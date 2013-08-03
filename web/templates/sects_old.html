@@ -1,0 +1,38 @@
+<table class="table">
+  <tr>
+    <th>Restriction</th>
+    <th>SLN</th>
+    <th>Section</th>
+    <th>Credit</th>
+    <th>Meeting Times</th>
+    <th>Instructor</th>
+    <th>Status</th>
+    <th>Taken spots</th>
+    <th>Total spots</th>
+    <th>Grades</th>
+    <th>Fee</th>
+    <th>Other?</th>
+    <th>Info</th>
+  </tr>
+{{range .}}
+  <tr>
+    <td>{{.Restriction}}</td>
+    <td>{{.SLN}}</td>
+    <td>{{.Section}}</td>
+    <td>{{.Credit}}</td>
+    <td>
+    {{range .GetMeetingTimes}}
+        {{.}}<br />
+    {{end}}
+    </td>
+    <td>{{.Instructor}}</td>
+    <td>{{.Status}}</td>
+    <td>{{.TakenSpots}}</td>
+    <td>{{.TotalSpots}}</td>
+    <td>{{.Grades}}</td>
+    <td>{{.Fee}}</td>
+    <td>{{.Other}}</td>
+    <td>{{.Info}}</td>
+  </tr>
+{{end}}
+</table>

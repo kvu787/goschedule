@@ -1,0 +1,17 @@
+{{define "body"}}
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12">
+      <ul class="breadcrumb">
+        <li><a href="/schedule">Departments</a></li>
+      </ul>
+      <h1>Departments</h1>
+      {{range .}}
+        <h4>
+          <a href="/schedule/{{.Abbreviation}}">{{.Title}} <small>({{.Abbreviation}})</small></a>
+        </h4>
+      {{end}}
+    </div>
+  </div>
+</div>
+{{end}}
