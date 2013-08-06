@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"testing"
 
-	"github.com/kvu787/go_schedule/crawler/config"
+	"github.com/kvu787/go-schedule/crawler/config"
 	_ "github.com/lib/pq"
 )
 

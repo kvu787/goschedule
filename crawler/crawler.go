@@ -7,10 +7,10 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/kvu787/go_schedule/crawler/config"
-	"github.com/kvu787/go_schedule/crawler/database"
-	"github.com/kvu787/go_schedule/crawler/extract"
-	"github.com/kvu787/go_schedule/crawler/fetch"
+	"github.com/kvu787/go-schedule/crawler/config"
+	"github.com/kvu787/go-schedule/crawler/database"
+	"github.com/kvu787/go-schedule/crawler/extract"
+	"github.com/kvu787/go-schedule/crawler/fetch"
 	_ "github.com/lib/pq"
 )
 

@@ -1,7 +1,7 @@
 package web
 
 import (
-	"github.com/kvu787/go_schedule/backend/extract"
+	"github.com/kvu787/go-schedule/backend/extract"
 	"html/template"
 	"net/http"
 	// "net/url"
