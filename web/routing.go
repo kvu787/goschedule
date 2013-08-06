@@ -8,11 +8,12 @@ import (
 type route string
 
 func (r route) Match(u *url.URL) bool {
-	if string(r) == "/" || u.String() == "/" {
-		return string(r) == u.String()
+	path := u.Path
+	if string(r) == "/" || path == "/" {
+		return string(r) == path
 	}
 	rSlice := strings.Split(string(r), "/")[1:]
-	uSlice := strings.Split(u.String(), "/")[1:]
+	uSlice := strings.Split(path, "/")[1:]
 	if len(rSlice) != len(uSlice) {
 		return false
 	}

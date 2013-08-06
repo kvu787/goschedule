@@ -1,18 +1,5 @@
 {{define "body"}}
 <style>
-  .restriction-col {
-    width: 10px;
-  }
-  .basic-info-col {
-    width: 100px;
-  }
-  .meeting-times-col {
-    width: 200px;
-  }
-  .other-col {
-    width: 150px;
-  }
-
   .label-white {
     background-color: white;
     color: black;
@@ -21,41 +8,38 @@
     background-color: #428bca;
     color: white;
   }
-  .indent-row {
-    padding-left: 50px;
-  }
 </style>
-<div class="container-full">
-  <ul class="breadcrumb">
-    <li><a href="/schedule">Departments</a></li>
-    <li><a href="/schedule/{{.dept}}">{{.dept}}</a></li>
-    <li><a href="/schedule/{{.dept}}/{{.class}}">{{.class}}</a></li>
-  </ul>
-<h1>Sections</h1>
-<br />
-<table class="table">
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12">
+      <ul class="breadcrumb">
+        <li><a href="/schedule">Departments</a></li>
+        <li><a href="/schedule/{{.dept}}">{{.dept}}</a></li>
+        <li><a href="/schedule/{{.dept}}/{{.class}}">{{.class}}</a></li>
+      </ul>
+      <h1>Sections</h1>
+    </div>
+  </div>
   {{range .sects}}
-    <tr>
-      <div class="row ">
-        <div class="col-lg-7 col-nested">
-          <div class="col-lg-4 col-nested">
-            <div class="col-lg-7 {{if .IsQuizSection}}indent-row{{end}}">
-              <span style="font-size: 20px;"><strong>{{.SLN}}</strong></span><br />
-              <h5><small>section&nbsp;&nbsp;&nbsp;</small>{{.Section}}</h5>
-              <h5><small>credit&nbsp;&nbsp;&nbsp;</small>{{.Credit}}</h5>
-            </div>
-            <div class="col-lg-5" style="text-align:right;">
-              <h3 style="margin-top: 0px;">
-                {{if .IsOpen}}
-                  <span class="label label-success">Open</span>
-                {{else}}
-                  <span class="label label-danger">Closed</span>
-                {{end}}
-              </h3>
-              {{.TakenSpots}} / {{.TotalSpots}}
-            </div>
+    <div class="row">
+      <div class="col-lg-7 col-sm-12">
+        <div class="row">
+          <div class="col-lg-2 col-sm-2 col-2" >
+            <span style="font-size: 20px;"><strong>{{.SLN}}</strong></span><br />
+            <h5><small>section&nbsp;&nbsp;&nbsp;</small>{{.Section}}</h5>
+            <h5><small>credit&nbsp;&nbsp;&nbsp;</small>{{.Credit}}</h5>
           </div>
-          <div class="col-lg-4" style="padding-left:30px;">
+          <div class="col-lg-2 col-sm-2 col-2">
+            <h3 style="margin-top: 0px;">
+              {{if .IsOpen}}
+                <span class="label label-success">Open</span>
+              {{else}}
+                <span class="label label-danger">Closed</span>
+              {{end}}
+            </h3>
+            {{.TakenSpots}} / {{.TotalSpots}}
+          </div>
+          <div class="col-lg-3 col-sm-3 col-3">
             {{range .GetMeetingTimes}}
               <p>
                 <span class="label {{if .MapDays.m}}label-primary{{else}}label-white{{end}}">M</span>
@@ -69,7 +53,7 @@
               </p>
             {{end}}
           </div>
-          <div class="col-lg-4">
+          <div class="col-lg-5 col-sm-5 col-5">
             {{range .GetRestriction}}
               {{range $token, $yes := .}}
                 {{if $yes}}
@@ -107,15 +91,14 @@
             {{end}}
           </div>
         </div>
-        <div class="col-lg-5">
-          Taught by: <strong>{{with .Instructor}}{{.}}{{else}}n/a{{end}}</strong>
-          <br />
-          {{.Info}}
-        </div>
       </div>
-      <br />
-    </tr>
+      <div class="col-lg-5 col-sm-12">
+        Taught by: <strong>{{with .Instructor}}{{.}}{{else}}n/a{{end}}</strong>
+        <br />
+        {{.Info}}
+      </div>
+    </div>
+    <br />
   {{end}}
-</table>
 </div>
 {{end}}

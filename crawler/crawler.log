@@ -1,0 +1,2158 @@
+Setting up database on DbConn1...
+Scraper started in concurrent mode
+Scraping: Center for Career Services
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/career.html
+Scraping: Honors
+Scraping: University Academy
+Scraping: Afro-American Studies
+Scraping: American Ethnic Studies
+Scraping: Asian-American Studies
+Scraping: Chicano Studies
+Scraping: Swahili
+Scraping: Tagalog
+Scraping: American Indian Studies
+Scraping: Anthropology
+Scraping: Archaeology
+Scraping: Biocultural Anthropology
+Scraping: Applied Mathematics
+Scraping: Art
+Scraping: Art History
+Scraping: Design
+Scraping: Arts and Sciences
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/artsci.html
+Scraping: Arts Program
+Scraping: Altai
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/arts.html
+Scraping: Asian Languages and Literature
+Scraping: Bengali
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/altai.html
+Scraping: Chinese
+Scraping: Hindi
+Scraping: Indian
+Scraping: Indonesian
+Scraping: Japanese
+Scraping: Korean
+Scraping: Sanskrit
+Scraping: Tamil
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/tamil.html
+Scraping: Thai
+Scraping: Tibetan
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/tibetan.html
+Scraping: Urdu
+Scraping: Vietnamese
+Scraping: Astronomy
+Scraping: Astrobiology
+Scraping: Biology
+Scraping: Center for Studies in Demography and Ecology
+Scraping: Center for the Humanities
+Scraping: Chemistry
+Scraping: Classical Archaeology
+Scraping: Classical Linguistics
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/cling.html
+Scraping: Classics
+Scraping: Greek
+Scraping: Latin
+Scraping: Communication
+Scraping: Comparative History of Ideas
+Scraping: Comparative Literature
+Scraping: Dance
+Scraping: Digital Arts and Experimental Media
+Scraping: Disability Studies
+Scraping: Drama
+Scraping: Economics
+Scraping: English
+Scraping: Gender, Women, and Sexuality Studies
+Scraping: General Studies
+Scraping: General Interdisciplinary Studies
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/gis.html
+Scraping: Individualized Studies
+Scraping: Geography
+Scraping: Germanics
+Scraping: Greek  -- see International Studies
+Scraping: Ancient and Medieval History
+Scraping: History
+Scraping: History of Asia
+Scraping: History of the Americas
+Scraping: Modern European History
+Scraping: Humanities -- Center for the Humanities
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Scraping: Integrated Sciences
+Scraping: International Studies Core and Gateway Courses
+Scraping: International Studies Area Studies
+Scraping: International Studies Global/Thematic Courses
+Scraping: International Studies Comparative Religion and Jewish Studies Courses
+Scraping: International Studies
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/jsisd.html
+Scraping: International Studies Language Courses
+Scraping: Law, Societies, and Justice
+Scraping: American Sign Language
+Error inserting class
+Error inserting class
+Error inserting sect
+Error inserting sect
+Scraping: Linguistics
+Scraping: Literature
+Scraping: Mathematics
+Scraping: Music
+Scraping: Music - Applied
+Scraping: Music Education
+Scraping: Music Ensemble
+Scraping: Music History
+Scraping: Music Performance
+Scraping: Akkadian
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/akkad.html
+Scraping: Arabic
+Fetch.Get error while using client.Get: &url.Error{Op:"Get", URL:"https://www.washington.edu/students/timeschd/AUT2013/appmus.html", Err:(*errors.errorString)(0xc200089030)}
+Link: https://www.washington.edu/students/timeschd/AUT2013/appmus.html
+Scraping: Aramaic
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/aramic.html
+Scraping: Egyptian
+Scraping: Hebrew
+Scraping: Near Eastern Languages and Civilization
+Scraping: Persian
+Scraping: Turkic
+Scraping: Turkish
+Scraping: Ugaritic
+Scraping: Neurobiology
+Scraping: History and Philosophy of Science
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/hps.html
+Scraping: Philosophy
+Scraping: Values in Society
+Scraping: Physics
+Scraping: Political Science
+Scraping: Psychology
+Scraping: French
+Scraping: Italian
+Scraping: Portuguese
+Scraping: Romance Languages and Literature
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/romance.html
+Scraping: Romance Linguistics
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/romling.html
+Scraping: Romanian
+Scraping: Spanish
+Scraping: Spanish Linguistics
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/romanianr.html
+Scraping: Danish
+Scraping: Estonian
+Scraping: Finnish
+Scraping: Icelandic
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/icel.html
+Scraping: Latvian
+Scraping: Lithuanian
+Scraping: Norwegian
+Scraping: Scandinavian
+Scraping: Swedish
+Scraping: Bosnian/Croatian/Serbian
+Scraping: Bulgarian
+Scraping: Czech
+Scraping: Georgian
+Scraping: Polish
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/georg.html
+Scraping: Romanian
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/romanian.html
+Scraping: Russian
+Scraping: Slavic
+Scraping: Slavic Languages and Literatures
+Scraping: Slovenian
+Scraping: Ukrainian
+Scraping: Social Sciences
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/socsci.html
+Scraping: Sociology
+Scraping: Speech and Hearing Sciences
+Scraping: Statistics
+Scraping: Architecture
+Scraping: Built Environment
+Scraping: Construction Management
+Scraping: Landscape Architecture
+Scraping: Community, Environment, and Planning
+Scraping: Infrastructure Planning and Management
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/ipm.html
+Scraping: Real Estate
+Scraping: Strategic Planning for Critical Infrastructure
+Scraping: Urban Planning
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/spci.html
+Scraping: Accounting
+Scraping: Administration
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/admin.html
+Scraping: Business Administration
+Scraping: Business Administration Research Methods
+Scraping: Business Communications
+Scraping: Business Economics
+Scraping: Business Policy
+Scraping: E-Business
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/ebiz.html
+Scraping: Entrepreneurship
+Scraping: Finance
+Scraping: Human Resources Management and Organizational Behavior
+Scraping: Information Systems
+Scraping: Information Systems Master of Science
+Scraping: International Business
+Scraping: Management
+Scraping: Marketing
+Scraping: Operations Management
+Scraping: Organization and Environment
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/orgenv.html
+Scraping: Quantitative Methods
+Scraping: Strategic Management
+Scraping: Dental Hygiene
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/stratm.html
+Scraping: Dental Public Health Sciences
+Scraping: Dentistry
+Scraping: Endodontics
+Scraping: Oral Biology
+Scraping: Oral Medicine
+Scraping: Oral Surgery
+Scraping: Orthodontics
+Scraping: Pediatric Dentistry
+Scraping: Periodontics
+Scraping: Prosthodontics
+Scraping: Restorative Dentistry
+Scraping: Curriculum and Instruction
+Scraping: College of Education
+Scraping: Early Childhood and Family Studies
+Scraping: Education
+Scraping: Educational Leadership and Policy Studies
+Scraping: Educational Psychology
+Scraping: Special Education
+Scraping: Aeronautics and Astronautics
+Scraping: Chemical Engineering
+Scraping: Nanoscience and Molecular Engineering
+Scraping: Civil and Environmental Engineering
+Scraping: Computer Science and Engineering
+Scraping: Computer Science and Engineering Accelerated Masters Program
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/csem.html
+Scraping: Computer Science and Engineering Professional Masters Program
+Scraping: Electrical Engineering
+Scraping: Engineering
+Scraping: Human Centered Design and Engineering
+Scraping: Industrial Engineering
+Scraping: Materials Science and Engineering
+Scraping: Mechanical Engineering
+Scraping: Mechanical Engineering Industrial Engineering
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/meie.html
+Scraping: Technical Communication
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Scraping: Aquatic and Fishery Sciences
+Error inserting class
+Error inserting class
+Scraping: Atmospheric Sciences
+Error inserting class
+Error inserting sect
+Error inserting sect
+Scraping: College of the Environment
+Error inserting sect
+Scraping: Earth and Space Sciences
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Scraping: Program on the Environment
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Scraping: Bioresource and  Science Engineering
+Error inserting sect
+Error inserting sect
+Scraping: Environmental Science and Resource Management
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Scraping: Paper Science and Engineering
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Scraping: School of Environmental and Forest Sciences
+Error inserting sect
+Error inserting sect
+Scraping: School of Marine and Environmental Affairs
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Scraping: Oceanography
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Scraping: Quantitative Science
+Error inserting sect
+Scraping: Quaternary Sciences
+Error inserting sect
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/qrc.html
+Scraping: Informatics
+Scraping: Information School Interdisciplinary
+Scraping: Information Science
+Scraping: Information Management
+Scraping: Library and Information Science
+Scraping: Biomolecular Structure and Design
+Scraping: Graduate School
+Scraping: Individual PhD
+Scraping: Molecular and Cellular Biology
+Scraping: Museology
+Scraping: Near and Middle Eastern Studies
+Scraping: Neurobiology and Behavior
+Scraping: Nutritional Science
+Scraping: Quantitative Ecology and Resource Management
+Scraping: Bioengineering
+Scraping: Medical Engineering
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/medeng.html
+Scraping: Pharmaceutical Bioengineering
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/pharbe.html
+Scraping: Global Health
+Scraping: University Conjoint Courses
+Scraping: Law
+Scraping: Law A
+Scraping: Law B
+Scraping: Law E
+Scraping: Law
+Scraping: Law
+Scraping: Law
+Scraping: Anesthesiology
+Scraping: Biochemistry
+Scraping: Bioethics and Humanities
+Scraping: Biological Structure
+Scraping: Comparative Medicine
+Scraping: Conjoint Courses
+Scraping: Family Medicine
+Scraping: Genome Sciences
+Scraping: Human Biology
+Scraping: Immunology
+Scraping: Laboratory Medicine
+Scraping: Medical Education and Biomedical Informatics
+Scraping: Emergency Medicine
+Scraping: Medicine
+Scraping: Medicine Elective Clerkships
+Scraping: Medicine Required Clerkships
+Scraping: Microbiology
+Scraping: Molecular Medicine
+Scraping: Neurological Surgery
+Scraping: Neurology
+Scraping: Obstetrics and Gynecology
+Scraping: Ophthalmology
+Scraping: Orthopedics
+Scraping: Otolaryngology--Head and Neck Surgery
+Scraping: Pathology
+Scraping: Pediatrics
+Scraping: Pharmacology
+Scraping: Physiology and Biophysics
+Scraping: Psychiatry and Behavioral Sciences
+Scraping: Radiation Oncology
+Scraping: Radiology
+Scraping: Prosthetics and Orthotics
+Scraping: Rehabilitation Medicine
+Scraping: Surgery
+Scraping: Urology
+Scraping: Nursing
+Scraping: Nursing
+Scraping: Nursing Clinical
+Scraping: Nursing Methods
+Scraping: Medicinal Chemistry
+Scraping: Pharmaceutics
+Scraping: Pharmacy
+Scraping: Pharmacy Practice
+Scraping: Pharmacy Regulatory Affairs
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/phrmra.html
+Scraping: Public Affairs Executive MPA
+Scraping: Public Affairs
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/paex.html
+Scraping: Public Policy and Management
+Scraping: Biostatistics
+Scraping: Environmental Health
+Scraping: Epidemiology
+Scraping: Health Informatics and Health Information
+Scraping: Health Services
+Scraping: Health Services Management
+Scraping: Nutritional Science
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Scraping: Pathobiology
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Scraping: Public Health Genetics
+Scraping: School of Public Health
+Scraping: Aerospace Studies
+Scraping: Military Science
+Scraping: Naval Science
+Scraping: Social Welfare BASW
+Scraping: Social Welfare
+Scraping: Social Work
+Scraping: Biology
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/91biology.html
+Scraping: Aquatic and Fishery Sciences
+Scraping: School of Marine Affairs
+Scraping: Oceanography
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/91fish.html
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/91marine.html
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/91ocean.html
+Scraper done
+Time taken: 35.788528237s
+Setting up database on DbConn2...
+Scraper started in concurrent mode
+Scraping: Center for Career Services
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/career.html
+Scraping: Honors
+Scraping: University Academy
+Scraping: Afro-American Studies
+Scraping: American Ethnic Studies
+Scraping: Asian-American Studies
+Scraping: Chicano Studies
+Scraping: Swahili
+Scraping: Tagalog
+Scraping: American Indian Studies
+Scraping: Anthropology
+Scraping: Archaeology
+Scraping: Biocultural Anthropology
+Scraping: Applied Mathematics
+Scraping: Art
+Scraping: Art History
+Scraping: Design
+Scraping: Arts and Sciences
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/artsci.html
+Scraping: Arts Program
+Scraping: Altai
+Scraping: Asian Languages and Literature
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/arts.html
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/altai.html
+Scraping: Bengali
+Scraping: Chinese
+Scraping: Hindi
+Scraping: Indian
+Scraping: Indonesian
+Scraping: Japanese
+Scraping: Korean
+Scraping: Sanskrit
+Scraping: Tamil
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/tamil.html
+Scraping: Thai
+Scraping: Tibetan
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/tibetan.html
+Scraping: Urdu
+Scraping: Vietnamese
+Scraping: Astronomy
+Scraping: Astrobiology
+Scraping: Biology
+Scraping: Center for Studies in Demography and Ecology
+Scraping: Center for the Humanities
+Scraping: Chemistry
+Scraping: Classical Archaeology
+Scraping: Classical Linguistics
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/cling.html
+Scraping: Classics
+Scraping: Greek
+Scraping: Latin
+Scraping: Communication
+Scraping: Comparative History of Ideas
+Scraping: Comparative Literature
+Fetch.Get error while using client.Get: &url.Error{Op:"Get", URL:"https://www.washington.edu/students/timeschd/AUT2013/clarch.html", Err:(*errors.errorString)(0xc200089030)}
+Link: https://www.washington.edu/students/timeschd/AUT2013/clarch.html
+Scraping: Dance
+Scraping: Digital Arts and Experimental Media
+Scraping: Disability Studies
+Scraping: Drama
+Scraping: Economics
+Scraping: English
+Scraping: Gender, Women, and Sexuality Studies
+Scraping: General Studies
+Scraping: General Interdisciplinary Studies
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/gis.html
+Scraping: Individualized Studies
+Scraping: Geography
+Scraping: Germanics
+Scraping: Greek  -- see International Studies
+Scraping: Ancient and Medieval History
+Scraping: History
+Scraping: History of Asia
+Scraping: History of the Americas
+Scraping: Modern European History
+Scraping: Humanities -- Center for the Humanities
+Scraping: Integrated Sciences
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Scraping: International Studies Core and Gateway Courses
+Scraping: International Studies Area Studies
+Scraping: International Studies Global/Thematic Courses
+Scraping: International Studies Comparative Religion and Jewish Studies Courses
+Scraping: International Studies
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/jsisd.html
+Scraping: International Studies Language Courses
+Scraping: Law, Societies, and Justice
+Scraping: American Sign Language
+Error inserting class
+Error inserting class
+Error inserting sect
+Error inserting sect
+Scraping: Linguistics
+Scraping: Literature
+Scraping: Mathematics
+Scraping: Music
+Scraping: Music - Applied
+Scraping: Music Education
+Scraping: Music Ensemble
+Scraping: Music History
+Scraping: Music Performance
+Scraping: Akkadian
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/akkad.html
+Scraping: Arabic
+Scraping: Aramaic
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/aramic.html
+Scraping: Egyptian
+Scraping: Hebrew
+Scraping: Near Eastern Languages and Civilization
+Scraping: Persian
+Scraping: Turkic
+Scraping: Turkish
+Scraping: Ugaritic
+Scraping: Neurobiology
+Scraping: History and Philosophy of Science
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/hps.html
+Scraping: Philosophy
+Scraping: Values in Society
+Scraping: Physics
+Scraping: Political Science
+Scraping: Psychology
+Scraping: French
+Scraping: Italian
+Scraping: Portuguese
+Scraping: Romance Languages and Literature
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/romance.html
+Scraping: Romance Linguistics
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/romling.html
+Scraping: Romanian
+Scraping: Spanish
+Scraping: Spanish Linguistics
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/romanianr.html
+Scraping: Danish
+Scraping: Estonian
+Scraping: Finnish
+Scraping: Icelandic
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/icel.html
+Scraping: Latvian
+Scraping: Lithuanian
+Scraping: Norwegian
+Scraping: Scandinavian
+Scraping: Swedish
+Scraping: Bosnian/Croatian/Serbian
+Scraping: Bulgarian
+Scraping: Czech
+Scraping: Georgian
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/georg.html
+Scraping: Polish
+Scraping: Romanian
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/romanian.html
+Scraping: Russian
+Scraping: Slavic
+Scraping: Slavic Languages and Literatures
+Scraping: Slovenian
+Scraping: Ukrainian
+Scraping: Social Sciences
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/socsci.html
+Scraping: Sociology
+Scraping: Speech and Hearing Sciences
+Scraping: Statistics
+Scraping: Architecture
+Scraping: Built Environment
+Scraping: Construction Management
+Scraping: Landscape Architecture
+Scraping: Community, Environment, and Planning
+Scraping: Infrastructure Planning and Management
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/ipm.html
+Scraping: Real Estate
+Scraping: Strategic Planning for Critical Infrastructure
+Scraping: Urban Planning
+Scraping: Accounting
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/spci.html
+Scraping: Administration
+Scraping: Business Administration
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/admin.html
+Scraping: Business Administration Research Methods
+Scraping: Business Communications
+Scraping: Business Economics
+Scraping: Business Policy
+Scraping: E-Business
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/ebiz.html
+Scraping: Entrepreneurship
+Scraping: Finance
+Scraping: Human Resources Management and Organizational Behavior
+Scraping: Information Systems
+Scraping: Information Systems Master of Science
+Scraping: International Business
+Scraping: Management
+Scraping: Marketing
+Scraping: Operations Management
+Scraping: Organization and Environment
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/orgenv.html
+Scraping: Quantitative Methods
+Scraping: Strategic Management
+Scraping: Dental Hygiene
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/stratm.html
+Scraping: Dental Public Health Sciences
+Scraping: Dentistry
+Scraping: Endodontics
+Scraping: Oral Biology
+Scraping: Oral Medicine
+Scraping: Oral Surgery
+Scraping: Orthodontics
+Scraping: Pediatric Dentistry
+Scraping: Periodontics
+Scraping: Prosthodontics
+Scraping: Restorative Dentistry
+Scraping: Curriculum and Instruction
+Scraping: College of Education
+Scraping: Early Childhood and Family Studies
+Scraping: Education
+Scraping: Educational Leadership and Policy Studies
+Scraping: Educational Psychology
+Scraping: Special Education
+Scraping: Aeronautics and Astronautics
+Scraping: Chemical Engineering
+Scraping: Nanoscience and Molecular Engineering
+Scraping: Civil and Environmental Engineering
+Scraping: Computer Science and Engineering
+Scraping: Computer Science and Engineering Accelerated Masters Program
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/csem.html
+Scraping: Computer Science and Engineering Professional Masters Program
+Scraping: Electrical Engineering
+Scraping: Engineering
+Scraping: Human Centered Design and Engineering
+Scraping: Industrial Engineering
+Scraping: Materials Science and Engineering
+Scraping: Mechanical Engineering
+Scraping: Mechanical Engineering Industrial Engineering
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/meie.html
+Scraping: Technical Communication
+Scraping: Aquatic and Fishery Sciences
+Scraping: Atmospheric Sciences
+Scraping: College of the Environment
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Scraping: Earth and Space Sciences
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Scraping: Program on the Environment
+Error inserting sect
+Scraping: Bioresource and  Science Engineering
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Scraping: Environmental Science and Resource Management
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Scraping: Paper Science and Engineering
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Scraping: School of Environmental and Forest Sciences
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Scraping: School of Marine and Environmental Affairs
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Scraping: Oceanography
+Error inserting sect
+Error inserting sect
+Scraping: Quantitative Science
+Error inserting sect
+Scraping: Quaternary Sciences
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/qrc.html
+Scraping: Informatics
+Scraping: Information School Interdisciplinary
+Scraping: Information Science
+Scraping: Information Management
+Scraping: Library and Information Science
+Scraping: Biomolecular Structure and Design
+Scraping: Graduate School
+Scraping: Individual PhD
+Scraping: Molecular and Cellular Biology
+Scraping: Museology
+Scraping: Near and Middle Eastern Studies
+Scraping: Neurobiology and Behavior
+Scraping: Nutritional Science
+Scraping: Quantitative Ecology and Resource Management
+Scraping: Bioengineering
+Scraping: Medical Engineering
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/medeng.html
+Scraping: Pharmaceutical Bioengineering
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/pharbe.html
+Scraping: Global Health
+Scraping: University Conjoint Courses
+Scraping: Law
+Scraping: Law A
+Scraping: Law B
+Scraping: Law E
+Scraping: Law
+Scraping: Law
+Scraping: Law
+Scraping: Anesthesiology
+Scraping: Biochemistry
+Scraping: Bioethics and Humanities
+Scraping: Biological Structure
+Scraping: Comparative Medicine
+Scraping: Conjoint Courses
+Scraping: Family Medicine
+Scraping: Genome Sciences
+Scraping: Human Biology
+Scraping: Immunology
+Scraping: Laboratory Medicine
+Scraping: Medical Education and Biomedical Informatics
+Scraping: Emergency Medicine
+Scraping: Medicine
+Scraping: Medicine Elective Clerkships
+Scraping: Medicine Required Clerkships
+Scraping: Microbiology
+Scraping: Molecular Medicine
+Scraping: Neurological Surgery
+Scraping: Neurology
+Scraping: Obstetrics and Gynecology
+Scraping: Ophthalmology
+Scraping: Orthopedics
+Scraping: Otolaryngology--Head and Neck Surgery
+Scraping: Pathology
+Scraping: Pediatrics
+Scraping: Pharmacology
+Scraping: Physiology and Biophysics
+Scraping: Psychiatry and Behavioral Sciences
+Scraping: Radiation Oncology
+Scraping: Radiology
+Scraping: Prosthetics and Orthotics
+Scraping: Rehabilitation Medicine
+Scraping: Surgery
+Scraping: Urology
+Scraping: Nursing
+Scraping: Nursing
+Scraping: Nursing Clinical
+Scraping: Nursing Methods
+Scraping: Medicinal Chemistry
+Scraping: Pharmaceutics
+Scraping: Pharmacy
+Scraping: Pharmacy Practice
+Scraping: Pharmacy Regulatory Affairs
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/phrmra.html
+Scraping: Public Affairs Executive MPA
+Scraping: Public Affairs
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/paex.html
+Scraping: Public Policy and Management
+Scraping: Biostatistics
+Scraping: Environmental Health
+Scraping: Epidemiology
+Scraping: Health Informatics and Health Information
+Scraping: Health Services
+Scraping: Health Services Management
+Scraping: Nutritional Science
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Scraping: Pathobiology
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Scraping: Public Health Genetics
+Scraping: School of Public Health
+Scraping: Aerospace Studies
+Scraping: Military Science
+Scraping: Naval Science
+Scraping: Social Welfare BASW
+Scraping: Social Welfare
+Scraping: Social Work
+Scraping: Biology
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/91biology.html
+Scraping: Aquatic and Fishery Sciences
+Scraping: School of Marine Affairs
+Scraping: Oceanography
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/91fish.html
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/91marine.html
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/91ocean.html
+Scraper done
+Time taken: 36.704686482s
+Setting up database on DbConn1...
+Scraper started in concurrent mode
+Scraping: Center for Career Services
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/career.html
+Scraping: Honors
+Scraping: University Academy
+Scraping: Afro-American Studies
+Scraping: American Ethnic Studies
+Scraping: Asian-American Studies
+Scraping: Chicano Studies
+Scraping: Swahili
+Scraping: Tagalog
+Scraping: American Indian Studies
+Scraping: Anthropology
+Scraping: Archaeology
+Scraping: Biocultural Anthropology
+Scraping: Applied Mathematics
+Scraping: Art
+Scraping: Art History
+Scraping: Design
+Scraping: Arts and Sciences
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/artsci.html
+Scraping: Arts Program
+Scraping: Altai
+Scraping: Asian Languages and Literature
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/arts.html
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/altai.html
+Scraping: Bengali
+Scraping: Chinese
+Scraping: Hindi
+Scraping: Indian
+Scraping: Indonesian
+Scraping: Japanese
+Scraping: Korean
+Scraping: Sanskrit
+Scraping: Tamil
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/tamil.html
+Scraping: Thai
+Scraping: Tibetan
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/tibetan.html
+Scraping: Urdu
+Scraping: Vietnamese
+Scraping: Astronomy
+Scraping: Astrobiology
+Scraping: Biology
+Scraping: Center for Studies in Demography and Ecology
+Scraping: Center for the Humanities
+Scraping: Chemistry
+Scraping: Classical Archaeology
+Scraping: Classical Linguistics
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/cling.html
+Scraping: Classics
+Scraping: Greek
+Scraping: Latin
+Scraping: Communication
+Scraping: Comparative History of Ideas
+Scraping: Comparative Literature
+Scraping: Dance
+Scraping: Digital Arts and Experimental Media
+Scraping: Disability Studies
+Scraping: Drama
+Scraping: Economics
+Scraping: English
+Scraping: Gender, Women, and Sexuality Studies
+Scraping: General Studies
+Scraping: General Interdisciplinary Studies
+Scraping: Individualized Studies
+Scraping: Geography
+Scraping: Germanics
+Scraping: Greek  -- see International Studies
+Scraping: Ancient and Medieval History
+Scraping: History
+Scraping: History of Asia
+Scraping: History of the Americas
+Scraping: Modern European History
+Scraping: Humanities -- Center for the Humanities
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/gis.html
+Scraping: Integrated Sciences
+Scraping: International Studies Core and Gateway Courses
+Scraping: International Studies Area Studies
+Scraping: International Studies Global/Thematic Courses
+Scraping: International Studies Comparative Religion and Jewish Studies Courses
+Scraping: International Studies
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/jsisd.html
+Scraping: International Studies Language Courses
+Error inserting class
+Error inserting class
+Error inserting sect
+Error inserting sect
+Scraping: Law, Societies, and Justice
+Scraping: American Sign Language
+Scraping: Linguistics
+Scraping: Literature
+Scraping: Mathematics
+Scraping: Music
+Scraping: Music - Applied
+Scraping: Music Education
+Scraping: Music Ensemble
+Scraping: Music History
+Scraping: Music Performance
+Scraping: Akkadian
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/akkad.html
+Scraping: Arabic
+Scraping: Aramaic
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/aramic.html
+Scraping: Egyptian
+Scraping: Hebrew
+Scraping: Near Eastern Languages and Civilization
+Scraping: Persian
+Scraping: Turkic
+Scraping: Turkish
+Scraping: Ugaritic
+Scraping: Neurobiology
+Scraping: History and Philosophy of Science
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/hps.html
+Scraping: Philosophy
+Scraping: Values in Society
+Scraping: Physics
+Scraping: Political Science
+Scraping: Psychology
+Scraping: French
+Scraping: Italian
+Scraping: Portuguese
+Scraping: Romance Languages and Literature
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/romance.html
+Scraping: Romance Linguistics
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/romling.html
+Scraping: Romanian
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/romanianr.html
+Scraping: Spanish
+Scraping: Spanish Linguistics
+Scraping: Danish
+Scraping: Estonian
+Scraping: Finnish
+Scraping: Icelandic
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/icel.html
+Scraping: Latvian
+Scraping: Lithuanian
+Scraping: Norwegian
+Scraping: Scandinavian
+Scraping: Swedish
+Scraping: Bosnian/Croatian/Serbian
+Scraping: Bulgarian
+Scraping: Czech
+Scraping: Georgian
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/georg.html
+Scraping: Polish
+Scraping: Romanian
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/romanian.html
+Scraping: Russian
+Scraping: Slavic
+Scraping: Slavic Languages and Literatures
+Scraping: Slovenian
+Scraping: Ukrainian
+Scraping: Social Sciences
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/socsci.html
+Scraping: Sociology
+Scraping: Speech and Hearing Sciences
+Scraping: Statistics
+Scraping: Architecture
+Scraping: Built Environment
+Scraping: Construction Management
+Scraping: Landscape Architecture
+Scraping: Community, Environment, and Planning
+Scraping: Infrastructure Planning and Management
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/ipm.html
+Scraping: Real Estate
+Scraping: Strategic Planning for Critical Infrastructure
+Scraping: Urban Planning
+Scraping: Accounting
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/spci.html
+Scraping: Administration
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/admin.html
+Scraping: Business Administration
+Scraping: Business Administration Research Methods
+Scraping: Business Communications
+Scraping: Business Economics
+Scraping: Business Policy
+Scraping: E-Business
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/ebiz.html
+Scraping: Entrepreneurship
+Scraping: Finance
+Scraping: Human Resources Management and Organizational Behavior
+Scraping: Information Systems
+Scraping: Information Systems Master of Science
+Scraping: International Business
+Scraping: Management
+Scraping: Marketing
+Scraping: Operations Management
+Scraping: Organization and Environment
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/orgenv.html
+Scraping: Quantitative Methods
+Scraping: Strategic Management
+Scraping: Dental Hygiene
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/stratm.html
+Scraping: Dental Public Health Sciences
+Scraping: Dentistry
+Scraping: Endodontics
+Scraping: Oral Biology
+Scraping: Oral Medicine
+Scraping: Oral Surgery
+Scraping: Orthodontics
+Scraping: Pediatric Dentistry
+Scraping: Periodontics
+Scraping: Prosthodontics
+Scraping: Restorative Dentistry
+Scraping: Curriculum and Instruction
+Scraping: College of Education
+Scraping: Early Childhood and Family Studies
+Scraping: Education
+Scraping: Educational Leadership and Policy Studies
+Scraping: Educational Psychology
+Scraping: Special Education
+Scraping: Aeronautics and Astronautics
+Scraping: Chemical Engineering
+Scraping: Nanoscience and Molecular Engineering
+Scraping: Civil and Environmental Engineering
+Scraping: Computer Science and Engineering
+Scraping: Computer Science and Engineering Accelerated Masters Program
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/csem.html
+Scraping: Computer Science and Engineering Professional Masters Program
+Scraping: Electrical Engineering
+Scraping: Engineering
+Scraping: Human Centered Design and Engineering
+Scraping: Industrial Engineering
+Scraping: Materials Science and Engineering
+Scraping: Mechanical Engineering
+Scraping: Mechanical Engineering Industrial Engineering
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/meie.html
+Scraping: Technical Communication
+Scraping: Aquatic and Fishery Sciences
+Scraping: Atmospheric Sciences
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Scraping: College of the Environment
+Error inserting class
+Error inserting class
+Error inserting class
+Scraping: Earth and Space Sciences
+Error inserting class
+Scraping: Program on the Environment
+Error inserting sect
+Error inserting sect
+Scraping: Bioresource and  Science Engineering
+Error inserting sect
+Scraping: Environmental Science and Resource Management
+Error inserting sect
+Scraping: Paper Science and Engineering
+Error inserting sect
+Error inserting sect
+Scraping: School of Environmental and Forest Sciences
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Scraping: School of Marine and Environmental Affairs
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Scraping: Oceanography
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Scraping: Quantitative Science
+Error inserting sect
+Scraping: Quaternary Sciences
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/qrc.html
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Scraping: Informatics
+Error inserting sect
+Scraping: Information School Interdisciplinary
+Error inserting sect
+Error inserting sect
+Scraping: Information Science
+Error inserting sect
+Error inserting sect
+Scraping: Information Management
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Scraping: Library and Information Science
+Error inserting sect
+Scraping: Biomolecular Structure and Design
+Scraping: Graduate School
+Scraping: Individual PhD
+Scraping: Molecular and Cellular Biology
+Scraping: Museology
+Scraping: Near and Middle Eastern Studies
+Scraping: Neurobiology and Behavior
+Scraping: Nutritional Science
+Scraping: Quantitative Ecology and Resource Management
+Scraping: Bioengineering
+Scraping: Medical Engineering
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/medeng.html
+Scraping: Pharmaceutical Bioengineering
+Scraping: Global Health
+Scraping: University Conjoint Courses
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/pharbe.html
+Scraping: Law
+Scraping: Law A
+Scraping: Law B
+Scraping: Law E
+Scraping: Law
+Scraping: Law
+Scraping: Law
+Scraping: Anesthesiology
+Scraping: Biochemistry
+Scraping: Bioethics and Humanities
+Scraping: Biological Structure
+Scraping: Comparative Medicine
+Scraping: Conjoint Courses
+Scraping: Family Medicine
+Scraping: Genome Sciences
+Scraping: Human Biology
+Scraping: Immunology
+Scraping: Laboratory Medicine
+Scraping: Medical Education and Biomedical Informatics
+Scraping: Emergency Medicine
+Scraping: Medicine
+Scraping: Medicine Elective Clerkships
+Scraping: Medicine Required Clerkships
+Scraping: Microbiology
+Scraping: Molecular Medicine
+Scraping: Neurological Surgery
+Scraping: Neurology
+Scraping: Obstetrics and Gynecology
+Scraping: Ophthalmology
+Scraping: Orthopedics
+Scraping: Otolaryngology--Head and Neck Surgery
+Scraping: Pathology
+Scraping: Pediatrics
+Scraping: Pharmacology
+Scraping: Physiology and Biophysics
+Scraping: Psychiatry and Behavioral Sciences
+Scraping: Radiation Oncology
+Scraping: Radiology
+Scraping: Prosthetics and Orthotics
+Scraping: Rehabilitation Medicine
+Scraping: Surgery
+Scraping: Urology
+Scraping: Nursing
+Scraping: Nursing
+Scraping: Nursing Clinical
+Scraping: Nursing Methods
+Scraping: Medicinal Chemistry
+Scraping: Pharmaceutics
+Scraping: Pharmacy
+Scraping: Pharmacy Practice
+Scraping: Pharmacy Regulatory Affairs
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/phrmra.html
+Scraping: Public Affairs Executive MPA
+Scraping: Public Affairs
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/paex.html
+Scraping: Public Policy and Management
+Scraping: Biostatistics
+Scraping: Environmental Health
+Scraping: Epidemiology
+Scraping: Health Informatics and Health Information
+Scraping: Health Services
+Scraping: Health Services Management
+Scraping: Nutritional Science
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Scraping: Pathobiology
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Scraping: Public Health Genetics
+Scraping: School of Public Health
+Scraping: Aerospace Studies
+Scraping: Military Science
+Scraping: Naval Science
+Scraping: Social Welfare BASW
+Scraping: Social Welfare
+Scraping: Social Work
+Scraping: Biology
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/91biology.html
+Scraping: Aquatic and Fishery Sciences
+Scraping: School of Marine Affairs
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/91fish.html
+Scraping: Oceanography
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/91marine.html
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/91ocean.html
+Scraper done
+Time taken: 36.655430967s
+Setting up database on DbConn2...
+Scraper started in concurrent mode
+Scraping: Center for Career Services
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/career.html
+Scraping: Honors
+Scraping: University Academy
+Scraping: Afro-American Studies
+Scraping: American Ethnic Studies
+Scraping: Asian-American Studies
+Scraping: Chicano Studies
+Scraping: Swahili
+Scraping: Tagalog
+Scraping: American Indian Studies
+Scraping: Anthropology
+Scraping: Archaeology
+Scraping: Biocultural Anthropology
+Scraping: Applied Mathematics
+Scraping: Art
+Scraping: Art History
+Scraping: Design
+Scraping: Arts and Sciences
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/artsci.html
+Scraping: Arts Program
+Scraping: Altai
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/arts.html
+Scraping: Asian Languages and Literature
+Scraping: Bengali
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/altai.html
+Scraping: Chinese
+Scraping: Hindi
+Scraping: Indian
+Scraping: Indonesian
+Scraping: Japanese
+Scraping: Korean
+Scraping: Sanskrit
+Scraping: Tamil
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/tamil.html
+Scraping: Thai
+Scraping: Tibetan
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/tibetan.html
+Scraping: Urdu
+Scraping: Vietnamese
+Scraping: Astronomy
+Scraping: Astrobiology
+Scraping: Biology
+Scraping: Center for Studies in Demography and Ecology
+Scraping: Center for the Humanities
+Scraping: Chemistry
+Scraping: Classical Archaeology
+Scraping: Classical Linguistics
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/cling.html
+Scraping: Classics
+Scraping: Greek
+Scraping: Latin
+Scraping: Communication
+Scraping: Comparative History of Ideas
+Scraping: Comparative Literature
+Scraping: Dance
+Scraping: Digital Arts and Experimental Media
+Scraping: Disability Studies
+Scraping: Drama
+Scraping: Economics
+Scraping: English
+Scraping: Gender, Women, and Sexuality Studies
+Scraping: General Studies
+Scraping: General Interdisciplinary Studies
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/gis.html
+Scraping: Individualized Studies
+Scraping: Geography
+Scraping: Germanics
+Scraping: Greek  -- see International Studies
+Scraping: Ancient and Medieval History
+Scraping: History
+Scraping: History of Asia
+Scraping: History of the Americas
+Scraping: Modern European History
+Scraping: Humanities -- Center for the Humanities
+Scraping: Integrated Sciences
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Scraping: International Studies Core and Gateway Courses
+Scraping: International Studies Area Studies
+Scraping: International Studies Global/Thematic Courses
+Scraping: International Studies Comparative Religion and Jewish Studies Courses
+Scraping: International Studies
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/jsisd.html
+Scraping: International Studies Language Courses
+Error inserting class
+Error inserting class
+Error inserting sect
+Error inserting sect
+Scraping: Law, Societies, and Justice
+Scraping: American Sign Language
+Scraping: Linguistics
+Scraping: Literature
+Scraping: Mathematics
+Scraping: Music
+Scraping: Music - Applied
+Scraping: Music Education
+Scraping: Music Ensemble
+Scraping: Music History
+Scraping: Music Performance
+Scraping: Akkadian
+Scraping: Arabic
+Scraping: Aramaic
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/akkad.html
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/aramic.html
+Scraping: Egyptian
+Scraping: Hebrew
+Fetch.Get error while using client.Get: &url.Error{Op:"Get", URL:"https://www.washington.edu/students/timeschd/AUT2013/mushist.html", Err:(*errors.errorString)(0xc200089030)}
+Link: https://www.washington.edu/students/timeschd/AUT2013/mushist.html
+Scraping: Near Eastern Languages and Civilization
+Scraping: Persian
+Scraping: Turkic
+Scraping: Turkish
+Scraping: Ugaritic
+Scraping: Neurobiology
+Scraping: History and Philosophy of Science
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/hps.html
+Scraping: Philosophy
+Scraping: Values in Society
+Scraping: Physics
+Scraping: Political Science
+Scraping: Psychology
+Scraping: French
+Scraping: Italian
+Scraping: Portuguese
+Scraping: Romance Languages and Literature
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/romance.html
+Scraping: Romance Linguistics
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/romling.html
+Scraping: Romanian
+Scraping: Spanish
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/romanianr.html
+Scraping: Spanish Linguistics
+Scraping: Danish
+Scraping: Estonian
+Scraping: Finnish
+Scraping: Icelandic
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/icel.html
+Scraping: Latvian
+Scraping: Lithuanian
+Scraping: Norwegian
+Scraping: Scandinavian
+Scraping: Swedish
+Scraping: Bosnian/Croatian/Serbian
+Scraping: Bulgarian
+Scraping: Czech
+Scraping: Georgian
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/georg.html
+Scraping: Polish
+Scraping: Romanian
+Scraping: Russian
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/romanian.html
+Scraping: Slavic
+Scraping: Slavic Languages and Literatures
+Scraping: Slovenian
+Scraping: Ukrainian
+Scraping: Social Sciences
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/socsci.html
+Scraping: Sociology
+Scraping: Speech and Hearing Sciences
+Scraping: Statistics
+Scraping: Architecture
+Scraping: Built Environment
+Scraping: Construction Management
+Scraping: Landscape Architecture
+Scraping: Community, Environment, and Planning
+Scraping: Infrastructure Planning and Management
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/ipm.html
+Scraping: Real Estate
+Scraping: Strategic Planning for Critical Infrastructure
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/spci.html
+Scraping: Urban Planning
+Scraping: Accounting
+Scraping: Administration
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/admin.html
+Scraping: Business Administration
+Scraping: Business Administration Research Methods
+Scraping: Business Communications
+Scraping: Business Economics
+Scraping: Business Policy
+Scraping: E-Business
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/ebiz.html
+Scraping: Entrepreneurship
+Scraping: Finance
+Scraping: Human Resources Management and Organizational Behavior
+Scraping: Information Systems
+Scraping: Information Systems Master of Science
+Scraping: International Business
+Scraping: Management
+Scraping: Marketing
+Scraping: Operations Management
+Scraping: Organization and Environment
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/orgenv.html
+Scraping: Quantitative Methods
+Scraping: Strategic Management
+Scraping: Dental Hygiene
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/stratm.html
+Scraping: Dental Public Health Sciences
+Scraping: Dentistry
+Scraping: Endodontics
+Scraping: Oral Biology
+Scraping: Oral Medicine
+Scraping: Oral Surgery
+Scraping: Orthodontics
+Scraping: Pediatric Dentistry
+Scraping: Periodontics
+Scraping: Prosthodontics
+Scraping: Restorative Dentistry
+Scraping: Curriculum and Instruction
+Scraping: College of Education
+Scraping: Early Childhood and Family Studies
+Scraping: Education
+Scraping: Educational Leadership and Policy Studies
+Scraping: Educational Psychology
+Scraping: Special Education
+Scraping: Aeronautics and Astronautics
+Scraping: Chemical Engineering
+Scraping: Nanoscience and Molecular Engineering
+Scraping: Civil and Environmental Engineering
+Scraping: Computer Science and Engineering
+Scraping: Computer Science and Engineering Accelerated Masters Program
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/csem.html
+Scraping: Computer Science and Engineering Professional Masters Program
+Scraping: Electrical Engineering
+Scraping: Engineering
+Scraping: Human Centered Design and Engineering
+Scraping: Industrial Engineering
+Scraping: Materials Science and Engineering
+Scraping: Mechanical Engineering
+Scraping: Mechanical Engineering Industrial Engineering
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/meie.html
+Scraping: Technical Communication
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Scraping: Aquatic and Fishery Sciences
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Scraping: Atmospheric Sciences
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Scraping: College of the Environment
+Error inserting sect
+Error inserting sect
+Scraping: Earth and Space Sciences
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Scraping: Program on the Environment
+Error inserting sect
+Error inserting sect
+Scraping: Bioresource and  Science Engineering
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Scraping: Environmental Science and Resource Management
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Scraping: Paper Science and Engineering
+Error inserting sect
+Error inserting sect
+Scraping: School of Environmental and Forest Sciences
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Scraping: School of Marine and Environmental Affairs
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Scraping: Oceanography
+Error inserting sect
+Scraping: Quantitative Science
+Error inserting sect
+Scraping: Quaternary Sciences
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/qrc.html
+Scraping: Informatics
+Scraping: Information School Interdisciplinary
+Scraping: Information Science
+Scraping: Information Management
+Scraping: Library and Information Science
+Scraping: Biomolecular Structure and Design
+Scraping: Graduate School
+Scraping: Individual PhD
+Scraping: Molecular and Cellular Biology
+Scraping: Museology
+Scraping: Near and Middle Eastern Studies
+Scraping: Neurobiology and Behavior
+Scraping: Nutritional Science
+Scraping: Quantitative Ecology and Resource Management
+Scraping: Bioengineering
+Scraping: Medical Engineering
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/medeng.html
+Scraping: Pharmaceutical Bioengineering
+Scraping: Global Health
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/pharbe.html
+Scraping: University Conjoint Courses
+Scraping: Law
+Scraping: Law A
+Scraping: Law B
+Scraping: Law E
+Scraping: Law
+Scraping: Law
+Scraping: Law
+Scraping: Anesthesiology
+Scraping: Biochemistry
+Scraping: Bioethics and Humanities
+Scraping: Biological Structure
+Scraping: Comparative Medicine
+Scraping: Conjoint Courses
+Scraping: Family Medicine
+Scraping: Genome Sciences
+Scraping: Human Biology
+Scraping: Immunology
+Scraping: Laboratory Medicine
+Scraping: Medical Education and Biomedical Informatics
+Scraping: Emergency Medicine
+Scraping: Medicine
+Scraping: Medicine Elective Clerkships
+Scraping: Medicine Required Clerkships
+Scraping: Microbiology
+Scraping: Molecular Medicine
+Scraping: Neurological Surgery
+Scraping: Neurology
+Scraping: Obstetrics and Gynecology
+Scraping: Ophthalmology
+Scraping: Orthopedics
+Scraping: Otolaryngology--Head and Neck Surgery
+Scraping: Pathology
+Scraping: Pediatrics
+Scraping: Pharmacology
+Scraping: Physiology and Biophysics
+Scraping: Psychiatry and Behavioral Sciences
+Scraping: Radiation Oncology
+Scraping: Radiology
+Scraping: Prosthetics and Orthotics
+Scraping: Rehabilitation Medicine
+Scraping: Surgery
+Scraping: Urology
+Scraping: Nursing
+Scraping: Nursing
+Scraping: Nursing Clinical
+Scraping: Nursing Methods
+Scraping: Medicinal Chemistry
+Scraping: Pharmaceutics
+Scraping: Pharmacy
+Scraping: Pharmacy Practice
+Scraping: Pharmacy Regulatory Affairs
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/phrmra.html
+Scraping: Public Affairs Executive MPA
+Scraping: Public Affairs
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/paex.html
+Scraping: Public Policy and Management
+Scraping: Biostatistics
+Scraping: Environmental Health
+Scraping: Epidemiology
+Scraping: Health Informatics and Health Information
+Scraping: Health Services
+Scraping: Health Services Management
+Scraping: Nutritional Science
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Scraping: Pathobiology
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Error inserting sect
+Scraping: Public Health Genetics
+Scraping: School of Public Health
+Scraping: Aerospace Studies
+Scraping: Military Science
+Scraping: Naval Science
+Scraping: Social Welfare BASW
+Scraping: Social Welfare
+Scraping: Social Work
+Scraping: Biology
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/91biology.html
+Scraping: Aquatic and Fishery Sciences
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/91fish.html
+Scraping: School of Marine Affairs
+Scraping: Oceanography
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/91marine.html
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/91ocean.html
+Scraper done
+Time taken: 35.897514939s
+Setting up database on DbConn1...
+Scraper started in concurrent mode
+Scraping: Center for Career Services
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/career.html
+Scraping: Honors
+Scraping: University Academy
+Scraping: Afro-American Studies
+Scraping: American Ethnic Studies
+Scraping: Asian-American Studies
+Scraping: Chicano Studies
+Scraping: Swahili
+Scraping: Tagalog
+Scraping: American Indian Studies
+Scraping: Anthropology
+Scraping: Archaeology
+Scraping: Biocultural Anthropology
+Scraping: Applied Mathematics
+Scraping: Art
+Scraping: Art History
+Scraping: Design
+Scraping: Arts and Sciences
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/artsci.html
+Scraping: Arts Program
+Scraping: Altai
+Scraping: Asian Languages and Literature
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/arts.html
+Scraping: Bengali
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/altai.html
+Scraping: Chinese
+Scraping: Hindi
+Scraping: Indian
+Scraping: Indonesian
+Scraping: Japanese
+Scraping: Korean
+Scraping: Sanskrit
+Scraping: Tamil
+Scraping: Thai
+Scraping: Tibetan
+Scraping: Urdu
+Scraping: Vietnamese
+Fetch.Get error while using client.Get: &url.Error{Op:"Get", URL:"https://www.washington.edu/students/timeschd/AUT2013/sanskrit.html", Err:(*errors.errorString)(0xc200089030)}
+Link: https://www.washington.edu/students/timeschd/AUT2013/sanskrit.html
+Scraping: Astronomy
+Scraping: Astrobiology
+Scraping: Biology
+Fetch.Get error while using client.Get: &url.Error{Op:"Get", URL:"https://www.washington.edu/students/timeschd/AUT2013/korean.html", Err:(*errors.errorString)(0xc200089030)}
+Link: https://www.washington.edu/students/timeschd/AUT2013/korean.html
+Scraping: Center for Studies in Demography and Ecology
+Scraping: Center for the Humanities
+Scraping: Chemistry
+Scraping: Classical Archaeology
+Scraping: Classical Linguistics
+Scraping: Classics
+Scraping: Greek
+Scraping: Latin
+Scraping: Communication
+Scraping: Comparative History of Ideas
+Scraping: Comparative Literature
+Scraping: Dance
+Scraping: Digital Arts and Experimental Media
+Scraping: Disability Studies
+Scraping: Drama
+Scraping: Economics
+Scraping: English
+Scraping: Gender, Women, and Sexuality Studies
+Scraping: General Studies
+Scraping: General Interdisciplinary Studies
+Scraping: Individualized Studies
+Scraping: Geography
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/tamil.html
+Scraping: Germanics
+Scraping: Greek  -- see International Studies
+Scraping: Ancient and Medieval History
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/tibetan.html
+Scraping: History
+Scraping: History of Asia
+Scraping: History of the Americas
+Scraping: Modern European History
+Scraping: Humanities -- Center for the Humanities
+Scraping: Integrated Sciences
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/cling.html
+Scraping: International Studies Core and Gateway Courses
+Scraping: International Studies Area Studies
+Scraping: International Studies Global/Thematic Courses
+Error inserting class
+Error inserting class
+Error inserting class
+Error inserting class
+Scraping: International Studies Comparative Religion and Jewish Studies Courses
+Error inserting sect
+Error inserting sect
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/gis.html
+Scraping: International Studies
+Error inserting sect
+Error inserting sect
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/jsisd.html
+Scraping: International Studies Language Courses
+Error inserting class
+Error inserting class
+Scraping: Law, Societies, and Justice
+Error inserting sect
+Error inserting sect
+Scraping: American Sign Language
+Scraping: Linguistics
+Scraping: Literature
+Scraping: Mathematics
+Scraping: Music
+Scraping: Music - Applied
+Scraping: Music Education
+Scraping: Music Ensemble
+Scraping: Music History
+Scraping: Music Performance
+Scraping: Akkadian
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/akkad.html
+Scraping: Arabic
+Scraping: Aramaic
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/aramic.html
+Scraping: Egyptian
+Scraping: Hebrew
+Scraping: Near Eastern Languages and Civilization
+Scraping: Persian
+Scraping: Turkic
+Scraping: Turkish
+Scraping: Ugaritic
+Scraping: Neurobiology
+Scraping: History and Philosophy of Science
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/hps.html
+Scraping: Philosophy
+Scraping: Values in Society
+Scraping: Physics
+Scraping: Political Science
+Scraping: Psychology
+Scraping: French
+Scraping: Italian
+Scraping: Portuguese
+Scraping: Romance Languages and Literature
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/romance.html
+Scraping: Romance Linguistics
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/romling.html
+Scraping: Romanian
+Scraping: Spanish
+Scraping: Spanish Linguistics
+Scraping: Danish
+Scraping: Estonian
+Scraping: Finnish
+Scraping: Icelandic
+Scraping: Latvian
+Scraping: Lithuanian
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/romanianr.html
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/icel.html
+Scraping: Norwegian
+Scraping: Scandinavian
+Scraping: Swedish
+Scraping: Bosnian/Croatian/Serbian
+Scraping: Bulgarian
+Scraping: Czech
+Scraping: Georgian
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/georg.html
+Scraping: Polish
+Scraping: Romanian
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/romanian.html
+Scraping: Russian
+Scraping: Slavic
+Scraping: Slavic Languages and Literatures
+Scraping: Slovenian
+Scraping: Ukrainian
+Scraping: Social Sciences
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/socsci.html
+Scraping: Sociology
+Scraping: Speech and Hearing Sciences
+Scraping: Statistics
+Scraping: Architecture
+Scraping: Built Environment
+Scraping: Construction Management
+Scraping: Landscape Architecture
+Scraping: Community, Environment, and Planning
+Scraping: Infrastructure Planning and Management
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/ipm.html
+Scraping: Real Estate
+Scraping: Strategic Planning for Critical Infrastructure
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/spci.html
+Scraping: Urban Planning
+Scraping: Accounting
+Scraping: Administration
+Scraping: Business Administration
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/admin.html
+Scraping: Business Administration Research Methods
+Scraping: Business Communications
+Scraping: Business Economics
+Scraping: Business Policy
+Scraping: E-Business
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/ebiz.html
+Scraping: Entrepreneurship
+Scraping: Finance
+Scraping: Human Resources Management and Organizational Behavior
+Scraping: Information Systems
+Scraping: Information Systems Master of Science
+Scraping: International Business
+Scraping: Management
+Scraping: Marketing
+Scraping: Operations Management
+Scraping: Organization and Environment
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/orgenv.html
+Scraping: Quantitative Methods
+Scraping: Strategic Management
+Scraping: Dental Hygiene
+Scraping: Dental Public Health Sciences
+Fetch.Get returned with a non-2XX/3XX status code: 404
+Link: https://www.washington.edu/students/timeschd/AUT2013/stratm.html
+Scraping: Dentistry
+Scraping: Endodontics
+Scraping: Oral Biology
+Scraping: Oral Medicine
+Scraping: Oral Surgery
+Scraping: Orthodontics
+Scraping: Pediatric Dentistry
+Scraping: Periodontics
+Scraping: Prosthodontics
+Scraping: Restorative Dentistry
+Scraping: Curriculum and Instruction
+Scraping: College of Education
+Scraping: Early Childhood and Family Studies
+Scraping: Education
+Scraping: Educational Leadership and Policy Studies
+Scraping: Educational Psychology
+Scraping: Special Education
+Scraping: Aeronautics and Astronautics
+Scraping: Chemical Engineering

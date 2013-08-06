@@ -1,31 +1,27 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
 
-	"github.com/kvu787/go_schedule/backend/config"
-	"github.com/kvu787/go_schedule/backend/database"
-	_ "github.com/lib/pq"
+	"github.com/kvu787/go_schedule/crawler/database"
 )
 
 func main() {
-	db, err := sql.Open(config.Db, config.DbConn)
-	defer db.Close()
+	i, err := database.GetSwitch()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	toAdd := database.Dept{"i", "like", "pie"}
-	if err = database.Insert(db, toAdd); err != nil {
-		fmt.Println(err)
-	}
-	res, err := database.Select(db, database.Dept{}, "")
+	fmt.Println(i)
+	err = database.UpdateSwitch(2, 1)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	for _, v := range res {
-		fmt.Println(v)
+	i, err = database.GetSwitch()
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
+	fmt.Println(i)
 }

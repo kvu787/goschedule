@@ -1,4 +1,3 @@
-// Main class for the Go Schedule web app.
 package main
 
 import (
@@ -6,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"time"
 
 	"github.com/kvu787/go_schedule/crawler/config"
 	"github.com/kvu787/go_schedule/crawler/database"
@@ -14,63 +14,113 @@ import (
 	_ "github.com/lib/pq"
 )
 
-var offline bool = false
-
 func main() {
-	if !offline {
-		client := http.DefaultClient
-		db, err := sql.Open(config.Db, config.DbConn)
-		defer db.Close()
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		Crawl(client, db)
-	} else {
-		db, err := sql.Open(config.TestDb, config.TestDbConn)
-		defer db.Close()
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		offlineCrawl(db)
-	}
-}
-
-func Crawl(c *http.Client, db *sql.DB) {
-	deptIndex, err := fetch.Get(c, config.RootIndex)
+	dbSwitch, err := database.GetSwitch()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	depts := extract.DeptIndex(deptIndex).Extract(nil)
-	for _, dept := range depts {
-		classSectIndex, err := fetch.Get(c, dept.Link)
+	for {
+		start := time.Now()
+		client := http.DefaultClient
+		var err error
+		var db *sql.DB
+		if dbSwitch == 2 {
+			fmt.Println("Setting up database on DbConn1...")
+			db, err = sql.Open(config.DbConn1.Driver(), config.DbConn1.Conn())
+
+		} else {
+			fmt.Println("Setting up database on DbConn2...")
+			db, err = sql.Open(config.DbConn2.Driver(), config.DbConn2.Conn())
+		}
 		if err != nil {
+			fmt.Println("Error in opening database")
 			fmt.Println(err)
-			continue // skip if dept link is bad
+			return
 		}
-		if database.Insert(db, dept); err != nil {
-			fmt.Println("Error inserting dept")
-			fmt.Println(dept.Abbreviation)
+		defer db.Close()
+		if err = setupDb(db); err != nil {
+			fmt.Println("Error in setting up database, stopping scraper")
+			fmt.Println(err)
+			return
 		}
-		classes := extract.ClassIndex(classSectIndex).Extract(dept)
-		for _, class := range classes {
-			if err := database.Insert(db, class); err != nil {
-				fmt.Println("Error inserting class")
-				fmt.Println("Dept", dept.Abbreviation)
-				fmt.Println("Class key", class.AbbreviationCode)
-				fmt.Println(err)
-			}
+		Crawl(client, db, true)
+		fmt.Println("Time taken:", time.Since(start))
+		if dbSwitch == 2 {
+			database.UpdateSwitch(2, 1)
+		} else {
+			database.UpdateSwitch(1, 2)
 		}
-		sects := extract.SectIndex(classSectIndex).Extract(classes)
-		for _, sect := range sects {
-			if err := database.Insert(db, sect); err != nil {
-				fmt.Println("Error inserting sect")
-				fmt.Println(dept.Abbreviation)
-				fmt.Println(sect.SLN)
-				fmt.Println(err)
-			}
+		dbSwitch, _ = database.GetSwitch()
+		time.Sleep(config.ScraperTimeout)
+	}
+}
+
+func setupDb(db *sql.DB) error {
+	statements, err := database.ParseSqlFile(config.SchemaPath)
+	if err != nil {
+		return err
+	}
+	for _, s := range statements {
+		_, err := db.Exec(s)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func Crawl(c *http.Client, db *sql.DB, concurrent bool) error {
+	deptIndex, err := fetch.Get(c, config.RootIndex)
+	if err != nil {
+		return err
+	}
+	depts := extract.DeptIndex(deptIndex).Extract(nil)
+	if concurrent {
+		fmt.Println("Scraper started in concurrent mode")
+		quitc := make(chan int)
+		for _, dept := range depts {
+			go func(dept database.Dept) {
+				fmt.Println("Scraping:", dept.Title)
+				crawlDept(dept, c, db)
+				quitc <- 1
+			}(dept)
+			time.Sleep(config.ScraperFetchTimeout)
+		}
+		for i := 0; i < len(depts); i++ {
+			<-quitc
+		}
+	} else {
+		fmt.Println("Scraper started in non-concurrent mode")
+		for _, dept := range depts {
+			fmt.Println("Scraping:", dept.Title)
+			fetch.Get(c, dept.Link)
+			crawlDept(dept, c, db)
+		}
+	}
+	fmt.Println("Scraper done")
+	return nil
+}
+
+func crawlDept(dept database.Dept, c *http.Client, db *sql.DB) {
+	classSectIndex, err := fetch.Get(c, dept.Link)
+	if err != nil {
+		fmt.Println(err)
+		return // skip if dept link is bad
+	}
+	if database.Insert(db, dept); err != nil {
+		fmt.Println("Error inserting dept")
+	}
+	classes := extract.ClassIndex(classSectIndex).Extract(dept)
+	for _, class := range classes {
+		if err := database.Insert(db, class); err != nil {
+			fmt.Println("Error inserting class")
+		}
+	}
+	sects := extract.SectIndex(classSectIndex).Extract(classes)
+	for _, sect := range sects {
+		if err := database.Insert(db, sect); err != nil {
+			fmt.Println("Error inserting sect")
 		}
 	}
 }

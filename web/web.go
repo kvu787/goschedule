@@ -4,7 +4,9 @@ import (
 	"database/sql"
 	"fmt"
 	"html/template"
+	"net"
 	"net/http"
+	"net/http/fcgi"
 	"os"
 	"strings"
 	"time"
@@ -14,12 +16,14 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func router(w http.ResponseWriter, r *http.Request) {
+type router struct{}
+
+func (ro router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	switch {
 	case route("/").Match(r.URL):
 		indexHandler(w, r)
 		return
-	// serve files in the assets directory properly
+	// properly serve files in the assets directory
 	case route("/assets/:type/:file").Match(r.URL):
 		var filePath string = string(r.URL.Path[1:])
 		filePathSlice := strings.Split(filePath, "/")
@@ -31,7 +35,7 @@ func router(w http.ResponseWriter, r *http.Request) {
 			http.ServeContent(w, r, fileName, time.Now(), staticFile)
 		}
 		return
-	case r.URL.String() == "/schedule":
+	case route("/schedule").Match(r.URL):
 		deptsHandler(w, r)
 		return
 	case route("/schedule/:dept").Match(r.URL):
@@ -41,8 +45,7 @@ func router(w http.ResponseWriter, r *http.Request) {
 		sectsHandler(w, r)
 		return
 	default:
-		fmt.Fprintf(w, "no route matched")
-		fmt.Fprintln(w, r.URL.String())
+		fmt.Fprintf(w, "No route matched for:\n%s", r.URL.String())
 	}
 }
 
@@ -55,10 +58,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func deptsHandler(w http.ResponseWriter, r *http.Request) {
-	// fmt.Fprintln(w, "depts handler called")
-	// fmt.Fprintln(w, r.URL.String())
-
-	db, _ := sql.Open(config.Db, config.DbConn)
+	db := determineDb()
 	defer db.Close()
 	queryers, _ := database.Select(db, database.Dept{}, "")
 	var depts []database.Dept
@@ -73,11 +73,10 @@ func deptsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func classesHandler(w http.ResponseWriter, r *http.Request) {
-	dept := strings.Split(r.URL.String(), "/")[2]
-
-	db, _ := sql.Open(config.Db, config.DbConn)
+	dept := strings.Split(r.URL.Path, "/")[2]
+	db := determineDb()
 	defer db.Close()
-	queryers, _ := database.Select(db, database.Class{}, fmt.Sprintf("WHERE dept_abbreviation = '%s'", dept))
+	queryers, _ := database.Select(db, database.Class{}, fmt.Sprintf("WHERE dept_abbreviation = '%s' ORDER BY code", dept))
 	var classes []database.Class
 	for _, v := range queryers {
 		classes = append(classes, v.(database.Class))
@@ -95,14 +94,10 @@ func classesHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func sectsHandler(w http.ResponseWriter, r *http.Request) {
-	dept := strings.Split(r.URL.String(), "/")[2]
-	class := strings.Split(r.URL.String(), "/")[3]
-	// fmt.Fprintln(w, "sects handler called")
-	// fmt.Fprintln(w, r.URL.String())
-	// fmt.Fprintln(w, "dept:", dept)
-	// fmt.Fprintln(w, "class:", class)
+	dept := strings.Split(r.URL.Path, "/")[2]
+	class := strings.Split(r.URL.Path, "/")[3]
 
-	db, _ := sql.Open(config.Db, config.DbConn)
+	db := determineDb()
 	defer db.Close()
 	queryers, _ := database.Select(db, database.Sect{}, fmt.Sprintf("WHERE class_dept_abbreviation = '%s' ORDER BY section", class))
 	var sects []database.Sect
@@ -122,8 +117,24 @@ func sectsHandler(w http.ResponseWriter, r *http.Request) {
 	t.ExecuteTemplate(w, "base", viewBag)
 }
 
+func determineDb() *sql.DB {
+	i, _ := database.GetSwitch()
+	if i == 1 {
+		db, _ := sql.Open(config.DbConn1.Driver(), config.DbConn1.Conn())
+		return db
+	} else {
+		db, _ := sql.Open(config.DbConn2.Driver(), config.DbConn2.Conn())
+		return db
+	}
+}
+
 func main() {
-	http.HandleFunc(`/`, router)
 	fmt.Println("Go Schedule frontend started")
-	http.ListenAndServe(":8080", nil)
+	listener, err := net.Listen("tcp", "127.0.0.1:9000")
+	if err != nil {
+		fmt.Println(err)
+	}
+	if err := fcgi.Serve(listener, router{}); err != nil {
+		fmt.Println(err)
+	}
 }

@@ -1,7 +1,13 @@
 package config
 
+import "time"
+
+var (
+	ScraperTimeout      time.Duration = 5 * time.Minute
+	ScraperFetchTimeout time.Duration = 200 * time.Millisecond
+)
+
 const (
-	UtilityPath         string = "/home/kevinvu/workspaces/go/src/github.com/kvu787/uwts/backend/utility/html/"
 	RootIndex           string = "https://www.washington.edu/students/timeschd/AUT2013/"
 	DeptChunkRe         string = `(?i)<li><a.+?</a>` // remove tags
 	DeptAbbreviationRe  string = `(?i)\(.+?\)`

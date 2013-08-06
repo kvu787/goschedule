@@ -2,7 +2,6 @@ package database
 
 import (
 	"database/sql"
-	"errors"
 	"fmt"
 	"reflect"
 )
@@ -42,9 +41,7 @@ func receive(q Queryer, rows *sql.Rows) ([]Queryer, error) {
 			case nil:
 				break
 			default:
-				return nil, errors.New(
-					fmt.Sprintf("Failed to fetch value from database: %v", underlyingValue.Interface()),
-				)
+				return nil, fmt.Errorf("Failed to fetch value from database: %v", underlyingValue.Interface())
 			}
 		}
 		qNew = ptrValue.Interface().(Queryer)
@@ -53,7 +50,6 @@ func receive(q Queryer, rows *sql.Rows) ([]Queryer, error) {
 	return queryers, nil
 }
 
-// TODO (kvu787): how are nil values handled?
 func prepareInsertString(q Queryer) string {
 	sql := fmt.Sprintf("INSERT INTO %s VALUES (", q.TableName())
 	v := reflect.ValueOf(q)
