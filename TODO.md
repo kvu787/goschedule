@@ -1,0 +1,7 @@
+- Fix template file paths
+- Improve responsive design for section 
+- About section
+    - Note: currently only covers autumn 2013
+- Add "Feedback" js tab thingy
+- Scrape class level info
+- Scrape detailed class info (ex. [https://sdb.admin.washington.edu/timeschd/uwnetid/sln.asp?QTRYR=AUT+2013&SLN=20486](https://sdb.admin.washington.edu/timeschd/uwnetid/sln.asp?QTRYR=AUT+2013&SLN=20486))

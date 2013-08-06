@@ -20,6 +20,6 @@ const (
 	ClassTitleRe        string = `(?i)<a href.*?>.+?</a>`    // remove tags
 	SectChunkRe         string = `(?s).{7}<A HREF=h.+?</td>` // remove tags
 	SpotsRe             string = `\d+`
-	MeetingTimeRe       string = `(?i)\d{3,4}.\d{3,4}`
+	MeetingTimeRe       string = `(?i)\w{1,5}\s*\d{3,4}-\d{3,4}`
 	BlankLine           string = `^\s*$`
 )
