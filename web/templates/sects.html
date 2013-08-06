@@ -8,6 +8,9 @@
     background-color: #428bca;
     color: white;
   }
+  .thin-h6 {
+    margin-bottom: 2px;
+  }
 </style>
 <div class="container">
   <div class="row">
@@ -30,6 +33,7 @@
             <h5><small>credit&nbsp;&nbsp;&nbsp;</small>{{.Credit}}</h5>
           </div>
           <div class="col-lg-2 col-sm-2 col-2">
+            <h6 class="text-muted thin-h6">Status</h6>
             <h3 style="margin-top: 0px;">
               {{if .IsOpen}}
                 <span class="label label-success">Open</span>
@@ -40,6 +44,7 @@
             {{.TakenSpots}} / {{.TotalSpots}}
           </div>
           <div class="col-lg-3 col-sm-3 col-3">
+            <h6 class="text-muted thin-h6">Meeting Times</h6>
             {{range .GetMeetingTimes}}
               <p>
                 <span class="label {{if .MapDays.m}}label-primary{{else}}label-white{{end}}">M</span>
@@ -54,6 +59,7 @@
             {{end}}
           </div>
           <div class="col-lg-5 col-sm-5 col-5">
+            <h6 class="text-muted thin-h6">Other</h6>
             {{range .GetRestriction}}
               {{range $token, $yes := .}}
                 {{if $yes}}
@@ -93,6 +99,7 @@
         </div>
       </div>
       <div class="col-lg-5 col-sm-12">
+        <h6 class="text-muted thin-h6">Info</h6>
         Taught by: <strong>{{with .Instructor}}{{.}}{{else}}n/a{{end}}</strong>
         <br />
         {{.Info}}
