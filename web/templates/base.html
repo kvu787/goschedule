@@ -4,7 +4,7 @@
 <head>
   <title>Go Schedule</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="/assets/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap.min.css">
 </head>
 <body>
   <div class="navbar navbar-static-top">
@@ -14,14 +14,8 @@
         <a data-toggle="modal" href="#help-modal" class="btn btn-primary" >Schedule Help</a>
       </form>
       <ul class="nav navbar-nav pull-right">
-        <li><a href="#">About</a></li>
+        <li><a href="https://github.com/kvu787/go-schedule">GitHub</a></li>
       </ul>
-    </div>
-  </div>
-  <div class="container">
-    <div class="alert">
-      <button type="button" class="close" data-dismiss="alert">&times;</button>
-      <strong>Warning!</strong> Go Schedule is still in development. Check the <a href="http://www.washington.edu/students/timeschd/AUT2013/">old time schedule</a> before you actually register for classes.
     </div>
   </div>
   {{template "body" .}}
@@ -122,9 +116,11 @@
         </div>
       </div>
     </div>
-  <!-- /.modal -->
-  <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
-  <script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>
+  <!-- end modal, TODO: move to partial -->
+  <script src="http://code.jquery.com/jquery.js"></script>
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.2.0/respond.min.js"></script>
+
 </body>
 </html>
 {{end}}

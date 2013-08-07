@@ -1,6 +1,7 @@
-- Fix template file paths
+- Make deployment/updating less painful
+    - Use template file paths relative to app path
 - Improve responsive design for section 
-- About section
+- add About section
     - Note: currently only covers autumn 2013
 - Add "Feedback" js tab thingy
 - Scrape class level info

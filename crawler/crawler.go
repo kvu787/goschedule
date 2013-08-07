@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"time"
 
@@ -22,6 +23,7 @@ func main() {
 	}
 	for {
 		start := time.Now()
+		log.Println("Scraper started at:", start.String())
 		client := http.DefaultClient
 		var err error
 		var db *sql.DB
@@ -34,13 +36,13 @@ func main() {
 			db, err = sql.Open(config.DbConn2.Driver(), config.DbConn2.Conn())
 		}
 		if err != nil {
-			fmt.Println("Error in opening database")
+			log.Fatalln("Error in opening database")
 			fmt.Println(err)
 			return
 		}
 		defer db.Close()
 		if err = setupDb(db); err != nil {
-			fmt.Println("Error in setting up database, stopping scraper")
+			log.Fatalln("Error in setting up database, stopping scraper")
 			fmt.Println(err)
 			return
 		}

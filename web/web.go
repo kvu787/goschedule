@@ -58,7 +58,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func deptsHandler(w http.ResponseWriter, r *http.Request) {
-	db := determineDb()
+	db, _ := determineDb()
 	defer db.Close()
 	queryers, _ := database.Select(db, database.Dept{}, "")
 	var depts []database.Dept
@@ -74,7 +74,7 @@ func deptsHandler(w http.ResponseWriter, r *http.Request) {
 
 func classesHandler(w http.ResponseWriter, r *http.Request) {
 	dept := strings.Split(r.URL.Path, "/")[2]
-	db := determineDb()
+	db, _ := determineDb()
 	defer db.Close()
 	queryers, _ := database.Select(db, database.Class{}, fmt.Sprintf("WHERE dept_abbreviation = '%s' ORDER BY code", dept))
 	var classes []database.Class
@@ -97,7 +97,7 @@ func sectsHandler(w http.ResponseWriter, r *http.Request) {
 	dept := strings.Split(r.URL.Path, "/")[2]
 	class := strings.Split(r.URL.Path, "/")[3]
 
-	db := determineDb()
+	db, _ := determineDb()
 	defer db.Close()
 	queryers, _ := database.Select(db, database.Sect{}, fmt.Sprintf("WHERE class_dept_abbreviation = '%s' ORDER BY section", class))
 	var sects []database.Sect
@@ -117,19 +117,25 @@ func sectsHandler(w http.ResponseWriter, r *http.Request) {
 	t.ExecuteTemplate(w, "base", viewBag)
 }
 
-func determineDb() *sql.DB {
+func determineDb() (*sql.DB, bool) {
 	i, _ := database.GetSwitch()
 	if i == 1 {
 		db, _ := sql.Open(config.DbConn1.Driver(), config.DbConn1.Conn())
-		return db
+		return db, true
 	} else {
 		db, _ := sql.Open(config.DbConn2.Driver(), config.DbConn2.Conn())
-		return db
+		return db, false
 	}
 }
 
 func main() {
 	fmt.Println("Go Schedule frontend started")
+	_, dbswitch := determineDb()
+	if dbswitch {
+		fmt.Println("Using DbConn1")
+	} else {
+		fmt.Println("Using DbConn2")
+	}
 	listener, err := net.Listen("tcp", "127.0.0.1:9000")
 	if err != nil {
 		fmt.Println(err)
