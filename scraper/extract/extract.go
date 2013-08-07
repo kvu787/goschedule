@@ -11,8 +11,8 @@ import (
 	"regexp"
 	"strconv"
 
-	"github.com/kvu787/go-schedule/crawler/config"
-	"github.com/kvu787/go-schedule/crawler/database"
+	"github.com/kvu787/go-schedule/scraper/config"
+	"github.com/kvu787/go-schedule/scraper/database"
 )
 
 // Extracter is implemented by any byteslice from which

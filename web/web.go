@@ -11,8 +11,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/kvu787/go-schedule/crawler/config"
-	"github.com/kvu787/go-schedule/crawler/database"
+	"github.com/kvu787/go-schedule/scraper/config"
+	"github.com/kvu787/go-schedule/scraper/database"
 	_ "github.com/lib/pq"
 )
 

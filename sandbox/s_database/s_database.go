@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/kvu787/go-schedule/crawler/database"
+	"github.com/kvu787/go-schedule/scraper/database"
 )
 
 func main() {

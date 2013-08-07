@@ -8,10 +8,10 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/kvu787/go-schedule/crawler/config"
-	"github.com/kvu787/go-schedule/crawler/database"
-	"github.com/kvu787/go-schedule/crawler/extract"
-	"github.com/kvu787/go-schedule/crawler/fetch"
+	"github.com/kvu787/go-schedule/scraper/config"
+	"github.com/kvu787/go-schedule/scraper/database"
+	"github.com/kvu787/go-schedule/scraper/extract"
+	"github.com/kvu787/go-schedule/scraper/fetch"
 	_ "github.com/lib/pq"
 )
 
@@ -46,7 +46,7 @@ func main() {
 			fmt.Println(err)
 			return
 		}
-		Crawl(client, db, true)
+		Scrape(client, db, true)
 		fmt.Println("Time taken:", time.Since(start))
 		if dbSwitch == 2 {
 			database.UpdateSwitch(2, 1)
@@ -72,7 +72,7 @@ func setupDb(db *sql.DB) error {
 	return nil
 }
 
-func Crawl(c *http.Client, db *sql.DB, concurrent bool) error {
+func Scrape(c *http.Client, db *sql.DB, concurrent bool) error {
 	deptIndex, err := fetch.Get(c, config.RootIndex)
 	if err != nil {
 		return err
@@ -84,7 +84,7 @@ func Crawl(c *http.Client, db *sql.DB, concurrent bool) error {
 		for _, dept := range depts {
 			go func(dept database.Dept) {
 				fmt.Println("Scraping:", dept.Title)
-				crawlDept(dept, c, db)
+				scrapeDept(dept, c, db)
 				quitc <- 1
 			}(dept)
 			time.Sleep(config.ScraperFetchTimeout)
@@ -97,14 +97,14 @@ func Crawl(c *http.Client, db *sql.DB, concurrent bool) error {
 		for _, dept := range depts {
 			fmt.Println("Scraping:", dept.Title)
 			fetch.Get(c, dept.Link)
-			crawlDept(dept, c, db)
+			scrapeDept(dept, c, db)
 		}
 	}
 	fmt.Println("Scraper done")
 	return nil
 }
 
-func crawlDept(dept database.Dept, c *http.Client, db *sql.DB) {
+func scrapeDept(dept database.Dept, c *http.Client, db *sql.DB) {
 	classSectIndex, err := fetch.Get(c, dept.Link)
 	if err != nil {
 		fmt.Println(err)
@@ -127,8 +127,9 @@ func crawlDept(dept database.Dept, c *http.Client, db *sql.DB) {
 	}
 }
 
-func offlineCrawl(db *sql.DB) {
-	fmt.Println("Crawler started")
+// This is probably currently broken
+func offlineScrape(db *sql.DB) {
+	fmt.Println("Scraper started")
 	math, _ := ioutil.ReadFile("utility/sample/math.html")
 	engl, _ := ioutil.ReadFile("utility/sample/engl.html")
 	cse, _ := ioutil.ReadFile("utility/sample/cse.html")

@@ -1,8 +1,20 @@
-- Make deployment/updating less painful
-    - Use template file paths relative to app path
-- Improve responsive design for section 
-- add About section
-    - Note: currently only covers autumn 2013
-- Add "Feedback" js tab thingy
-- Scrape class level info
-- Scrape detailed class info (ex. [https://sdb.admin.washington.edu/timeschd/uwnetid/sln.asp?QTRYR=AUT+2013&SLN=20486](https://sdb.admin.washington.edu/timeschd/uwnetid/sln.asp?QTRYR=AUT+2013&SLN=20486))
+- Refactoring
+    - Write tests
+    - Finish documentation
+    - Make deployment/updating less painful
+        - Use template file paths relative to app path
+        - Use templating to generate Nginx config
+        - Understand what the Nginx config does
+    - Implement a load-balancer to manage scrape requests and database inserts instead of the current timeout/stagger method
+    - Write tests
+    - Organize html into partials
+    - Add stuff to .gitignore
+    - Use yaml for config
+    - Also, write tests
+- Features
+    - Improve responsive design for section 
+    - add About section
+        - Note: currently only covers autumn 2013
+    - Add "Feedback" js tab thingy
+    - Scrape class level info
+    - Scrape detailed class info (ex. [https://sdb.admin.washington.edu/timeschd/uwnetid/sln.asp?QTRYR=AUT+2013&SLN=20486](https://sdb.admin.washington.edu/timeschd/uwnetid/sln.asp?QTRYR=AUT+2013&SLN=20486))
