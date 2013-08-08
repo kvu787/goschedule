@@ -51,8 +51,8 @@ func (ro router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	t := template.Must(template.ParseFiles(
-		"templates/index.html",
-		"templates/base.html",
+		"web/templates/index.html",
+		"web/templates/base.html",
 	))
 	t.ExecuteTemplate(w, "base", nil)
 }
@@ -66,8 +66,8 @@ func deptsHandler(w http.ResponseWriter, r *http.Request) {
 		depts = append(depts, v.(database.Dept))
 	}
 	t := template.Must(template.ParseFiles(
-		"templates/depts.html",
-		"templates/base.html",
+		"web/templates/depts.html",
+		"web/templates/base.html",
 	))
 	t.ExecuteTemplate(w, "base", depts)
 }
@@ -82,8 +82,8 @@ func classesHandler(w http.ResponseWriter, r *http.Request) {
 		classes = append(classes, v.(database.Class))
 	}
 	t := template.Must(template.ParseFiles(
-		"templates/classes.html",
-		"templates/base.html",
+		"web/templates/classes.html",
+		"web/templates/base.html",
 	))
 
 	viewBag := make(map[string]interface{})
@@ -105,8 +105,8 @@ func sectsHandler(w http.ResponseWriter, r *http.Request) {
 		sects = append(sects, v.(database.Sect))
 	}
 	t := template.Must(template.ParseFiles(
-		"templates/sects.html",
-		"templates/base.html",
+		"web/templates/sects.html",
+		"web/templates/base.html",
 	))
 
 	viewBag := make(map[string]interface{})
@@ -129,6 +129,10 @@ func determineDb() (*sql.DB, bool) {
 }
 
 func main() {
+	if err := os.Chdir(os.ExpandEnv(config.AppRoot)); err != nil {
+		fmt.Println(err)
+		return
+	}
 	fmt.Println("Go Schedule frontend started")
 	_, dbswitch := determineDb()
 	if dbswitch {

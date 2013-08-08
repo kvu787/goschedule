@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/kvu787/go-schedule/scraper/config"
@@ -16,6 +17,10 @@ import (
 )
 
 func main() {
+	if err := os.Chdir(os.ExpandEnv(config.AppRoot)); err != nil {
+		fmt.Println(err)
+		return
+	}
 	dbSwitch, err := database.GetSwitch()
 	if err != nil {
 		fmt.Println(err)

@@ -26,10 +26,6 @@ func (db DbConn) Conn() string {
 	)
 }
 
-const (
-	SchemaPath string = "utility/sql/schema.sql" // relative to crawler.go
-)
-
 var (
 	Switch DbConn = DbConn{
 		"postgres",
