@@ -25,80 +25,88 @@
   </div>
   {{range .sects}}
     <div class="row">
-      <div class="col-lg-7 col-sm-12">
+      <div class="col-lg-7 col-sm-12 col-12">
         <div class="row">
-          <div class="col-lg-2 col-sm-2 col-2" >
-            <span style="font-size: 20px;"><strong>{{.SLN}}</strong></span><br />
-            <h5><small>section&nbsp;&nbsp;&nbsp;</small>{{.Section}}</h5>
-            <h5><small>credit&nbsp;&nbsp;&nbsp;</small>{{.Credit}}</h5>
+          <div class="col-lg-4 col-sm-4 col-12">
+            <div class="row">
+              <div class="col-lg-5 col-sm-5 col-5">
+                <span style="font-size: 20px;"><strong>{{.SLN}}</strong></span><br />
+                <h5><small>section&nbsp;&nbsp;&nbsp;</small>{{.Section}}</h5>
+                <h5><small>credit&nbsp;&nbsp;&nbsp;</small>{{.Credit}}</h5>
+              </div>
+              <div class="col-lg-7 col-sm-7 col-7">
+                <h6 class="text-muted thin-h6">Status</h6>
+                <h3 style="margin-top: 0px;">
+                  {{if .IsOpen}}
+                    <span class="label label-success">Open</span>
+                  {{else}}
+                    <span class="label label-danger">Closed</span>
+                  {{end}}
+                </h3>
+                {{.TakenSpots}} / {{.TotalSpots}}
+              </div>
+            </div>
           </div>
-          <div class="col-lg-2 col-sm-2 col-2">
-            <h6 class="text-muted thin-h6">Status</h6>
-            <h3 style="margin-top: 0px;">
-              {{if .IsOpen}}
-                <span class="label label-success">Open</span>
-              {{else}}
-                <span class="label label-danger">Closed</span>
-              {{end}}
-            </h3>
-            {{.TakenSpots}} / {{.TotalSpots}}
-          </div>
-          <div class="col-lg-3 col-sm-3 col-3">
-            <h6 class="text-muted thin-h6">Meeting Times</h6>
-            {{range .GetMeetingTimes}}
-              <p>
-                <span class="label {{if .MapDays.m}}label-primary{{else}}label-white{{end}}">M</span>
-                <span class="label {{if .MapDays.t}}label-primary{{else}}label-white{{end}}">Tu</span>
-                <span class="label {{if .MapDays.w}}label-primary{{else}}label-white{{end}}">W</span>
-                <span class="label {{if .MapDays.th}}label-primary{{else}}label-white{{end}}">Th</span>
-                <span class="label {{if .MapDays.f}}label-primary{{else}}label-white{{end}}">F</span>
+          <div class="col-lg-8 col-sm-8 col-12">
+            <div class="row">
+              <div class="col-lg-5 col-sm-5 col-5">
+                <h6 class="text-muted thin-h6">Meeting Times</h6>
+                {{range .GetMeetingTimes}}
+                  <p>
+                    <span class="label {{if .MapDays.m}}label-primary{{else}}label-white{{end}}">M</span>
+                    <span class="label {{if .MapDays.t}}label-primary{{else}}label-white{{end}}">Tu</span>
+                    <span class="label {{if .MapDays.w}}label-primary{{else}}label-white{{end}}">W</span>
+                    <span class="label {{if .MapDays.th}}label-primary{{else}}label-white{{end}}">Th</span>
+                    <span class="label {{if .MapDays.f}}label-primary{{else}}label-white{{end}}">F</span>
+                    <br />
+                    {{.Time}}<br /> 
+                    {{.Building}} {{.Room}}
+                  </p>
+                {{end}}
+              </div>
+              <div class="col-lg-7 col-sm-7 col-7">
+                <h6 class="text-muted thin-h6">Other</h6>
+                {{range .GetRestriction}}
+                  {{range $token, $yes := .}}
+                    {{if $yes}}
+                    <span class="label label-info">{{$token}}</span>
+                    {{else}}
+                    <span class="label label-white">{{$token}}</span>
+                    {{end}}
+                  {{end}}
+                {{end}}
                 <br />
-                {{.Time}}<br /> 
-                {{.Building}} {{.Room}}
-              </p>
-            {{end}}
-          </div>
-          <div class="col-lg-5 col-sm-5 col-5">
-            <h6 class="text-muted thin-h6">Other</h6>
-            {{range .GetRestriction}}
-              {{range $token, $yes := .}}
-                {{if $yes}}
-                <span class="label label-info">{{$token}}</span>
+                {{with .Fee}}
+                  <span class="label label-info">{{.}}</span>
                 {{else}}
-                <span class="label label-white">{{$token}}</span>
+                  <span class="label label-white">No fee</span>
+                {{end}} 
+                <br />
+                {{range .GetGradesTokens}}
+                  {{range $token, $yes := .}}
+                    {{if $yes}}
+                    <span class="label label-info">{{$token}}</span>
+                    {{else}}
+                    <span class="label label-white">{{$token}}</span>
+                    {{end}}
+                  {{end}}
                 {{end}}
-              {{end}}
-            {{end}}
-            <br />
-            {{with .Fee}}
-              <span class="label label-info">{{.}}</span>
-            {{else}}
-              <span class="label label-white">No fee</span>
-            {{end}} 
-            <br />
-            {{range .GetGradesTokens}}
-              {{range $token, $yes := .}}
-                {{if $yes}}
-                <span class="label label-info">{{$token}}</span>
-                {{else}}
-                <span class="label label-white">{{$token}}</span>
+                <br />
+                {{range .GetOtherTokens}}
+                  {{range $token, $yes := .}}
+                    {{if $yes}}
+                    <span class="label label-info">{{$token}}</span>
+                    {{else}}
+                    <span class="label label-white">{{$token}}</span>
+                    {{end}}
+                  {{end}}
                 {{end}}
-              {{end}}
-            {{end}}
-            <br />
-            {{range .GetOtherTokens}}
-              {{range $token, $yes := .}}
-                {{if $yes}}
-                <span class="label label-info">{{$token}}</span>
-                {{else}}
-                <span class="label label-white">{{$token}}</span>
-                {{end}}
-              {{end}}
-            {{end}}
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="col-lg-5 col-sm-12">
+      <div class="col-lg-5 col-sm-12 col-12">
         <h6 class="text-muted thin-h6">Info</h6>
         Taught by: <strong>{{with .Instructor}}{{.}}{{else}}n/a{{end}}</strong>
         <br />

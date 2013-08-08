@@ -11,7 +11,6 @@
     - Use yaml for config
     - Also, write tests
 - Features
-    - Improve mobile/responsive design for section 
     - add About section
         - Note: currently only covers autumn 2013
     - Add "Feedback" js tab thingy

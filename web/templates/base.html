@@ -9,13 +9,22 @@
 <body>
   <div class="navbar navbar-static-top">
     <div class="container">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
       <a class="navbar-brand" href="/">Go Schedule</a>
-      <form class="navbar-form pull-right">
-        <a data-toggle="modal" href="#help-modal" class="btn btn-primary" >Schedule Help</a>
-      </form>
-      <ul class="nav navbar-nav pull-right">
-        <li><a href="https://github.com/kvu787/go-schedule">GitHub</a></li>
-      </ul>
+      <div class="nav-collapse collapse navbar-responsive-collapse">
+        <ul class="nav navbar-nav pull-right">
+          <li><a href="https://github.com/kvu787/go-schedule">GitHub</a></li>
+          <li>
+            <form class="navbar-form">
+              <a data-toggle="modal" href="#help-modal" class="btn btn-primary">Schedule Help</a>
+            </form>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
   {{template "body" .}}
