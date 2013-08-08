@@ -28,7 +28,7 @@ func (ro router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		var filePath string = string(r.URL.Path[1:])
 		filePathSlice := strings.Split(filePath, "/")
 		fileName := filePathSlice[len(filePathSlice)-1]
-		staticFile, err := os.Open(filePath)
+		staticFile, err := os.Open("web/" + filePath)
 		if err != nil {
 			fmt.Fprintf(w, "404, file not found error: "+err.Error())
 		} else {
