@@ -17,53 +17,65 @@ import (
 )
 
 func main() {
-	if err := os.Chdir(os.ExpandEnv(config.AppRoot)); err != nil {
-		fmt.Println(err)
-		return
-	}
-	dbSwitch, err := database.GetSwitch()
-	if err != nil {
+	if err := os.Chdir(os.ExpandEnv(config.AppRoot)); err != nil { // is this idiomatic and safe?
 		fmt.Println(err)
 		return
 	}
 	for {
-		start := time.Now()
-		log.Println("Scraper started at:", start.String())
-		client := http.DefaultClient
-		var err error
-		var db *sql.DB
-		if dbSwitch == 2 {
-			fmt.Println("Setting up database on DbConn1...")
-			db, err = sql.Open(config.DbConn1.Driver(), config.DbConn1.Conn())
-
-		} else {
-			fmt.Println("Setting up database on DbConn2...")
-			db, err = sql.Open(config.DbConn2.Driver(), config.DbConn2.Conn())
-		}
+		// open switch db
+		switchDB, err := sql.Open(config.DbConnSwitch.Driver(), config.DbConnSwitch.Conn())
 		if err != nil {
-			log.Fatalln("Error in opening database")
-			fmt.Println(err)
+			log.Fatalln("Failed to open switch db")
+			log.Fatalln(err)
+			return
+		}
+		defer switchDB.Close()
+		// determine which app db to use
+		var db *sql.DB
+		if db, err = getDB(switchDB); err != nil {
+			log.Fatalln("Failed to determine app db")
+			log.Fatalln(err)
 			return
 		}
 		defer db.Close()
-		if err = setupDb(db); err != nil {
-			log.Fatalln("Error in setting up database, stopping scraper")
-			fmt.Println(err)
+		// setup db
+		if err = setupDB(db); err != nil {
+			log.Fatalln("Failed to setup app db")
+			log.Fatalln(err)
 			return
 		}
-		Scrape(client, db, true)
-		fmt.Println("Time taken:", time.Since(start))
-		if dbSwitch == 2 {
-			database.UpdateSwitch(2, 1)
-		} else {
-			database.UpdateSwitch(1, 2)
+		// scrape
+		client := http.DefaultClient
+		if err = scrape(client, db, true); err != nil {
+			log.Fatalln("Scraping failed")
+			log.Fatalln(err)
+			return
 		}
-		dbSwitch, _ = database.GetSwitch()
+		// flip switch
+		if err = database.FlipSwitch(switchDB); err != nil {
+			log.Fatalln("Failed to flip switch db")
+			log.Fatalln(err)
+			return
+		}
 		time.Sleep(config.ScraperTimeout)
 	}
 }
 
-func setupDb(db *sql.DB) error {
+func getDB(switchDB *sql.DB) (res *sql.DB, err error) {
+	num, err := database.GetSwitch(switchDB)
+	if num == 1 {
+		if res, err = sql.Open(config.DbConn2.Driver(), config.DbConn2.Conn()); err != nil {
+			return nil, err
+		}
+	} else {
+		if res, err = sql.Open(config.DbConn1.Driver(), config.DbConn1.Conn()); err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func setupDB(db *sql.DB) error {
 	statements, err := database.ParseSqlFile(config.SchemaPath)
 	if err != nil {
 		return err
@@ -77,7 +89,7 @@ func setupDb(db *sql.DB) error {
 	return nil
 }
 
-func Scrape(c *http.Client, db *sql.DB, concurrent bool) error {
+func scrape(c *http.Client, db *sql.DB, concurrent bool) error {
 	deptIndex, err := fetch.Get(c, config.RootIndex)
 	if err != nil {
 		return err
@@ -88,7 +100,6 @@ func Scrape(c *http.Client, db *sql.DB, concurrent bool) error {
 		quitc := make(chan int)
 		for _, dept := range depts {
 			go func(dept database.Dept) {
-				fmt.Println("Scraping:", dept.Title)
 				scrapeDept(dept, c, db)
 				quitc <- 1
 			}(dept)
@@ -100,7 +111,6 @@ func Scrape(c *http.Client, db *sql.DB, concurrent bool) error {
 	} else {
 		fmt.Println("Scraper started in non-concurrent mode")
 		for _, dept := range depts {
-			fmt.Println("Scraping:", dept.Title)
 			fetch.Get(c, dept.Link)
 			scrapeDept(dept, c, db)
 		}

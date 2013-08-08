@@ -83,34 +83,33 @@ func ParseSqlFile(path string) ([]string, error) {
 	return statements, nil
 }
 
-func GetSwitch() (int, error) {
-	db, err := sql.Open(config.Switch.Driver(), config.Switch.Conn())
-	if err != nil {
-		return -1, err
-	}
-	defer db.Close()
+func GetSwitch(db *sql.DB) (int, error) {
 	var result int
-	query := fmt.Sprintf("SELECT %s FROM %s LIMIT 1", "switch_col", "switch_table")
-	err = db.QueryRow(query).Scan(&result)
-	if err != nil {
+	query := fmt.Sprintf("SELECT %s FROM %s LIMIT 1", config.SwitchDBCol, config.SwitchDBTable)
+	if err := db.QueryRow(query).Scan(&result); err != nil {
 		return -1, err
 	}
 	return result, nil
 }
 
-func UpdateSwitch(old int, update int) error {
-	db, err := sql.Open(config.Switch.Driver(), config.Switch.Conn())
+func FlipSwitch(db *sql.DB) error {
+	currentSwitch, err := GetSwitch(db)
 	if err != nil {
 		return err
 	}
-	defer db.Close()
+	var newSwitch int
+	if currentSwitch == 0 {
+		newSwitch = 1
+	} else {
+		newSwitch = 0
+	}
 	query := fmt.Sprintf(
 		"UPDATE %s SET %s = %d WHERE %s = %d",
-		"switch_table",
-		"switch_col",
-		update,
-		"switch_col",
-		old,
+		config.SwitchDBTable,
+		config.SwitchDBCol,
+		newSwitch,
+		config.SwitchDBCol,
+		currentSwitch,
 	)
 	_, err = db.Exec(query)
 	if err != nil {

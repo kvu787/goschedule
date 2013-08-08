@@ -27,7 +27,7 @@ func (db DbConn) Conn() string {
 }
 
 var (
-	Switch DbConn = DbConn{
+	DbConnSwitch DbConn = DbConn{
 		"postgres",
 		"gosh",
 		"switch_db",
