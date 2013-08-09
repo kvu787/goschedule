@@ -32,14 +32,14 @@ func main() {
 		defer switchDB.Close()
 		// determine which app db to use
 		var db *sql.DB
-		if db, err = getDB(switchDB); err != nil {
+		if db, err = database.GetAppDB(switchDB, true); err != nil {
 			log.Fatalln("Failed to determine app db")
 			log.Fatalln(err)
 			return
 		}
 		defer db.Close()
-		// setup db
-		if err = setupDB(db); err != nil {
+		// run setup sql against db
+		if err = database.SetupDB(db); err != nil {
 			log.Fatalln("Failed to setup app db")
 			log.Fatalln(err)
 			return
@@ -59,34 +59,6 @@ func main() {
 		}
 		time.Sleep(config.ScraperTimeout)
 	}
-}
-
-func getDB(switchDB *sql.DB) (res *sql.DB, err error) {
-	num, err := database.GetSwitch(switchDB)
-	if num == 1 {
-		if res, err = sql.Open(config.DbConn2.Driver(), config.DbConn2.Conn()); err != nil {
-			return nil, err
-		}
-	} else {
-		if res, err = sql.Open(config.DbConn1.Driver(), config.DbConn1.Conn()); err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
-}
-
-func setupDB(db *sql.DB) error {
-	statements, err := database.ParseSqlFile(config.SchemaPath)
-	if err != nil {
-		return err
-	}
-	for _, s := range statements {
-		_, err := db.Exec(s)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 func scrape(c *http.Client, db *sql.DB, concurrent bool) error {

@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"html/template"
+	"log"
 	"net"
 	"net/http"
 	"net/http/fcgi"
@@ -58,7 +59,11 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func deptsHandler(w http.ResponseWriter, r *http.Request) {
-	db, _ := determineDb()
+	db, err := determineDb()
+	if err != nil {
+		log.Fatalln(err)
+		return
+	}
 	defer db.Close()
 	queryers, _ := database.Select(db, database.Dept{}, "")
 	var depts []database.Dept
@@ -74,7 +79,11 @@ func deptsHandler(w http.ResponseWriter, r *http.Request) {
 
 func classesHandler(w http.ResponseWriter, r *http.Request) {
 	dept := strings.Split(r.URL.Path, "/")[2]
-	db, _ := determineDb()
+	db, err := determineDb()
+	if err != nil {
+		log.Fatalln(err)
+		return
+	}
 	defer db.Close()
 	queryers, _ := database.Select(db, database.Class{}, fmt.Sprintf("WHERE dept_abbreviation = '%s' ORDER BY code", dept))
 	var classes []database.Class
@@ -96,8 +105,11 @@ func classesHandler(w http.ResponseWriter, r *http.Request) {
 func sectsHandler(w http.ResponseWriter, r *http.Request) {
 	dept := strings.Split(r.URL.Path, "/")[2]
 	class := strings.Split(r.URL.Path, "/")[3]
-
-	db, _ := determineDb()
+	db, err := determineDb()
+	if err != nil {
+		log.Fatalln(err)
+		return
+	}
 	defer db.Close()
 	queryers, _ := database.Select(db, database.Sect{}, fmt.Sprintf("WHERE class_dept_abbreviation = '%s' ORDER BY section", class))
 	var sects []database.Sect
@@ -117,15 +129,16 @@ func sectsHandler(w http.ResponseWriter, r *http.Request) {
 	t.ExecuteTemplate(w, "base", viewBag)
 }
 
-func determineDb() (*sql.DB, bool) {
-	i, _ := database.GetSwitch()
-	if i == 1 {
-		db, _ := sql.Open(config.DbConn1.Driver(), config.DbConn1.Conn())
-		return db, true
-	} else {
-		db, _ := sql.Open(config.DbConn2.Driver(), config.DbConn2.Conn())
-		return db, false
+func determineDb() (*sql.DB, error) {
+	switchDB, err := sql.Open(config.DbConnSwitch.Driver(), config.DbConnSwitch.Conn())
+	if err != nil {
+		return nil, err
 	}
+	db, err := database.GetAppDB(switchDB, false)
+	if err != nil {
+		return nil, err
+	}
+	return db, nil
 }
 
 func main() {
@@ -134,12 +147,6 @@ func main() {
 		return
 	}
 	fmt.Println("Go Schedule frontend started")
-	_, dbswitch := determineDb()
-	if dbswitch {
-		fmt.Println("Using DbConn1")
-	} else {
-		fmt.Println("Using DbConn2")
-	}
 	listener, err := net.Listen("tcp", "127.0.0.1:9000")
 	if err != nil {
 		fmt.Println(err)

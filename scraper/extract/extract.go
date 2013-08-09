@@ -5,7 +5,6 @@ package extract
 
 import (
 	"bytes"
-	"database/sql"
 	"encoding/json"
 	"errors"
 	"regexp"
