@@ -1,3 +1,4 @@
+// Package fetch provides functions to fetch web pages.
 package fetch
 
 import (
@@ -6,6 +7,9 @@ import (
 	"net/http"
 )
 
+// Get requests a url with the given client and returns the bytes
+// of the response body if successful.
+// A response with a non-2XX/3XX status code is considered an error.
 func Get(client *http.Client, url string) ([]byte, error) {
 	resp, err := client.Get(url)
 	if err != nil {

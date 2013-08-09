@@ -92,6 +92,7 @@ func setupDB(db *sql.DB) error {
 func scrape(c *http.Client, db *sql.DB, concurrent bool) error {
 	deptIndex, err := fetch.Get(c, config.RootIndex)
 	if err != nil {
+		log.Fatalln("Failed to fetch RootIndex (department page)")
 		return err
 	}
 	depts := extract.DeptIndex(deptIndex).Extract(nil)

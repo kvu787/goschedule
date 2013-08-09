@@ -6,9 +6,8 @@ import (
 	"reflect"
 )
 
-// Receive stores the results of a raw SQL select
-// into the appropriate struct that implements
-// Queryer.
+// Receive stores the results of a raw SQL select into the
+// appropriate struct that implements Queryer.
 // How/why the hell does this work
 func receive(q Queryer, rows *sql.Rows) ([]Queryer, error) {
 	var queryers []Queryer
@@ -50,6 +49,7 @@ func receive(q Queryer, rows *sql.Rows) ([]Queryer, error) {
 	return queryers, nil
 }
 
+// prepareInsertString is a helper function used by Insert.
 func prepareInsertString(q Queryer) string {
 	sql := fmt.Sprintf("INSERT INTO %s VALUES (", q.TableName())
 	v := reflect.ValueOf(q)
@@ -63,6 +63,7 @@ func prepareInsertString(q Queryer) string {
 	return sql
 }
 
+// prepareInsertArguments is a helper function used by Insert.
 func prepareInsertArguments(q Queryer) []interface{} {
 	v := reflect.ValueOf(q)
 	arguments := []interface{}{}

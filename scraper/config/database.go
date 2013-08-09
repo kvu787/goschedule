@@ -4,6 +4,8 @@ import (
 	"fmt"
 )
 
+// A DbConn provides data to create a *sql.DB connection for PostgreSQL
+// databases.
 type DbConn struct {
 	driver   string
 	user     string

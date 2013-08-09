@@ -1,6 +1,5 @@
-// Package database provides basic (read: fragile)
-// object relational mapping between structs and
-// database tables.
+// Package database provides basic (read: fragile) object relational
+// mapping between structs and database tables.
 package database
 
 import (
@@ -16,7 +15,7 @@ import (
 // Select uses an empty Queryer struct to query the database
 // and return a slice of the corresponding Queryer structs.
 // By default it returns records in the form:
-// 'SELECT * FROM [tableName]'.
+// 'SELECT * FROM [q.TableName()] [additional SQL clauses]...'.
 // Additional SQL clauses can be specified in the filters
 // parameter.
 // TODO (kvu787): might want to split this into seperate functions
@@ -58,6 +57,10 @@ func Insert(db *sql.DB, q Queryer) error {
 	return nil
 }
 
+// ParseSqlFile parses a SQL file into a slice of SQL commands
+// (delimited by semicolons).
+// Semicolons are included in the slice of commands.
+// Comments (starting with '--') are ignored.
 func ParseSqlFile(path string) ([]string, error) {
 	f, err := os.Open(path)
 	if err != nil {
@@ -83,6 +86,9 @@ func ParseSqlFile(path string) ([]string, error) {
 	return statements, nil
 }
 
+// GetSwitch queries the 'switch db' specified in package config and
+// returns either 1 or 0.
+// Used to determine which database should be used to store scrape results.
 func GetSwitch(db *sql.DB) (int, error) {
 	var result int
 	query := fmt.Sprintf("SELECT %s FROM %s LIMIT 1", config.SwitchDBCol, config.SwitchDBTable)
@@ -92,6 +98,8 @@ func GetSwitch(db *sql.DB) (int, error) {
 	return result, nil
 }
 
+// Flip switch changes the value stored in the 'switch db' from 0 to 1
+// or from 1 to 0.
 func FlipSwitch(db *sql.DB) error {
 	currentSwitch, err := GetSwitch(db)
 	if err != nil {

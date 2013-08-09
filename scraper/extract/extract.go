@@ -15,21 +15,11 @@ import (
 	"github.com/kvu787/go-schedule/scraper/database"
 )
 
-// Extracter is implemented by any byteslice from which
-// information can be extracted from with Extract.
-// p is a (makeshift) optional argument that
-// will act as a parent/ancestor to the extracted
-// objects.
-type Extracter interface {
-	Extract(parent database.Queryer, db *sql.DB) interface{}
-}
-
 // DeptIndex wraps a webpage that contains an index
 // of UW departments.
 type DeptIndex []byte
 
-// Extract grabs department information from an index of
-// UW departments.
+// Extract grabs department information from an index of UW departments.
 // Parameter p Parent should be nil.
 // Returns a slice of Dept structs.
 func (body DeptIndex) Extract(parent database.Queryer) []database.Dept {
@@ -62,12 +52,10 @@ func (body DeptIndex) Extract(parent database.Queryer) []database.Dept {
 	return depts
 }
 
-// ClassIndex wraps a webpage that contains an index
-// of UW class headings.
+// ClassIndex wraps a webpage that contains an index of UW class headings.
 type ClassIndex []byte
 
-// Extract grabs class information from an index of
-// UW class headings.
+// Extract grabs class information from an index of UW class headings.
 // Parameter p Parent should be a Dept struct.
 // Returns a slice of Class structs.
 func (body ClassIndex) Extract(parent database.Queryer) []database.Class {
@@ -99,12 +87,10 @@ func (body ClassIndex) Extract(parent database.Queryer) []database.Class {
 	return classes // already sorted by index
 }
 
-// SectIndex wraps a webpage that contains an index
-// of UW class headings.
+// SectIndex wraps a webpage that contains an index of UW class headings.
 type SectIndex []byte
 
-// Extract grabs class information from an index of
-// UW sections.
+// Extract grabs class information from an index of UW sections.
 // Parameter p Parent accepts a slice of Class structs.
 // Returns a slice of Sect structss.
 func (body SectIndex) Extract(parent []database.Class) []database.Sect {
@@ -187,15 +173,15 @@ func checkMeetingTime(ln []byte) (database.MeetingTime, error) {
 	return database.MeetingTime{}, errors.New("Meeting time pattern not found.")
 }
 
-// replaceRegexp replaces all matches by the regexp r with
-// the string repl in the byteslice b.
+// replaceRegexp returns a copy of the byteslice replacing all
+// matches by the regexp r with the string repl.
 func replaceRegexp(b []byte, r string, repl string) []byte {
 	re := regexp.MustCompile(r)
 	return re.ReplaceAll(b, []byte(repl))
 }
 
-// removeRegexp uses each given regxp in sequence to
-// match and remove patterns in the string.
+// removeRegexp returns a copy of the byteslice, removing all
+// matches against the slice of regexps in r.
 func removeRegexp(b []byte, r ...string) []byte {
 	for _, v := range r {
 		re := regexp.MustCompile(v)
@@ -204,8 +190,8 @@ func removeRegexp(b []byte, r ...string) []byte {
 	return b
 }
 
-// matchRegex uses the given regexp to return an array
-// of all matches in the byteslice.
+// matchRegex uses the given regexp to return an array of all
+// matches in the byteslice.
 // Returns nil if there are no matches.
 func matchRegexp(b []byte, r string) [][]byte {
 	re := regexp.MustCompile(r)
@@ -216,16 +202,17 @@ func matchRegexp(b []byte, r string) [][]byte {
 	}
 }
 
-// matchIndexRegex uses the given regexp to return an array
-// of arrays indicating the start and stop indices of
-// each match in the byteslice.
+// matchIndexRegex uses the given regexp to return an array of
+// arrays indicating the start and stop indices of each match
+// in the byteslice.
 func matchIndexRegexp(b []byte, r string) [][]int {
 	re := regexp.MustCompile(r)
 	return re.FindAllIndex(b, -1)
 }
 
-// findRegexp uses the given regexp to return a match
-// if found in the byteslice.
+// findRegexp uses the given regexp to return a match if found
+// in the byteslice.
+// first indicates whether the first or last match should be returned.
 // Returns nil if no match found.
 func findRegexp(b []byte, r string, first bool) []byte {
 	re := regexp.MustCompile(r)
