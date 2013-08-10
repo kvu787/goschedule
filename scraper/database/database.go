@@ -18,42 +18,25 @@ import (
 // 'SELECT * FROM [q.TableName()] [additional SQL clauses]...'.
 // Additional SQL clauses can be specified in the filters
 // parameter.
-// TODO (kvu787): might want to split this into seperate functions
 func Select(db *sql.DB, q Queryer, filters string) ([]Queryer, error) {
-	tx, err := db.Begin()
-	if err != nil {
-		tx.Rollback()
-		return nil, err
-	}
 	query := fmt.Sprintf("SELECT * FROM %s %s", q.TableName(), filters)
-	rows, err := tx.Query(query)
+	rows, err := db.Query(query)
 	if err != nil {
-		tx.Rollback()
 		return nil, err
 	}
 	qs, err := receive(q, rows)
 	if err != nil {
-		tx.Rollback()
 		return nil, err
 	}
-	tx.Commit()
 	return qs, nil
 }
 
 // Insert inserts a Queryer struct into the database.
 func Insert(db *sql.DB, q Queryer) error {
-	tx, err := db.Begin()
-	defer tx.Commit()
-	if err != nil {
-		tx.Rollback()
-		return err
-	}
 	sql := prepareInsertString(q)
-	if _, err := tx.Exec(sql, prepareInsertArguments(q)...); err != nil {
-		tx.Rollback()
+	if _, err := db.Exec(sql, prepareInsertArguments(q)...); err != nil {
 		return fmt.Errorf("Failed to insert records: %s", err)
 	}
-	tx.Commit()
 	return nil
 }
 
