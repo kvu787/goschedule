@@ -1,5 +1,6 @@
 package extract
 
+// These regular expressions are used by the extract methods.
 const (
 	DeptChunkRe         string = `(?i)<li><a.+?</a>` // remove tags
 	DeptAbbreviationRe  string = `(?i)\(.+?\)`

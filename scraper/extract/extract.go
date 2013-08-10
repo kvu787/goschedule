@@ -1,6 +1,5 @@
-// Package extract provides structs for UW time
-// schedule information and methods to extract
-// them from a webpage.
+// Package extract provides methods to extract models defined in
+// package database from a webpage.
 package extract
 
 import (
@@ -154,11 +153,10 @@ func (body SectIndex) Extract(parent []database.Class) []database.Sect {
 	return sects
 }
 
-// checkMeetingTime checks if a byteslice contains
-// information for a MeetingTime struct.
-// If a MeetingTime is found, it is returned with nil
-// error. Else, nil is returned for MeetingTime and non
-// nil for error.
+// checkMeetingTime checks if a byteslice contains information
+// for a MeetingTime struct.
+// If a MeetingTime is found, it is returned with nil error. Else,
+// nil is returned for MeetingTime and non-nil for error.
 func checkMeetingTime(ln []byte) (database.MeetingTime, error) {
 	var mt database.MeetingTime
 	re := regexp.MustCompile(MeetingTimeRe)
