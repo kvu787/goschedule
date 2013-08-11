@@ -1,5 +1,7 @@
 // Package config provides various configurable variables used in
 // both the web and scraper programs.
+// This example file should be edited if necessary and copied to
+// `config.go` in the same folder.
 package config
 
 import "time"
