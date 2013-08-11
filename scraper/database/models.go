@@ -34,6 +34,7 @@ type Dept struct {
 	Link         string
 }
 
+// PrimaryKey returns the dept's Abbreviation.
 func (d Dept) PrimaryKey() interface{} {
 	return d.Abbreviation
 }
@@ -52,6 +53,7 @@ type Class struct {
 	Index            int
 }
 
+// PrimaryKey returns the class's AbbreviationCode.
 func (c Class) PrimaryKey() interface{} {
 	return c.AbbreviationCode
 }
@@ -89,6 +91,7 @@ type Sect struct {
 	Info                  string
 }
 
+// PrimaryKey returns the sect's SLN.
 func (s Sect) PrimaryKey() interface{} {
 	return s.SLN
 }

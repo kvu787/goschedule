@@ -70,15 +70,19 @@ func deptsHandler(w http.ResponseWriter, r *http.Request) {
 	for _, v := range queryers {
 		depts = append(depts, v.(database.Dept))
 	}
-	t := template.Must(template.ParseFiles(
+	t := template.Must(template.New("").Funcs(template.FuncMap{
+		"title": strings.Title,
+		"upper": strings.ToUpper,
+	}).ParseFiles(
 		"web/templates/depts.html",
 		"web/templates/base.html",
 	))
+
 	t.ExecuteTemplate(w, "base", depts)
 }
 
 func classesHandler(w http.ResponseWriter, r *http.Request) {
-	dept := strings.Split(r.URL.Path, "/")[2]
+	dept := strings.Split(strings.ToLower(r.URL.Path), "/")[2]
 	db, err := determineDb()
 	if err != nil {
 		log.Fatalln(err)
@@ -90,7 +94,10 @@ func classesHandler(w http.ResponseWriter, r *http.Request) {
 	for _, v := range queryers {
 		classes = append(classes, v.(database.Class))
 	}
-	t := template.Must(template.ParseFiles(
+	t := template.Must(template.New("").Funcs(template.FuncMap{
+		"title": strings.Title,
+		"upper": strings.ToUpper,
+	}).ParseFiles(
 		"web/templates/classes.html",
 		"web/templates/base.html",
 	))
@@ -103,8 +110,8 @@ func classesHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func sectsHandler(w http.ResponseWriter, r *http.Request) {
-	dept := strings.Split(r.URL.Path, "/")[2]
-	class := strings.Split(r.URL.Path, "/")[3]
+	dept := strings.Split(strings.ToLower(r.URL.Path), "/")[2]
+	class := strings.Split(strings.ToLower(r.URL.Path), "/")[3]
 	db, err := determineDb()
 	if err != nil {
 		log.Fatalln(err)
@@ -116,7 +123,10 @@ func sectsHandler(w http.ResponseWriter, r *http.Request) {
 	for _, v := range queryers {
 		sects = append(sects, v.(database.Sect))
 	}
-	t := template.Must(template.ParseFiles(
+	t := template.Must(template.New("").Funcs(template.FuncMap{
+		"title": strings.Title,
+		"upper": strings.ToUpper,
+	}).ParseFiles(
 		"web/templates/sects.html",
 		"web/templates/base.html",
 	))

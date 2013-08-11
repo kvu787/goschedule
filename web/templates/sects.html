@@ -17,8 +17,8 @@
     <div class="col-lg-12">
       <ul class="breadcrumb">
         <li><a href="/schedule">Departments</a></li>
-        <li><a href="/schedule/{{.dept}}">{{.dept}}</a></li>
-        <li><a href="/schedule/{{.dept}}/{{.class}}">{{.class}}</a></li>
+        <li><a href="/schedule/{{.dept}}">{{upper .dept}}</a></li>
+        <li><a href="/schedule/{{.dept}}/{{.class}}">{{upper .class}}</a></li>
       </ul>
       <h1>Sections</h1>
     </div>

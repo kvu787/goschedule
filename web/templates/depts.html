@@ -8,7 +8,7 @@
       <h1>Departments</h1>
       {{range .}}
         <h4>
-          <a href="/schedule/{{.Abbreviation}}">{{.Title}} <small>({{.Abbreviation}})</small></a>
+          <a href="/schedule/{{.Abbreviation}}">{{title .Title}} <small>({{upper .Abbreviation}})</small></a>
         </h4>
       {{end}}
     </div>

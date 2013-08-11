@@ -34,12 +34,15 @@ func (body DeptIndex) Extract(parent database.Queryer) []database.Dept {
 		fullTitle := removeRegexp(ck, TagRe)
 		fullTitle = replaceRegexp(fullTitle, `&nbsp;`, " ")
 		fullTitle = replaceRegexp(fullTitle, `&amp;`, "&")
-		dept.Title = string(bytes.TrimSpace(removeRegexp(fullTitle, DeptAbbreviationRe)))
+		dept.Title = string(
+			bytes.ToLower(
+				bytes.TrimSpace(
+					removeRegexp(fullTitle, DeptAbbreviationRe))))
 		// grab abbreviation
 		if abbreviation := findRegexp(fullTitle, DeptAbbreviationRe, false); abbreviation != nil {
 			abbreviation = removeRegexp(abbreviation, `\(`, `\)`)
 			abbreviation = replaceRegexp(abbreviation, " ", "")
-			dept.Abbreviation = string(bytes.ToUpper(abbreviation))
+			dept.Abbreviation = string(bytes.ToLower(abbreviation))
 		} else {
 			// skip dept if abbreviation not found
 			continue
@@ -69,12 +72,18 @@ func (body ClassIndex) Extract(parent database.Queryer) []database.Class {
 		// grab name (abbreviation and code)
 		name := findRegexp(ck, ClassNameRe, true)
 		// grab abbreviation
-		class.Abbreviation = string(bytes.ToLower(findRegexp(name, ClassAbbreviationRe, true)))
+		class.Abbreviation = string(
+			bytes.ToLower(
+				findRegexp(name, ClassAbbreviationRe, true)))
 		// grab code
-		class.Code = string(findRegexp(name, ClassCodeRe, true))
+		class.Code = string(
+			bytes.ToLower(
+				findRegexp(name, ClassCodeRe, true)))
 		// grab title
 		title := findRegexp(ck, ClassTitleRe, true)
-		class.Title = string(removeRegexp(title, TagRe))
+		class.Title = string(
+			bytes.ToLower(
+				removeRegexp(title, TagRe)))
 		// set AbbreviationCode key
 		class.AbbreviationCode = class.Abbreviation + class.Code
 		// set index position
@@ -116,7 +125,9 @@ func (body SectIndex) Extract(parent []database.Class) []database.Sect {
 		}
 		// check first line for rest of fields
 		sect.Restriction = string(bytes.TrimSpace(ckLns[0][0:7]))
-		sect.SLN = string(bytes.TrimSpace(ckLns[0][7:13]))
+		sect.SLN = string(
+			bytes.ToLower(
+				bytes.TrimSpace(ckLns[0][7:13])))
 		sect.Section = string(bytes.TrimSpace(ckLns[0][13:16]))
 		sect.Credit = string(bytes.TrimSpace(ckLns[0][16:24]))
 		sect.Instructor = string(bytes.TrimSpace(ckLns[0][56:83]))
