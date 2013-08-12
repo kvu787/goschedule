@@ -2,6 +2,7 @@ package database
 
 import (
 	"encoding/json"
+	"html/template"
 	"strings"
 )
 
@@ -39,6 +40,8 @@ func (d Dept) PrimaryKey() interface{} {
 	return d.Abbreviation
 }
 
+// TableName returns the name of the SQL table for deparment
+// records.
 func (d Dept) TableName() string {
 	return "depts"
 }
@@ -50,6 +53,7 @@ type Class struct {
 	Abbreviation     string
 	Code             string
 	Title            string
+	Description      string
 	Index            int
 }
 
@@ -66,12 +70,16 @@ func (c Class) TableName() string {
 // can implement a ForeignKey method.
 type Classes []Class
 
-// func (c Classes) SortByCode() []Classes {
-
-// 	for i, v := range Classes {
-// 		v.Code
-// 	}
-// }
+// DescriptionHTML outputs non-escaped HTML of a class's
+// for use in a template.
+// TODO(kvu787): change extraction function to avoid stripping
+// out first 'b' tag.
+func (c Class) DescriptionHTML() template.HTML {
+	description := c.Description
+	i := strings.IndexAny("</b>", strings.ToLower(description))
+	description = description[i+1:]
+	return template.HTML(description)
+}
 
 // A Class is a UW class represented on the time schedule.
 type Sect struct {

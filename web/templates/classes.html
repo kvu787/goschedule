@@ -7,12 +7,18 @@
         <li><a href="/schedule/{{.dept}}">{{upper .dept}}</a></li>
       </ul>
       <h1>Classes</h1>
-      {{range .classes}}
-        <p>
-          <a href="/schedule/{{.DeptAbbreviation}}/{{.AbbreviationCode}}"><h4>{{.Code}} <small>{{title .Title}}</small></h4></a>
-        </p>
-      {{end}}
     </div>
   </div>
+  {{range .classes}}
+    <div class="row">
+      <div class="col-lg-3">
+          <a href="/schedule/{{.DeptAbbreviation}}/{{.AbbreviationCode}}"><h4 style="margin-top: 0;">{{.Code}} <small>{{title .Title}}</small></h4></a>
+      </div>
+      <div class="col-lg-9">
+        <p>{{.DescriptionHTML}}</p>
+      </div>
+    </div>
+    <br />
+  {{end}}
 </div>
 {{end}}

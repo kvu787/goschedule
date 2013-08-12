@@ -82,6 +82,10 @@ func _main() {
 // and db insert operations can run concurrently.
 func scrapeConcurrentLoadBalance(c *http.Client, db *sql.DB) error {
 	fmt.Println("Scraper started in concurrent, load balancing mode")
+	// setup channels
+	fetchBufc := make(chan int, config.FetchBuffer)
+	insertBufc := make(chan int, config.InsertBuffer)
+	donec := make(chan int)
 	// fetch department index
 	deptIndex, err := fetch.Get(c, config.RootIndex)
 	if err != nil {
@@ -89,11 +93,7 @@ func scrapeConcurrentLoadBalance(c *http.Client, db *sql.DB) error {
 		return err
 	}
 	// extract dept structs from dept index
-	depts := extract.DeptIndex(deptIndex).Extract(nil)
-	// setup channels
-	fetchBufc := make(chan int, config.FetchBuffer)
-	insertBufc := make(chan int, config.InsertBuffer)
-	donec := make(chan int)
+	depts := extract.DeptIndex(deptIndex).Extract(config.RootIndex)
 	// run 'scrape dept page' operations concurrently
 	for _, dept := range depts {
 		go func(dept database.Dept) {
@@ -101,11 +101,53 @@ func scrapeConcurrentLoadBalance(c *http.Client, db *sql.DB) error {
 			donec <- 1
 		}(dept)
 	}
-	// return when all scrape dept operations finish
+	// wait for all dept scrapes to finish
+	for i := 0; i < len(depts); i++ {
+		<-donec
+	}
+	// extract class descriptions concurrently
+	deptDescriptionIndex, err := fetch.Get(c, config.DeptDescriptionIndex)
+	if err != nil {
+		log.Fatalln("Failed to fetch DeptDescriptionIndex")
+		return err
+	}
+	// reassign depts to get links to description pages (instead of schedule pages)
+	depts = extract.DeptIndex(deptDescriptionIndex).Extract(config.DeptDescriptionIndex)
+	for _, dept := range depts {
+		go func(link string) {
+			scrapeClassDescription(link, c, db, fetchBufc, insertBufc)
+			donec <- 1
+		}(dept.Link)
+	}
+	// wait for all class description scrapes to finish and return
 	for i := 0; i < len(depts); i++ {
 		<-donec
 	}
 	return nil
+}
+
+func scrapeClassDescription(link string, c *http.Client, db *sql.DB, fetchc chan int, insertc chan int) {
+	fmt.Println(link)
+	// fetch page if buffer is ready
+	fetchc <- 1
+	classDescriptionIndex, err := fetch.Get(c, link)
+	if err != nil {
+		<-fetchc
+		return // skip if dept link is bad
+	}
+	<-fetchc
+	// extract class-description mapping
+	var descriptionMapping map[string]string = extract.ClassDescriptionIndex(classDescriptionIndex).Extract()
+	// update class records with description
+	for key, description := range descriptionMapping {
+		insertc <- 1
+		db.Exec(
+			"UPDATE classes SET description = $1 WHERE abbreviation_code = $2",
+			description,
+			key,
+		)
+		<-insertc
+	}
 }
 
 // scrapeConcurrent runs the scrapeDept operations
@@ -117,7 +159,7 @@ func scrapeConcurrent(c *http.Client, db *sql.DB, concurrent bool) error {
 		log.Fatalln("Failed to fetch RootIndex (department page)")
 		return err
 	}
-	depts := extract.DeptIndex(deptIndex).Extract(nil)
+	depts := extract.DeptIndex(deptIndex).Extract(config.RootIndex)
 	quitc := make(chan int)
 	for _, dept := range depts {
 		go func(dept database.Dept) {
@@ -141,7 +183,7 @@ func scrape(c *http.Client, db *sql.DB, concurrent bool) error {
 		log.Fatalln("Failed to fetch RootIndex (department page)")
 		return err
 	}
-	depts := extract.DeptIndex(deptIndex).Extract(nil)
+	depts := extract.DeptIndex(deptIndex).Extract(config.RootIndex)
 	for _, dept := range depts {
 		scrapeDept(dept, c, db)
 	}
@@ -149,7 +191,7 @@ func scrape(c *http.Client, db *sql.DB, concurrent bool) error {
 }
 
 // scrapeDeptLoadBalance fetches a class/section page
-// and runs class/section inserts concurrently and load
+// and runs dept/class/section inserts concurrently and load
 // balanced.
 // Each insert operation runs when there is space in the
 // insertc chan.
@@ -196,7 +238,6 @@ func scrapeDeptLoadBalance(dept database.Dept, c *http.Client, db *sql.DB, fetch
 		<-localInsertc
 	}
 	// all inserts complete
-	return
 }
 
 // scrapeDept sequentially fetches a class/section page

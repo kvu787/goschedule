@@ -20,6 +20,7 @@ CREATE TABLE classes (
     abbreviation text,
     code text,
     title text,
+    description text,
     index int
 );
 

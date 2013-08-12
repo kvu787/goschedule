@@ -9,7 +9,6 @@ import (
 	"regexp"
 	"strconv"
 
-	"github.com/kvu787/go-schedule/scraper/config"
 	"github.com/kvu787/go-schedule/scraper/database"
 )
 
@@ -20,8 +19,7 @@ type DeptIndex []byte
 // Extract grabs department information from an index of UW departments.
 // Parameter p Parent should be nil.
 // Returns a slice of Dept structs.
-func (body DeptIndex) Extract(parent database.Queryer) []database.Dept {
-	root := config.RootIndex
+func (body DeptIndex) Extract(root string) []database.Dept {
 	depts := []database.Dept{}
 	cks := matchRegexp(body, DeptChunkRe)
 	for _, ck := range cks {
@@ -164,6 +162,28 @@ func (body SectIndex) Extract(parent []database.Class) []database.Sect {
 	return sects
 }
 
+// ClassDescriptionIndex wraps a webpage that contains an index of UW class
+// descriptions.
+type ClassDescriptionIndex []byte
+
+func (body ClassDescriptionIndex) Extract() map[string]string {
+	m := make(map[string]string)
+	chunks := matchRegexp(body, ClassDescriptionChunk)
+	for _, chunk := range chunks {
+		// grab class abbreviation-code
+		title := bytes.TrimSpace(
+			bytes.ToLower(
+				removeRegexp(
+					findRegexp(chunk, ClassDescriptionTitle, true), TagRe, " ")))
+		// get rest of chunk as description
+		i := findIndexRegexp(chunk, `(?i)</a>`)
+		chunk = bytes.Trim(chunk[i[1]:], "\n")
+		// store abbreviation-code and description as key-value pair
+		m[string(title)] = string(chunk)
+	}
+	return m
+}
+
 // checkMeetingTime checks if a byteslice contains information
 // for a MeetingTime struct.
 // If a MeetingTime is found, it is returned with nil error. Else,
@@ -233,4 +253,12 @@ func findRegexp(b []byte, r string, first bool) []byte {
 	} else {
 		return matches[len(matches)-1]
 	}
+}
+
+// findIndexRegexp wraps regexp.Find Index in a more convenient
+// function.
+// Returns nil if no match is found.
+func findIndexRegexp(b []byte, r string) []int {
+	re := regexp.MustCompile(r)
+	return re.FindIndex(b)
 }

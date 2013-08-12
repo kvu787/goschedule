@@ -13,6 +13,8 @@ const (
 	ScraperFetchTimeout time.Duration = 200 * time.Millisecond
 	// link to departments index
 	RootIndex string = "https://www.washington.edu/students/timeschd/AUT2013/"
+	// link to departments description index
+	DeptDescriptionIndex string = "http://www.washington.edu/students/crscat/"
 	// path to application root
 	AppRoot string = "$GOPATH/src/github.com/kvu787/go-schedule"
 	// relative to AppRoot
