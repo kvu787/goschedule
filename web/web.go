@@ -65,7 +65,7 @@ func deptsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer db.Close()
-	queryers, _ := database.Select(db, database.Dept{}, "")
+	queryers, _ := database.Select(db, database.Dept{}, "ORDER BY title")
 	var depts []database.Dept
 	for _, v := range queryers {
 		depts = append(depts, v.(database.Dept))
