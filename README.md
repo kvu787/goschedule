@@ -4,28 +4,16 @@
 
 # Deployment
 
-- Install Nginx
-- Verify Nginx server is working
-- Install Go
-    - Setup $GOPATH properly
-- Verify Go works
-- [Install PostgreSQL](http://www.postgresql.org/download/linux/ubuntu/)
-- `go get github.com/kvu787/go-schedule`
-- Create the databases specified in crawler/config/database.go
-- In crawler/utility/sql
-    - Run schema.sql against the two app databases
-    - Run switch.sql against the swtich database
-- Run crawler in background
-- Update Nginx config (see Nginx config section) and restart Nginx server
-- Run web in background
+- `go get github.com/kvu787/go-schedule/scraper`
+- `go get github.com/kvu787/go-schedule/web`
+- Create the databases specified in scraper/config/database.go
+- In scraper/utility/sql
+    - Run schema.sql against the two app databases and test database
+    - Run switch.sql against the switch database
+- Run scraper in background at least once to fill up an app database
+- Run web
 - Pray 
-- Visit the hosting address to verify things work
-
-# Running background processes (Unix)
-
-- Run and do not exit on logout: `nohup <command> &`
-- View processes and PIDs: `ps -e`
-- Kill process: `kill <pid>`
+- Visit localhost:8080
 
 # Setting up Postgres
 
