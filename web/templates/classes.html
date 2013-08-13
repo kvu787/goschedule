@@ -13,7 +13,16 @@
   {{range .classes}}
     <div class="row">
       <div class="col-lg-2 col-sm-3">
-          <a href="/schedule/{{.DeptAbbreviation}}/{{.AbbreviationCode}}"><h4 style="margin-top: 0;">{{.Code}} <small>{{title .Title}}</small></h4></a>
+          <a href="/schedule/{{.DeptAbbreviation}}/{{.AbbreviationCode}}">
+            <h4 style="margin-top: 0;">
+              <span class="visible-sm">
+                <span style="display:inline; background-color:#FCEB95;">
+                  {{.Code}} <small style="color:#7D7D7D;">{{title .Title}}</small>
+                </span>
+              </span>
+              <span class="hidden-sm">{{.Code}} <small>{{title .Title}}</small></span>
+            </h4>
+          </a>
       </div>
       <div class="col-lg-10 col-sm-9">
         <p>{{.DescriptionHTML}}</p>
