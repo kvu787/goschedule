@@ -127,7 +127,6 @@ func scrapeConcurrentLoadBalance(c *http.Client, db *sql.DB) error {
 }
 
 func scrapeClassDescription(link string, c *http.Client, db *sql.DB, fetchc chan int, insertc chan int) {
-	fmt.Println(link)
 	// fetch page if buffer is ready
 	fetchc <- 1
 	classDescriptionIndex, err := fetch.Get(c, link)

@@ -124,8 +124,8 @@ func sectsHandler(w http.ResponseWriter, r *http.Request) {
 		sects = append(sects, v.(database.Sect))
 	}
 	t := template.Must(template.New("").Funcs(template.FuncMap{
-		"title": strings.Title,
 		"upper": strings.ToUpper,
+		"lower": strings.ToLower,
 	}).ParseFiles(
 		"web/templates/sects.html",
 		"web/templates/base.html",

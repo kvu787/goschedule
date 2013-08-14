@@ -6,26 +6,27 @@
         <li><a href="/schedule">Departments</a></li>
         <li><a href="/schedule/{{.dept}}">{{upper .dept}}</a></li>
       </ul>
-      <h1>Classes</h1>
+      <h1 style="display:inline;">Classes</h1>&nbsp;&nbsp;&nbsp;<a id="toggle-description" style="cursor:pointer;">Hide descriptions</a>
+      <br />
       <br />
     </div>
   </div>
   {{range .classes}}
     <div class="row">
-      <div class="col-lg-2 col-sm-3">
+      <div class="col-lg-2 col-md-2 col-sm-3">
           <a href="/schedule/{{.DeptAbbreviation}}/{{.AbbreviationCode}}">
             <h4 style="margin-top: 0;">
-              <span class="visible-sm">
+              <span class="visible-xs">
                 <span style="display:inline; background-color:#FCEB95;">
                   {{.Code}} <small style="color:#7D7D7D;">{{title .Title}}</small>
                 </span>
               </span>
-              <span class="hidden-sm">{{.Code}} <small>{{title .Title}}</small></span>
+              <span class="hidden-xs">{{.Code}} <small>{{title .Title}}</small></span>
             </h4>
           </a>
       </div>
-      <div class="col-lg-10 col-sm-9">
-        <p>{{.DescriptionHTML}}</p>
+      <div class="col-lg-10 col-md-10 col-sm-9">
+        <p class="toggle-description-target">{{.DescriptionHTML}}</p>
       </div>
     </div>
     <br />

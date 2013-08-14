@@ -2,13 +2,11 @@
     - Write tests
     - Finish documentation
     - Use log/syslog for logging
-    - Make deployment less painful
-        - Use templating to generate Nginx config
-        - Understand what the Nginx config does
+    - Test `go get` deployment
     - Write tests
     - Organize html into partials
     - Add stuff to .gitignore
-    - Use yaml for config
+    - Use JSON for config
     - Also, write tests
 - Bugs
     - Some class descriptions have weird characters in them (see honors241)

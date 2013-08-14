@@ -10,8 +10,8 @@
 - In scraper/utility/sql
     - Run schema.sql against the two app databases and test database
     - Run switch.sql against the switch database
-- Run scraper in background at least once to fill up an app database
-- Run web
+- Run `scraper` at least once to fill up an app database
+- Run `web`
 - Pray 
 - Visit localhost:8080
 

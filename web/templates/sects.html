@@ -14,27 +14,27 @@
 </style>
 <div class="container">
   <div class="row">
-    <div class="col-lg-12">
+    <div class="col-md-12">
       <ul class="breadcrumb">
         <li><a href="/schedule">Departments</a></li>
         <li><a href="/schedule/{{.dept}}">{{upper .dept}}</a></li>
-        <li><a href="/schedule/{{.dept}}/{{.class}}">{{title .class}}</a></li>
+        <li><a href="/schedule/{{.dept}}/{{.class}}">{{lower .class}}</a></li>
       </ul>
       <h1>Sections</h1>
     </div>
   </div>
   {{range .sects}}
     <div class="row">
-      <div class="col-lg-7 col-sm-12 col-12">
+      <div class="col-md-7 col-sm-12 col-xs-12">
         <div class="row">
-          <div class="col-lg-7 col-sm-7 col-12">
+          <div class="col-md-7 col-sm-7 col-xs-12">
             <div class="row">
-              <div class="col-lg-3 col-sm-3 col-3">
+              <div class="col-md-3 col-sm-3 col-xs-3">
                 <span style="font-size: 20px;"><strong>{{.SLN}}</strong></span><br />
                 <h5><small>section&nbsp;&nbsp;&nbsp;</small>{{.Section}}</h5>
                 <h5><small>credit&nbsp;&nbsp;&nbsp;</small>{{.Credit}}</h5>
               </div>
-              <div class="col-lg-3 col-sm-4 col-4">
+              <div class="col-md-3 col-sm-4 col-xs-4">
                 <h6 class="text-muted thin-h6">Status</h6>
                 <h4 style="margin-top: 0px;">
                   {{if .IsOpen}}
@@ -45,7 +45,7 @@
                 </h4>
                 {{.TakenSpots}} / {{.TotalSpots}}
               </div>
-              <div class="col-lg-6 col-sm-5 col-5">
+              <div class="col-md-6 col-sm-5 col-xs-5">
                 <h6 class="text-muted thin-h6">Meeting Times</h6>
                 {{range .GetMeetingTimes}}
                   <p>
@@ -62,10 +62,10 @@
               </div>
             </div>
           </div>
-          <div class="col-lg-5 col-sm-5 col-12">
+          <div class="col-md-5 col-sm-5 col-xs-12">
             <div class="row">
-              <div class="col-lg-12 col-sm-12 col-12">
-                <h6 class="text-muted thin-h6">Other</h6>
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <h6 class="text-muted thin-h6 hidden-xs">Other</h6>
                 {{range .GetRestriction}}
                   {{range $token, $yes := .}}
                     {{if $yes}}
@@ -75,13 +75,13 @@
                     {{end}}
                   {{end}}
                 {{end}}
-                <br class="hidden-sm" />
+                <br class="hidden-xs" />
                 {{with .Fee}}
                   <span class="label label-info">{{.}}</span>
                 {{else}}
                   <span class="label label-white">No fee</span>
                 {{end}} 
-                <br class="hidden-sm" />
+                <br class="hidden-xs" />
                 {{range .GetGradesTokens}}
                   {{range $token, $yes := .}}
                     {{if $yes}}
@@ -91,7 +91,7 @@
                     {{end}}
                   {{end}}
                 {{end}}
-                <br class="hidden-sm" />
+                <br class="hidden-xs" />
                 {{range .GetOtherTokens}}
                   {{range $token, $yes := .}}
                     {{if $yes}}
@@ -106,15 +106,14 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-5 col-sm-12 col-12">
-        <h6 class="text-muted thin-h6">Info</h6>
-        Taught by: <strong>{{with .Instructor}}{{.}}{{else}}n/a{{end}}</strong>
-        <br />
+      <div class="col-md-5 col-sm-12 col-xs-12">
+        <h6 class="text-muted thin-h6 hidden-xs">Info</h6>
+        <br class="visible-xs" />
+        {{with .Instructor}}Taught by: <strong>{{.}}</strong><br />{{end}}
         {{.Info}}
       </div>
     </div>
-    <br />
-    <br class="hidden-lg" />
+    <hr />
   {{end}}
 </div>
 {{end}}
