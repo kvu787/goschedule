@@ -56,7 +56,7 @@
                     <span class="label {{if .MapDays.f}}label-primary{{else}}label-white{{end}}">F</span>
                     <br />
                     {{.Time}}<br /> 
-                    {{.Building}} {{.Room}}
+                    {{with .Building}}<a href="http://www.washington.edu/maps/?l={{.}}">{{.}}</a>{{end}} {{.Room}}
                   </p>
                 {{end}}
               </div>
