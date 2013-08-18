@@ -6,9 +6,12 @@
         <li><a href="/schedule">Departments</a></li>
         <li><a href="/schedule/{{.dept}}">{{upper .dept}}</a></li>
       </ul>
-      <h1 style="display:inline;">Classes</h1>&nbsp;&nbsp;&nbsp;<a id="toggle-description" style="cursor:pointer;">Hide descriptions</a>
-      <br />
-      <br />
+      <h1>Classes</h1>
+      <div class="panel panel-primary">
+        <div class="panel-body">
+          <input type="checkbox" id="toggle-class-description"> Hide class descriptions
+        </div>
+      </div>
     </div>
   </div>
   {{range .classes}}

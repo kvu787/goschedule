@@ -11,8 +11,13 @@
   .thin-h6 {
     margin-bottom: 2px;
   }
+  .inline-div {
+    display: inline;
+    white-space: nowrap;
+    margin-right: 15px;
+  }
 </style>
-<div class="container">
+<div class="container" id="here">
   <div class="row">
     <div class="col-md-12">
       <ul class="breadcrumb">
@@ -21,99 +26,108 @@
         <li><a href="/schedule/{{.dept}}/{{.class}}">{{lower .class}}</a></li>
       </ul>
       <h1>Sections</h1>
+      <div class="panel panel-primary">
+        <div class="panel-body">
+          <div class="inline-div"><input type="checkbox" id="toggle-closed"> Hide closed</div>
+          <div class="inline-div"><input type="checkbox" id="toggle-freshmen"> <a href="#" data-toggle="popover" data-placement="top" title="" data-content="Hides sections with 'freshmen' or 'freshman' in them. Hence, may hide sections that *are not* restricted to freshmen.">Hide freshmen only</a></div>
+          <div class="inline-div"><input type="checkbox" id="toggle-withdrawal"> Hide pending withdrawal</div>
+        </div>
+      </div>
     </div>
   </div>
   {{range .sects}}
-    <div class="row">
-      <div class="col-md-7 col-sm-12 col-xs-12">
-        <div class="row">
-          <div class="col-md-7 col-sm-7 col-xs-12">
-            <div class="row">
-              <div class="col-md-3 col-sm-3 col-xs-3">
-                <span style="font-size: 20px;"><strong>{{.SLN}}</strong></span><br />
-                <h5><small>section&nbsp;&nbsp;&nbsp;</small>{{.Section}}</h5>
-                <h5><small>credit&nbsp;&nbsp;&nbsp;</small>{{.Credit}}</h5>
-              </div>
-              <div class="col-md-3 col-sm-4 col-xs-4">
-                <h6 class="text-muted thin-h6">Status</h6>
-                <h4 style="margin-top: 0px;">
-                  {{if .IsOpen}}
-                    <span class="label label-success">Open</span>
-                  {{else}}
-                    <span class="label label-danger">Closed</span>
+    <div class="sect-target {{if not .IsOpen}}sect-closed{{end}} {{if .IsFreshmen}}sect-freshmen{{end}} {{if .IsWithdrawal}}sect-withdrawal{{end}}">
+      <div class="row">
+        <div class="col-md-7 col-sm-12 col-xs-12">
+          <div class="row">
+            <div class="col-md-7 col-sm-7 col-xs-12">
+              <div class="row">
+                <div class="col-md-3 col-sm-3 col-xs-3">
+                  <span style="font-size: 20px;"><strong>{{.SLN}}</strong></span><br />
+                  <h5><small>section&nbsp;&nbsp;&nbsp;</small>{{.Section}}</h5>
+                  <h5><small>credit&nbsp;&nbsp;&nbsp;</small>{{.Credit}}</h5>
+                </div>
+                <div class="col-md-3 col-sm-4 col-xs-4">
+                  <h6 class="text-muted thin-h6">Status</h6>
+                  <h4 style="margin-top: 0px;">
+                    {{if .IsOpen}}
+                      <span class="label label-success">Open</span>
+                    {{else}}
+                      <span class="label label-danger">Closed</span>
+                    {{end}}
+                  </h4>
+                  {{.TakenSpots}} / {{.TotalSpots}}
+                </div>
+                <div class="col-md-6 col-sm-5 col-xs-5">
+                  <h6 class="text-muted thin-h6">Meeting Times</h6>
+                  {{range .GetMeetingTimes}}
+                    <p>
+                      <span class="label {{if .MapDays.m}}label-primary{{else}}label-white{{end}}">M</span>
+                      <span class="label {{if .MapDays.t}}label-primary{{else}}label-white{{end}}">Tu</span>
+                      <span class="label {{if .MapDays.w}}label-primary{{else}}label-white{{end}}">W</span>
+                      <span class="label {{if .MapDays.th}}label-primary{{else}}label-white{{end}}">Th</span>
+                      <span class="label {{if .MapDays.f}}label-primary{{else}}label-white{{end}}">F</span>
+                      <br />
+                      {{.Time}}<br /> 
+                      {{with .Building}}<a href="http://www.washington.edu/maps/?l={{.}}">{{.}}</a>{{end}} {{.Room}}
+                    </p>
                   {{end}}
-                </h4>
-                {{.TakenSpots}} / {{.TotalSpots}}
-              </div>
-              <div class="col-md-6 col-sm-5 col-xs-5">
-                <h6 class="text-muted thin-h6">Meeting Times</h6>
-                {{range .GetMeetingTimes}}
-                  <p>
-                    <span class="label {{if .MapDays.m}}label-primary{{else}}label-white{{end}}">M</span>
-                    <span class="label {{if .MapDays.t}}label-primary{{else}}label-white{{end}}">Tu</span>
-                    <span class="label {{if .MapDays.w}}label-primary{{else}}label-white{{end}}">W</span>
-                    <span class="label {{if .MapDays.th}}label-primary{{else}}label-white{{end}}">Th</span>
-                    <span class="label {{if .MapDays.f}}label-primary{{else}}label-white{{end}}">F</span>
-                    <br />
-                    {{.Time}}<br /> 
-                    {{with .Building}}<a href="http://www.washington.edu/maps/?l={{.}}">{{.}}</a>{{end}} {{.Room}}
-                  </p>
-                {{end}}
+                </div>
               </div>
             </div>
-          </div>
-          <div class="col-md-5 col-sm-5 col-xs-12">
-            <div class="row">
-              <div class="col-md-12 col-sm-12 col-xs-12">
-                <h6 class="text-muted thin-h6 hidden-xs">Other</h6>
-                {{range .GetRestriction}}
-                  {{range $token, $yes := .}}
-                    {{if $yes}}
-                    <span class="label label-info">{{$token}}</span>
-                    {{else}}
-                    <span class="label label-white">{{$token}}</span>
+            <div class="col-md-5 col-sm-5 col-xs-12">
+              <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                  <h6 class="text-muted thin-h6 hidden-xs">Other</h6>
+                  {{range .GetRestriction}}
+                    {{range $token, $yes := .}}
+                      {{if $yes}}
+                      <span class="label label-info">{{$token}}</span>
+                      {{else}}
+                      <span class="label label-white">{{$token}}</span>
+                      {{end}}
                     {{end}}
                   {{end}}
-                {{end}}
-                <br class="hidden-xs" />
-                {{with .Fee}}
-                  <span class="label label-info">{{.}}</span>
-                {{else}}
-                  <span class="label label-white">No fee</span>
-                {{end}} 
-                <br class="hidden-xs" />
-                {{range .GetGradesTokens}}
-                  {{range $token, $yes := .}}
-                    {{if $yes}}
-                    <span class="label label-info">{{$token}}</span>
-                    {{else}}
-                    <span class="label label-white">{{$token}}</span>
+                  <br class="hidden-xs" />
+                  {{with .Fee}}
+                    <span class="label label-info">{{.}}</span>
+                  {{else}}
+                    <span class="label label-white">No fee</span>
+                  {{end}} 
+                  <br class="hidden-xs" />
+                  {{range .GetGradesTokens}}
+                    {{range $token, $yes := .}}
+                      {{if $yes}}
+                      <span class="label label-info">{{$token}}</span>
+                      {{else}}
+                      <span class="label label-white">{{$token}}</span>
+                      {{end}}
                     {{end}}
                   {{end}}
-                {{end}}
-                <br class="hidden-xs" />
-                {{range .GetOtherTokens}}
-                  {{range $token, $yes := .}}
-                    {{if $yes}}
-                    <span class="label label-info">{{$token}}</span>
-                    {{else}}
-                    <span class="label label-white">{{$token}}</span>
+                  <br class="hidden-xs" />
+                  {{range .GetOtherTokens}}
+                    {{range $token, $yes := .}}
+                      {{if $yes}}
+                      <span class="label label-info">{{$token}}</span>
+                      {{else}}
+                      <span class="label label-white">{{$token}}</span>
+                      {{end}}
                     {{end}}
                   {{end}}
-                {{end}}
+                </div>
               </div>
             </div>
           </div>
         </div>
+        <div class="col-md-5 col-sm-12 col-xs-12">
+          <h6 class="text-muted thin-h6 hidden-xs">Info</h6>
+          <br class="visible-xs" />
+          {{with .Instructor}}Taught by: <strong>{{.}}</strong><br />{{end}}
+          {{.Info}}
+        </div>
       </div>
-      <div class="col-md-5 col-sm-12 col-xs-12">
-        <h6 class="text-muted thin-h6 hidden-xs">Info</h6>
-        <br class="visible-xs" />
-        {{with .Instructor}}Taught by: <strong>{{.}}</strong><br />{{end}}
-        {{.Info}}
-      </div>
+      <hr />
     </div>
-    <hr />
   {{end}}
 </div>
 {{end}}

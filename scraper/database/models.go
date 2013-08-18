@@ -134,7 +134,7 @@ func (s Sect) GetMeetingTimes() ([]MeetingTime, error) {
 	return meetingTimes, nil
 }
 
-// IsQuizSection indicates if this Section is a quiz section.
+// IsQuizSection indicates if this Sect is a quiz section.
 func (s Sect) IsQuizSection() bool {
 	if s.Credit == "QZ" {
 		return true
@@ -143,13 +143,58 @@ func (s Sect) IsQuizSection() bool {
 	}
 }
 
-// IsOpen indicates if this Section has open spots.
+// IsOpen indicates if this Sect has open spots.
 func (s Sect) IsOpen() bool {
 	if s.TotalSpots-s.TakenSpots < 1 {
 		return false
 	} else {
 		return true
 	}
+}
+
+// IsFreshmen indicates if this Sect is restricted to freshmen
+// by looking for key phrases/words in Sect.Info.
+// TODO (kvu787): use regexps
+func (s Sect) IsFreshmen() bool {
+	keyPhrases := []string{
+		// "freshmen interest grp students only",
+		// "freshman interest grp students only",
+		// "freshmen interest grp only",
+		// "freshman interest grp only",
+		// "freshmen interest group students only",
+		// "freshman interest group students only",
+		// "freshmen interest group only",
+		// "freshman interest group only",
+		// "open only to entering freshmen",
+		// "open only to entering freshman",
+		// "open to entering freshmen only",
+		// "open to entering freshman only",
+		// "opening only to entering freshmen",
+		"freshmen",
+		"freshman",
+	}
+	info := strings.Replace(
+		strings.ToLower(s.Info), "\n", " ", -1)
+
+	for _, v := range keyPhrases {
+		if strings.Contains(info, v) {
+			return true
+		}
+	}
+	return false
+}
+
+// IsWithdrawal indicates if this Sect pending withdrawal by
+// looking for key phrases/words in Sect.Info.
+func (s Sect) IsWithdrawal() bool {
+	keyPhrases := []string{"withdrawl", "withdrawal"}
+	info := strings.ToLower(s.Info)
+	for _, v := range keyPhrases {
+		if strings.Contains(info, v) {
+			return true
+		}
+	}
+	return false
 }
 
 // GetRestriction returns a map of possible restriction
