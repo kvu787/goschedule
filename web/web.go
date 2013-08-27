@@ -17,6 +17,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
+// router is a one-off type that implements the http.Handler interface.
 type router struct{}
 
 func (ro router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -156,12 +157,31 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println("Go Schedule frontend started")
-	listener, err := net.Listen("tcp", "127.0.0.1:9000")
-	if err != nil {
-		fmt.Println(err)
-	}
-	if err := fcgi.Serve(listener, router{}); err != nil {
-		fmt.Println(err)
+	switch {
+	case len(os.Args) < 2:
+		fmt.Println("Go Schedule frontend started on port 8080")
+		if err := http.ListenAndServe(":8080", router{}); err != nil {
+			fmt.Println(err)
+			return
+		}
+	case os.Args[1] == "fcgi":
+		fmt.Println("Go Schedule frontend started, listening on port 9000")
+		listener, err := net.Listen("tcp", "127.0.0.1:9000")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		if err := fcgi.Serve(listener, router{}); err != nil {
+			fmt.Println(err)
+			return
+		}
+	default:
+		fmt.Println(`
+Start the Go Schedule web app.
+	usage: web [listen_and_serve]
+	arguments
+		fcgi    If present, a web server will listen and serve through fcgi on port 9000.
+				If not present, the server will listen and serve regularly through port 8080.`)
+		return
 	}
 }
