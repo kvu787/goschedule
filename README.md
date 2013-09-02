@@ -1,10 +1,10 @@
 # Deployment
 
-- `go get github.com/kvu787/go-schedule/scraper`
+- `go get github.com/kvu787/goschedule/scraper`
     - NOTE: You will receive several "...undefined: config.*" errors. This is normal.
     - In `scraper/config/`, copy `config.go.example` to `config.go` and edit the settings as necessary.
 - In `scraper/`, run `go install`.
-- `go get github.com/kvu787/go-schedule/web`
+- `go get github.com/kvu787/goschedule/web`
 - Create the databases specified in `scraper/config/database.go`.
 - In `scraper/utility/sql`
     - Run schema.sql against the two app databases and test database.
