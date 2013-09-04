@@ -7,6 +7,7 @@
     - Add stuff to .gitignore
     - Use JSON for config
     - Also, write tests
+    - Add SQL setup script
 - Bugs
     - Some class descriptions have non-unicode conformant characters in them (see honors241)
         - Causes error in db update: pq: S:"ERROR" C:"22021" M:"invalid byte sequence for encoding \"UTF8\": 0xe9 0x6d 0x69" F:"wchar.c" L:"2015" R:"report_invalid_encoding"
