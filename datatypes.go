@@ -7,45 +7,49 @@ type position struct {
 	end   int
 }
 
+type Quarter struct {
+	Name string `pk:"true"`
+}
+
 // A College is a UW college that has many departments
 type College struct {
-	QuarterKey   string
+	QuarterKey   string `fk:"Quarter"`
 	Name         string
-	Abbreviation string
+	Abbreviation string `pk:"true"`
 	position
 }
 
 // A Department is a UW department that has many classes.
 type Dept struct {
-	CollegeKey   string
+	CollegeKey   string `fk:"College"`
 	Name         string
-	Abbreviation string
+	Abbreviation string `pk:"true"`
 	Link         string
 }
 
 // A Class is UW class that has many sections.
 type Class struct {
-	DeptKey          string
-	AbbreviationCode string
+	DeptKey          string `fk:"Dept"`
+	AbbreviationCode string `pk:"true"`
 	Abbreviation     string
 	Code             string
 	Title            string
 	Description      string
-	position
+	position         `ignore:"true"`
 }
 
 // A Sect is a UW section.
 type Sect struct {
-	ClassKey     string // foreign key
+	ClassKey     string `fk:"Class"`
 	Restriction  string
-	SLN          string // primary key
+	SLN          string `pk:"true"`
 	Section      string
 	Credit       string
 	MeetingTimes string // JSON representation
 	Instructor   string
 	Status       string
-	TakenSpots   int
-	TotalSpots   int
+	TakenSpots   int64
+	TotalSpots   int64
 	Grades       string
 	Fee          string
 	Other        string

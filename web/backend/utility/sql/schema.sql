@@ -10,13 +10,13 @@ DROP TABLE meeting_times;
 
 CREATE TABLE depts (
     title text,
-    abbreviation text CONSTRAINT pk_depts_abbreviation PRIMARY KEY,
+    abbreviation text PRIMARY KEY,
     link text
 );
 
 CREATE TABLE classes (
     dept_abbreviation text,
-    abbreviation_code text CONSTRAINT pk_classes_abbreviation_code PRIMARY KEY,
+    abbreviation_code text PRIMARY KEY REFERENCES depts,
     abbreviation text,
     code text,
     title text,
@@ -27,7 +27,7 @@ CREATE TABLE classes (
 CREATE TABLE sects (
     class_dept_abbreviation text,
     restriction text,
-    sln text CONSTRAINT pk_sects_sln PRIMARY KEY,
+    sln text PRIMARY KEY,
     section text,
     credit text,
     meeting_times text,

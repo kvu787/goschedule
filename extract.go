@@ -211,8 +211,8 @@ func ExtractSects(content, classKey string) []Sect {
 		sect.Status = strings.TrimSpace(lines[0][83:89])
 		spots := strings.TrimSpace(lines[0][89:101])
 		if m := spotsRe.FindAllString(spots, -1); len(m) > 1 {
-			sect.TakenSpots, _ = strconv.Atoi(m[0])
-			sect.TotalSpots, _ = strconv.Atoi(m[1])
+			sect.TakenSpots, _ = strconv.ParseInt(m[0], 10, 64)
+			sect.TotalSpots, _ = strconv.ParseInt(m[1], 10, 64)
 		}
 
 		sect.Grades = strings.TrimSpace(lines[0][101:108])
