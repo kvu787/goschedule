@@ -7,16 +7,11 @@ type position struct {
 	end   int
 }
 
-type Quarter struct {
-	Name string `pk:"true"`
-}
-
 // A College is a UW college that has many departments
 type College struct {
-	QuarterKey   string `fk:"Quarter"`
 	Name         string
 	Abbreviation string `pk:"true"`
-	position
+	position     `ignore:"true"`
 }
 
 // A Department is a UW department that has many classes.

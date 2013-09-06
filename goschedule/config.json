@@ -1,0 +1,19 @@
+{
+    "deptDescriptionIndex" : "http://www.washington.edu/students/crscat/",
+    "loopScraper" : false,
+    "dbLogin" : {
+        "user" : "gosh",
+        "password" : "gosh",  
+        "dbname" : "gosh"  
+    },
+    "schedules" : [
+        { 
+            "name" : "aut2013",
+            "url" : "http://www.washington.edu/students/timeschd/AUT2013/"
+         },
+        {
+            "name" : "winter2013",
+            "url" : "http://www.washington.edu/students/timeschd/WINT2013/" 
+        }
+    ]
+}

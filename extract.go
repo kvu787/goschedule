@@ -25,9 +25,8 @@ func filterUtf8(in, repl string) (out string) {
 	return out
 }
 
-// ExtractColleges grabs College structs from a string. All College structs
-// in the returned slice will use quarterKey as their QuarterKey attribute.
-func ExtractColleges(content, quarterKey string) ([]College, error) {
+// ExtractColleges grabs College structs from a string
+func ExtractColleges(content string) ([]College, error) {
 	content = filterUtf8(content, "?")
 	var colleges []College
 	var errString string
@@ -51,7 +50,6 @@ func ExtractColleges(content, quarterKey string) ([]College, error) {
 		// set attributes
 		college.Abbreviation = abbreviation
 		college.Name = html.UnescapeString(tag.Content)
-		college.QuarterKey = quarterKey
 
 		// setup regex to get positions
 		collegeRe := regexp.MustCompile(fmt.Sprintf(`(?i)<a name="%s.+?</a>\n<h2>.+?</h2>((?s).*?)<a name=".+?</a>\n<h2>.+?</h2>`, abbreviation))
