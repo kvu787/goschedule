@@ -6,6 +6,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"html"
+	"io"
 	"regexp"
 	"strconv"
 	"strings"
@@ -25,64 +26,92 @@ func filterUtf8(in, repl string) (out string) {
 	return out
 }
 
+// htmlDecoder that creates an XML decoder that can handle typical HTML.
+// See http://golang.org/pkg/encoding/xml/#Decoder.
+func newHtmlDecoder(s string) *xml.Decoder {
+	decoder := xml.NewDecoder(strings.NewReader(s))
+	decoder.Strict = false
+	decoder.Entity = xml.HTMLEntity
+	decoder.AutoClose = xml.HTMLAutoClose
+	return decoder
+}
+
+// cleanHref surrounds the value of an href tag with quotes if it is unquoted.
+func cleanHref(s string) string {
+	return regexp.MustCompile(`(?i)href=(?:"|')?(.+)[.](html?)(?:"|')?`).ReplaceAllString(s, `href="$1.$2"`)
+}
+
+type errorsSlice []error
+
+func (e errorsSlice) Error() string {
+	var errStrings string
+	for _, err := range e {
+		errStrings += err.Error() + "; "
+	}
+	return errStrings
+}
+
 // ExtractColleges grabs College structs from a string
 func ExtractColleges(content string) ([]College, error) {
 	content = filterUtf8(content, "?")
+	content = html.UnescapeString(content)
 	var colleges []College
-	var errString string
+	var errs errorsSlice
 
 	// process hash links
 	matches := collegeLinkRe.FindAllString(content, -1)
 	for _, match := range matches {
-		var college College // Name, Abbreviation, position
-
+		var college College
 		// parse links from xml
 		tag := struct {
 			Href    string `xml:"href,attr"`
 			Content string `xml:",innerxml"`
 		}{}
-		if err := xml.Unmarshal([]byte(match), &tag); err != nil {
-			errString += err.Error() + ", "
+		decoder := newHtmlDecoder(match)
+		if err := decoder.Decode(&tag); err != nil && err != io.EOF {
+			errs = append(errs, fmt.Errorf("skipped a college: error unmarshalling xml (%s): %v", string(match), err))
 			continue
 		}
 		abbreviation := strings.TrimPrefix(strings.TrimSpace(tag.Href), "#")
-
 		// set attributes
 		college.Abbreviation = abbreviation
-		college.Name = html.UnescapeString(tag.Content)
-
+		college.Name = tag.Content
 		// setup regex to get positions
 		collegeRe := regexp.MustCompile(fmt.Sprintf(`(?i)<a name="%s.+?</a>\n<h2>.+?</h2>((?s).*?)<a name=".+?</a>\n<h2>.+?</h2>`, abbreviation))
 		if position := collegeRe.FindStringIndex(content); position != nil {
-			college.start = position[0]
-			college.end = position[1]
+			college.Start = position[0]
+			college.End = position[1]
 		} else {
 			startPosition := regexp.MustCompile(
 				fmt.Sprintf(`(?i)<a name="%s.+?</a>\n<h2>.+?</h2>`, abbreviation)).
 				FindStringIndex(content) // will panic if doesn't find a match
 			if startPosition == nil {
+				errs = append(errs, fmt.Errorf(`skipped college: could not find abbreviation in main body: "%s"`, college.Abbreviation))
 				continue
 			}
-			college.start = startPosition[0]
-			college.end = len(content)
+			college.Start = startPosition[0]
+			college.End = len(content)
 		}
 		colleges = append(colleges, college)
 	}
-	if len(errString) > 0 {
-		return colleges, fmt.Errorf(errString)
+	if len(errs) > 0 {
+		return colleges, errs
 	} else {
 		return colleges, nil
 	}
 }
 
-// Extract grabs Dept structs from a string. All Dept structs in the
-// returned slice will use collegeKey as their collegeKey attribute.
-func ExtractDepts(content, collegeKey, url string) ([]Dept, error) {
+// Extract grabs Dept structs from a string.
+// All Dept structs in the returned slice will use collegeKey as their collegeKey attribute.
+// processed is a map of Dept.Abbreviation's that have already been processed. The int values
+// are not used.
+// ExtractDepts will skip a Dept if it's abbreviation is in processed. Else, it will add the
+// abbreviation to processed.
+func ExtractDepts(content, collegeKey, url string, processed *map[string]int) ([]Dept, error) {
 	content = filterUtf8(content, "?")
+	content = html.UnescapeString(content)
 	var depts []Dept
-	var errString string
-	var hrefs = map[string]int{}
-
+	var errs errorsSlice
 	matches := anchorRe.FindAllString(content, -1)
 	for _, match := range matches {
 		// check validity
@@ -90,51 +119,54 @@ func ExtractDepts(content, collegeKey, url string) ([]Dept, error) {
 			Href    string `xml:"href,attr"`
 			Content string `xml:",innerxml"`
 		}{}
-		if err := xml.Unmarshal([]byte(match), &tag); err != nil {
-			errString += err.Error() + ", "
+		decoder := newHtmlDecoder(cleanHref(match))
+		if err := decoder.Decode(&tag); err != nil && err != io.EOF {
+			errs = append(errs, fmt.Errorf("skipped a department: error unmarshalling xml (%s): %v", string(match), err))
 			continue
 		}
 		tag.Href = strings.TrimSpace(tag.Href)
 		tag.Content = strings.TrimSpace(tag.Content)
-		if valid := validateDept(tag.Href, tag.Content, hrefs); !valid {
+		if valid := validateDept(tag.Href, tag.Content); !valid {
 			continue
 		}
-
 		// create Dept
 		var dept Dept
 		// grab link
 		dept.Link = url + string(tag.Href)
 		// grab title
-		dept.Name = html.UnescapeString(
-			strings.TrimSpace(
-				parenthesesRe.ReplaceAllString(tag.Content, "")))
+		dept.Name = strings.TrimSpace(parenthesesRe.ReplaceAllString(tag.Content, ""))
 		// grab abbreviation
 		if temp := strings.Split(tag.Href, "."); len(temp) > 0 {
 			dept.Abbreviation = temp[0]
+		} else {
+			errs = append(errs, fmt.Errorf(`skipped department: invalid href format: "%s"`, tag.Href))
+			continue
+		}
+		// check department for uniqueness
+		if _, exists := (*processed)[dept.Abbreviation]; exists {
+			errs = append(errs, fmt.Errorf(`skipped department: already processed: "%s"`, dept.Abbreviation))
+			continue
+		} else { // add to map if unique
+			(*processed)[dept.Abbreviation] = 1
 		}
 		// add college
 		dept.CollegeKey = collegeKey
 		// add href to map
-		hrefs[tag.Href] = 0
 		depts = append(depts, dept)
 	}
-	if len(errString) > 0 {
-		return depts, fmt.Errorf(errString)
+	if len(errs) > 0 {
+		return depts, errs
 	} else {
 		return depts, nil
 	}
 }
 
-// validateDept checks the elements of a Dept for validiting. Also
-// checks that the Dept has not already been processed in hrefs.
-func validateDept(href, content string, hrefs map[string]int) bool {
+// validateDept checks the elements of a Dept for validity.
+func validateDept(href, content string) bool {
 	if len(href) < 1 {
 		return false
 	}
 	if href[0] == '#' {
-		return false
-	}
-	if _, exists := hrefs[string(href)]; exists {
 		return false
 	}
 	if parenthesesRe.FindString(content) == "" {
@@ -147,6 +179,7 @@ func validateDept(href, content string, hrefs map[string]int) bool {
 // in the returned slice will use deptKey as their DeptKey attribute.
 func ExtractClasses(content, deptKey string) []Class {
 	content = filterUtf8(content, "?")
+	content = html.UnescapeString(content)
 	var classes []Class
 
 	matches := classChunkRe.FindAllString(content, -1)
@@ -173,12 +206,12 @@ func ExtractClasses(content, deptKey string) []Class {
 	}
 	// set Class positions
 	for i, class := range classes {
-		class.start = matchIndices[i][0]
+		class.Start = matchIndices[i][0]
 		if i == len(classes)-1 {
-			class.end = len(content)
+			class.End = len(content)
 			break
 		}
-		class.end = matchIndices[i+1][0]
+		class.End = matchIndices[i+1][0]
 	}
 	return classes
 }
@@ -187,6 +220,7 @@ func ExtractClasses(content, deptKey string) []Class {
 // in the returned slice will use classKey as their ClassKey attribute.
 func ExtractSects(content, classKey string) []Sect {
 	content = filterUtf8(content, "?")
+	content = html.UnescapeString(content)
 	var sects []Sect
 
 	matches := sectChunkRe.FindAllString(content, -1)

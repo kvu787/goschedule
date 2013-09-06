@@ -1,23 +1,46 @@
-package scrape
+package backend
 
 import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 
 	"github.com/kvu787/goschedule"
 )
 
-// // Scrape will begin a full time schedule scrape and store results in a database.
-// // Parameter url must be a the time schedule page listing departments and colleges.
-// func Scrape(url string, db *sql.DB) {
-// 	body, err := get(url)
-// 	if err != nil {
-// 		panic(fmt.Sprintf("Failed to fetch time schedule root at %s: %s", url, err))
-// 	}
-// }
+// Scrape will begin a full time schedule scrape and store results in a database.
+// Parameter url must be a the time schedule page listing departments and colleges.
+func Scrape(url string, db *sql.DB) {
+	if err := db.Ping(); err != nil {
+		panic("Bad db connection")
+	}
+	body, err := get(url)
+	if err != nil {
+		panic(fmt.Sprintf("Failed to fetch time schedule root at %s: %s", url, err))
+	}
+	colleges, err := goschedule.ExtractColleges(body)
+	if err != nil {
+		log.Println(err)
+	}
+	uniqueDepts := make(map[string]int)
+	for _, college := range colleges {
+		if err := goschedule.Insert(db, college); err != nil {
+			log.Println(err)
+		}
+		depts, err := goschedule.ExtractDepts(body[college.Start:college.End], college.Abbreviation, url, &uniqueDepts)
+		if err != nil {
+			log.Println(err)
+		}
+		for _, dept := range depts {
+			if err := goschedule.Insert(db, dept); err != nil {
+				log.Println(err)
+			}
+		}
+	}
+}
 
 // parseConfig reads a JSON format byte slice into a map.
 func parseConfig(config []byte) (result map[string]interface{}) {

@@ -9,6 +9,7 @@ import (
 	"os"
 
 	"github.com/kvu787/goschedule"
+	"github.com/kvu787/goschedule/goschedule/backend"
 	_ "github.com/lib/pq"
 )
 
@@ -40,7 +41,6 @@ func main() {
 	case "help":
 		if len(os.Args) > 2 {
 			fmt.Println("command help not implemented")
-			fmt.Println(usage)
 			os.Exit(1)
 		}
 		fmt.Println(usage)
@@ -56,12 +56,6 @@ func main() {
 		fmt.Println(usage)
 		os.Exit(1)
 	}
-}
-
-var flagSet = flag.NewFlagSet("flags", flag.ExitOnError)
-
-func init() {
-	flagSet.String("config", "", "Path to a JSON formatted config file.")
 }
 
 func handleSetup(args []string) {
@@ -80,81 +74,65 @@ func handleSetup(args []string) {
 		fmt.Println("unrecognized argument")
 		os.Exit(1)
 	}
-	var config map[string]interface{}
-	parseConfig(args[1:], &config)
-	// setup superuser db connection
-	dbLogin := config["dbLogin"].(map[string]interface{})
+	// load config
+	config := parseConfig(args[1:])
+	// connect to superuser db
 	db, err := sql.Open("postgres", fmt.Sprintf(
 		"user=%s dbname=%s password=%s sslmode=require",
-		dbLogin["user"].(string),
-		dbLogin["dbname"].(string),
-		dbLogin["password"].(string),
+		config.DbLogin["user"],
+		config.DbLogin["dbname"],
+		config.DbLogin["password"],
 	))
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
 	// setup databases for each schedule
-	var dbSets []map[string]interface{}
-	for _, v := range config["schedules"].([]interface{}) {
-		dbSets = append(dbSets, v.(map[string]interface{}))
-	}
-	for _, dbSet := range dbSets {
-		_, err := db.Exec(fmt.Sprintf("%s DATABASE goschedule_%s_switch", command, dbSet["name"].(string)))
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-		_, err = db.Exec(
-			fmt.Sprintf("%s DATABASE goschedule_%s_app1", command, dbSet["name"].(string)))
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-		_, err = db.Exec(
-			fmt.Sprintf("%s DATABASE goschedule_%s_app2", command, dbSet["name"].(string)))
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+	for _, schedule := range config.Schedules {
+		for _, statement := range []string{
+			fmt.Sprintf("%s DATABASE goschedule_%s_switch", command, schedule["name"]),
+			fmt.Sprintf("%s DATABASE goschedule_%s_app1", command, schedule["name"]),
+			fmt.Sprintf("%s DATABASE goschedule_%s_app2", command, schedule["name"]),
+		} {
+			if _, err := db.Exec(statement); err != nil {
+				fmt.Println(err)
+			}
 		}
 		// load db schemas if in create mode
 		if command == "CREATE" {
 			// load switch schema
 			dbSwitch, err := sql.Open("postgres", fmt.Sprintf(
 				"user=%s dbname=%s password=%s sslmode=require",
-				dbLogin["user"].(string),
-				fmt.Sprintf("goschedule_%s_switch", dbSet["name"].(string)),
-				dbLogin["password"].(string),
+				config.DbLogin["user"],
+				fmt.Sprintf("goschedule_%s_switch", schedule["name"]),
+				config.DbLogin["password"],
 			))
 			if err != nil {
 				fmt.Println(err)
-				os.Exit(1)
 			}
-			if _, err := dbSwitch.Exec("CREATE TABLE switch_table ( switch_col int)"); err != nil {
-				fmt.Println(err)
-				os.Exit(1)
-			}
-			if _, err := dbSwitch.Exec("INSERT INTO switch_table VALUES (1)"); err != nil {
-				fmt.Println(err)
-				os.Exit(1)
+			for _, statement := range []string{
+				"CREATE TABLE switch_table ( switch_col int)",
+				"INSERT INTO switch_table VALUES (1)",
+			} {
+				if _, err := dbSwitch.Exec(statement); err != nil {
+					fmt.Println(err)
+				}
 			}
 			// load app db schemas
 			for i := 1; i < 3; i++ {
 				dbApp, err := sql.Open("postgres", fmt.Sprintf(
 					"user=%s dbname=%s password=%s sslmode=require",
-					dbLogin["user"].(string),
-					fmt.Sprintf("goschedule_%s_app%d", dbSet["name"].(string), i),
-					dbLogin["password"].(string),
+					config.DbLogin["user"],
+					fmt.Sprintf("goschedule_%s_app%d", schedule["name"], i),
+					config.DbLogin["password"],
 				))
 				if err != nil {
 					fmt.Println(err)
-					os.Exit(1)
 				}
 				objects := []interface{}{goschedule.College{}, goschedule.Dept{}, goschedule.Class{}, goschedule.Sect{}}
 				for _, object := range objects {
 					if _, err := dbApp.Exec(goschedule.GenerateSchema(object)); err != nil {
 						fmt.Println(err)
-						os.Exit(1)
 					}
 				}
 			}
@@ -162,30 +140,61 @@ func handleSetup(args []string) {
 	}
 }
 
-func handleScrape(flags []string) {
-
+func handleScrape(args []string) {
+	config := parseConfig(args)
+	for _, schedule := range config.Schedules {
+		// connect to db
+		db, err := sql.Open("postgres", fmt.Sprintf(
+			"user=%s dbname=%s password=%s sslmode=require",
+			config.DbLogin["user"],
+			fmt.Sprintf("goschedule_%s_app1", schedule["name"]),
+			config.DbLogin["password"],
+		))
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+		fmt.Println("Scraping", schedule["url"])
+		backend.Scrape(schedule["url"], db)
+		break // use only the first schedule
+	}
 }
 
 func handleWeb(flags []string) {
-	fcgi := flagSet.Bool("fcgi", false, "")
-	flagSet.Parse(flags)
-	fmt.Println(*fcgi)
+	// fcgi := flagSet.Bool("fcgi", false, "")
+	// flagSet.Parse(flags)
+	// fmt.Println(*fcgi)
 }
 
-type jsonConfig struct {
+type config struct {
+	DepartmentDescriptionIndex string
+	LoopScraper                bool
+	DbLogin                    map[string]string
+	Schedules                  []map[string]string
 }
 
-func parseConfig(flags []string, target interface{}) {
-	flagSet.Parse(flags)
+// parseConfig will use the given args to try to load a file from the `--config` flag.
+// If the config flag is not set, or if it cannot read the file path, or it encounters
+// an error when unmarshalling the config from JSON, it will call os.Exit(1).
+// Else, it will return a jsonConfig struct.
+func parseConfig(args []string) config {
+	var flagSet = flag.NewFlagSet("flags", flag.ExitOnError)
+	flagSet.String("config", "", "Path to a JSON formatted config file.")
+	flagSet.Parse(args)
 	configPath := flagSet.Lookup("config").Value.String()
 	if configPath == "" {
 		fmt.Println("missing `--config` flag")
 		os.Exit(1)
 	}
-	config, err := ioutil.ReadFile(configPath)
+	rawConfig, err := ioutil.ReadFile(configPath)
 	if err != nil {
 		fmt.Printf("error reading config at %s\n", configPath)
 		os.Exit(1)
 	}
-	json.Unmarshal(config, target)
+	parsedConfig := config{}
+	if err := json.Unmarshal(rawConfig, &parsedConfig); err != nil {
+		fmt.Printf("error parsing config file at %s to JSON\n", configPath)
+		os.Exit(1)
+	}
+	return parsedConfig
 }

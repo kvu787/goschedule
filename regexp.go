@@ -8,7 +8,7 @@ import (
 var (
 	anchorRe              *regexp.Regexp = regexp.MustCompile(`(?is)<a.+?</a>`)
 	parenthesesRe         *regexp.Regexp = regexp.MustCompile(`(?is)\(.*?\)`)
-	collegeLinkRe         *regexp.Regexp = regexp.MustCompile(`<a.+?\|`)
+	collegeLinkRe         *regexp.Regexp = regexp.MustCompile(`<a href="#.+?\|`)
 	collegeChunkRe        *regexp.Regexp = regexp.MustCompile(`(?i)<a name.+?</a>\n<h2>.+?</h2>`)
 	classChunkRe          *regexp.Regexp = regexp.MustCompile(`(?is)<table bgcolor="#ffcccc".*?</table>`)
 	classNameRe           *regexp.Regexp = regexp.MustCompile(`(?i)name=.*?>`)

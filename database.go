@@ -84,17 +84,17 @@ func Insert(db *sql.DB, object interface{}) error {
 	oValue := reflect.ValueOf(object)
 	// prepare values and placeholder string
 	var values []interface{}
-	var placeholder string
+	var placeholder []string
 	for i := 0; i < oType.NumField(); i++ {
-		if oType.Field(i).Tag.Get("ignored") != "true" {
+		if oType.Field(i).Tag.Get("ignore") != "true" {
 			values = append(values, oValue.Field(i).Interface())
 		}
 	}
 	for i, _ := range values {
-		placeholder += fmt.Sprintf("$%d ", i+1)
+		placeholder = append(placeholder, fmt.Sprintf("$%d", i+1))
 	}
 	// execute query
-	query := fmt.Sprintf("INSERT INTO %s VALUES (%s)", oType.Name(), placeholder)
+	query := fmt.Sprintf("INSERT INTO %s VALUES (%s)", oType.Name(), strings.Join(placeholder, ","))
 	if _, err := db.Exec(query, values...); err != nil {
 		return fmt.Errorf("Failed to insert records: %s", err)
 	}

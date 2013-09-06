@@ -3,8 +3,8 @@ package goschedule
 // Position provides the start and end indices of a struct
 // extracted from a document.
 type position struct {
-	start int
-	end   int
+	Start int
+	End   int
 }
 
 // A College is a UW college that has many departments
