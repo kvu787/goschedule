@@ -1,5 +1,12 @@
 package goschedule
 
+import (
+	"fmt"
+	"html"
+	"regexp"
+	"strings"
+)
+
 // Position provides the start and end indices of a struct
 // extracted from a document.
 type position struct {
@@ -20,6 +27,21 @@ type Dept struct {
 	Name         string
 	Abbreviation string `pk:"true"`
 	Link         string
+}
+
+// ExtractAbbreviation extracts a department abbreviation from content (assumed
+// to be a class index of a department) and sets the Dept.Abbreviation attribute.
+//
+// Returns an error if no department abbreviation was found.
+func (d *Dept) ScrapeAbbreviation(content string) error {
+	if match := regexp.MustCompile(`(?i)<a name=.+?>(.+?)&nbsp;&nbsp; .*?</a>`).FindStringSubmatch(content); match == nil || len(match) < 2 {
+		return fmt.Errorf("No match found in content")
+	} else {
+		abbreviation := html.UnescapeString(match[1])
+		abbreviation = strings.ToLower(strings.Replace(abbreviation, " ", "", -1))
+		d.Abbreviation = abbreviation
+	}
+	return nil
 }
 
 // A Class is UW class that has many sections.

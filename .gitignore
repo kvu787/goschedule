@@ -1,1 +1,2 @@
 scraper/config/config.go
+goschedule/*.log

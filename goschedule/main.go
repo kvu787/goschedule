@@ -8,8 +8,8 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/kvu787/goschedule"
 	"github.com/kvu787/goschedule/goschedule/backend"
+	"github.com/kvu787/goschedule/lib"
 	_ "github.com/lib/pq"
 )
 

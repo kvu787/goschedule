@@ -11,10 +11,13 @@
 - Bugs
     - Some class descriptions have non-unicode conformant characters in them (see honors241)
         - Causes error in db update: pq: S:"ERROR" C:"22021" M:"invalid byte sequence for encoding \"UTF8\": 0xe9 0x6d 0x69" F:"wchar.c" L:"2015" R:"report_invalid_encoding"
+    - Weird department cases
+        - Paper Science and Engineering (PSE): paper.html (redirect)
 - Features
     - scrape summer too
     - add About section
         - Note: currently only covers autumn 2013
+        - Departments with no classes are omitted from the schedule
     - Add "Feedback" js tab thingy
     - Scrape detailed class info (ex. [https://sdb.admin.washington.edu/timeschd/uwnetid/sln.asp?QTRYR=AUT+2013&SLN=20486](https://sdb.admin.washington.edu/timeschd/uwnetid/sln.asp?QTRYR=AUT+2013&SLN=20486))
     - Organize departments by college

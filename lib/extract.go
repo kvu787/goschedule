@@ -3,6 +3,7 @@
 package goschedule
 
 import (
+	"encoding/json"
 	"encoding/xml"
 	"fmt"
 	"html"
@@ -57,10 +58,8 @@ func ExtractColleges(content string) ([]College, error) {
 	content = html.UnescapeString(content)
 	var colleges []College
 	var errs errorsSlice
-
 	// process hash links
-	matches := collegeLinkRe.FindAllString(content, -1)
-	for _, match := range matches {
+	for _, match := range collegeLinkRe.FindAllString(content, -1) {
 		var college College
 		// parse links from xml
 		tag := struct {
@@ -102,18 +101,22 @@ func ExtractColleges(content string) ([]College, error) {
 }
 
 // Extract grabs Dept structs from a string.
+//
 // All Dept structs in the returned slice will use collegeKey as their collegeKey attribute.
 // processed is a map of Dept.Abbreviation's that have already been processed. The int values
 // are not used.
-// ExtractDepts will skip a Dept if it's abbreviation is in processed. Else, it will add the
+// ExtractDepts will skip a Dept if its abbreviation is in processed. Else, it will add the
 // abbreviation to processed.
+//
+// Note that the department's abbreviation (primary key) cannot be scraped from the department index.
+// The abbreviation from the class listing by visiting the department page. Use
+// Dept.ScrapeAbbreviation with a class index page (Dept.Link).
 func ExtractDepts(content, collegeKey, url string, processed *map[string]int) ([]Dept, error) {
 	content = filterUtf8(content, "?")
 	content = html.UnescapeString(content)
 	var depts []Dept
 	var errs errorsSlice
-	matches := anchorRe.FindAllString(content, -1)
-	for _, match := range matches {
+	for _, match := range anchorRe.FindAllString(content, -1) {
 		// check validity
 		tag := struct {
 			Href    string `xml:"href,attr"`
@@ -135,19 +138,19 @@ func ExtractDepts(content, collegeKey, url string, processed *map[string]int) ([
 		dept.Link = url + string(tag.Href)
 		// grab title
 		dept.Name = strings.TrimSpace(parenthesesRe.ReplaceAllString(tag.Content, ""))
-		// grab abbreviation
+		// grab href
+		var href string
 		if temp := strings.Split(tag.Href, "."); len(temp) > 0 {
-			dept.Abbreviation = temp[0]
+			href = temp[0]
 		} else {
 			errs = append(errs, fmt.Errorf(`skipped department: invalid href format: "%s"`, tag.Href))
 			continue
 		}
 		// check department for uniqueness
-		if _, exists := (*processed)[dept.Abbreviation]; exists {
-			errs = append(errs, fmt.Errorf(`skipped department: already processed: "%s"`, dept.Abbreviation))
+		if _, exists := (*processed)[href]; exists {
 			continue
 		} else { // add to map if unique
-			(*processed)[dept.Abbreviation] = 1
+			(*processed)[href] = 1
 		}
 		// add college
 		dept.CollegeKey = collegeKey
@@ -181,60 +184,54 @@ func ExtractClasses(content, deptKey string) []Class {
 	content = filterUtf8(content, "?")
 	content = html.UnescapeString(content)
 	var classes []Class
-
-	matches := classChunkRe.FindAllString(content, -1)
 	matchIndices := classChunkRe.FindAllStringIndex(content, -1)
-	for _, match := range matches {
+	for _, match := range classChunkRe.FindAllString(content, -1) {
 		var class Class
 		class.DeptKey = deptKey
 		// grab name (abbreviation and code)
 		name := classNameRe.FindString(match)
 		// grab abbreviation
-		class.Abbreviation = strings.ToLower(
-			classAbbreviationRe.FindString(name))
+		class.Abbreviation = strings.ToLower(classAbbreviationRe.FindString(name))
 		// grab code
-		class.Code = strings.ToLower(
-			classCodeRe.FindString(name))
+		class.Code = strings.ToLower(classCodeRe.FindString(name))
 		// grab title
-		class.Title = strings.ToLower(
-			tagRe.ReplaceAllString(
-				classTitleRe.FindString(match), ""))
+		class.Title = strings.ToLower(tagRe.ReplaceAllString(classTitleRe.FindString(match), ""))
 		// set AbbreviationCode key
 		class.AbbreviationCode = class.Abbreviation + class.Code
 		// append to slice
 		classes = append(classes, class)
 	}
-	// set Class positions
-	for i, class := range classes {
-		class.Start = matchIndices[i][0]
+	// set class positions
+	for i := 0; i < len(classes); i++ {
+		classes[i].Start = matchIndices[i][0]
 		if i == len(classes)-1 {
-			class.End = len(content)
+			classes[i].End = len(content)
 			break
 		}
-		class.End = matchIndices[i+1][0]
+		classes[i].End = matchIndices[i+1][0]
+		// fmt.Printf("=== Class indices %3d : %3d ===\n", classes[i].Start, classes[i].End)
 	}
 	return classes
 }
 
 // ExtractSects grabs Sect structs from a string. All Sect structs
 // in the returned slice will use classKey as their ClassKey attribute.
-func ExtractSects(content, classKey string) []Sect {
+func ExtractSects(content, classKey string) ([]Sect, error) {
 	content = filterUtf8(content, "?")
 	content = html.UnescapeString(content)
 	var sects []Sect
-
-	matches := sectChunkRe.FindAllString(content, -1)
-	for _, match := range matches {
+	var errs errorsSlice
+	for _, match := range sectChunkRe.FindAllString(content, -1) {
 		var sect Sect
-
+		// remove html tags
 		match = tagRe.ReplaceAllString(match, "")
 		lines := strings.Split(match, "\n")
-
 		var meetingTimes []MeetingTime
+		// check first line for meeting time
 		if mt, err := checkMeetingTime(lines[0]); err == nil {
 			meetingTimes = append(meetingTimes, mt)
 		}
-
+		// extract sect attributes from rest of first line
 		sect.Restriction = strings.TrimSpace(lines[0][0:7])
 		sect.SLN = strings.ToLower(strings.TrimSpace(lines[0][7:13]))
 		sect.Section = strings.TrimSpace(lines[0][13:16])
@@ -246,12 +243,37 @@ func ExtractSects(content, classKey string) []Sect {
 			sect.TakenSpots, _ = strconv.ParseInt(m[0], 10, 64)
 			sect.TotalSpots, _ = strconv.ParseInt(m[1], 10, 64)
 		}
-
 		sect.Grades = strings.TrimSpace(lines[0][101:108])
 		sect.Fee = strings.TrimSpace(lines[0][108:115])
 		sect.Other = strings.TrimSpace(lines[0][115:])
+		// crawl through other lines
+		lines = lines[1:]
+		for _, line := range lines {
+			// check if MeetingTime
+			if mt, err := checkMeetingTime(line); err == nil {
+				meetingTimes = append(meetingTimes, mt)
+			} else if blankLineRe.MatchString(line) {
+				// skip if blank line
+			} else { // else append to sect.Info
+				sect.Info += strings.TrimSpace(line) + "\n"
+			}
+		}
+		// store JSON representation of MeetingTime's
+		mtJson, err := json.Marshal(meetingTimes)
+		if err != nil {
+			errs = append(errs, err)
+			sect.MeetingTimes = "error"
+		} else {
+			sect.MeetingTimes = string(mtJson)
+		}
+		sect.ClassKey = classKey
+		sects = append(sects, sect)
 	}
-	return sects
+	if len(errs) < 1 {
+		return sects, nil
+	} else {
+		return sects, errs
+	}
 }
 
 // checkMeetingTime checks if a string contains information for
@@ -268,4 +290,20 @@ func checkMeetingTime(line string) (MeetingTime, error) {
 		return mt, nil
 	}
 	return mt, fmt.Errorf("")
+}
+
+// ExtractClassDescriptions extracts class descriptions from content. It returns a
+// map of class abbreviationCode's (primary key) to class descriptions.
+func ExtractClassDescriptions(content string) (map[string]string, error) {
+	descriptions := make(map[string]string)
+	for _, match := range classDescriptionRe.FindAllStringSubmatch(content, -1) {
+		if len(match) < 3 {
+			return nil, fmt.Errorf("less than 3 submatches found: %q", match)
+		}
+		// grab class AbbreviationCode
+		abbreviationCode := strings.ToLower(strings.TrimSpace(match[1]))
+		// store abbreviationCode and description as key-value pair
+		descriptions[abbreviationCode] = strings.TrimSpace(match[2])
+	}
+	return descriptions, nil
 }
