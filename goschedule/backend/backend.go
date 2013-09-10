@@ -2,13 +2,11 @@ package backend
 
 import (
 	"database/sql"
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
-	"time"
 
 	"github.com/kvu787/goschedule/lib"
 )
@@ -21,8 +19,9 @@ func Scrape(link string, db *sql.DB) {
 	}
 	body, err := get(link)
 	if err != nil {
-		panic(fmt.Sprintf("Failed to fetch time schedule root at %s: %s", link, err))
+		panic(fmt.Sprintf("Failed to fetch time schedule root at %q: %v", link, err))
 	}
+	body = goschedule.Filter(body)
 	colleges, err := goschedule.ExtractColleges(body)
 	if err != nil {
 		log.Println(err)
@@ -34,53 +33,50 @@ func Scrape(link string, db *sql.DB) {
 		if err := goschedule.Insert(db, college); err != nil {
 			log.Println(err)
 		}
-		// scrape department for each college
+		// scrape departments for each college
 		depts, err := goschedule.ExtractDepts(body[college.Start:college.End], college.Abbreviation, link, &uniqueDepts)
 		if err != nil {
 			log.Println(err)
 		}
 		for _, dept := range depts {
+			fmt.Printf("scraping %-70q", dept.Name)
 			classIndex, err := get(dept.Link)
 			if err != nil {
-				log.Printf("department %q SKIPPED: %v\n", dept.Name, err)
+				fmt.Printf("SKIPPED: %v\n       ", err)
 				continue
 			}
 			if err := dept.ScrapeAbbreviation(classIndex); err != nil {
-				log.Printf("department %q SKIPPED: %v\n", dept.Name, err)
+				fmt.Printf("SKIPPED: %v\n        ", err)
 				continue
 			}
+			classIndex = goschedule.Filter(classIndex)
 			if err := goschedule.Insert(db, dept); err != nil {
-				fmt.Println("LINK:", dept.Link)
-				log.Println(err)
+				fmt.Print(err)
 			}
 			// scrape classes for each department
 			classes := goschedule.ExtractClasses(classIndex, dept.Abbreviation)
+			fmt.Printf("%-4d classes        ", len(classes))
 			var sections []goschedule.Sect
 			// scrape sections for each class
 			for _, class := range classes {
 				if err := goschedule.Insert(db, class); err != nil {
-					log.Println(err)
+					fmt.Print(err, "      ")
 				}
 				sects, err := goschedule.ExtractSects(classIndex[class.Start:class.End], class.AbbreviationCode)
 				if err != nil {
-					log.Println(err)
+					fmt.Print(err, "      ")
 				}
 				sections = append(sections, sects...)
 			}
+			fmt.Printf("%-4d sections        ", len(sections))
 			for _, sect := range sections {
 				if err := goschedule.Insert(db, sect); err != nil {
-					log.Println(err)
+					fmt.Print(err, "      ")
 				}
 			}
-			time.Sleep(1000 * time.Millisecond)
+			fmt.Print("\n")
 		}
 	}
-}
-
-// parseConfig reads a JSON format byte slice into a map.
-func parseConfig(config []byte) (result map[string]interface{}) {
-	json.Unmarshal(config, &result)
-	return
 }
 
 // get requests a link with the given client and returns the bytes
@@ -106,8 +102,10 @@ func get(link string) (string, error) {
 	return string(body), nil
 }
 
+// getEofError is an alias for *url.Error{Op:"...", URL:"...", Err:"EOF"}.
 type getEofError string
 
+// Error implements the error interface for getEofError.
 func (err getEofError) Error() string {
 	return string(err)
 }

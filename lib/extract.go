@@ -6,26 +6,11 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
-	"html"
 	"io"
 	"regexp"
 	"strconv"
 	"strings"
-	"unicode/utf8"
 )
-
-// filterUtf8 is replaces, "?" all invalid characters (per the UTF-8 encoding
-// of Unicode) with the repl.
-func filterUtf8(in, repl string) (out string) {
-	for _, r := range []rune(in) {
-		if r != utf8.RuneError {
-			out += string(r)
-		} else {
-			out += repl
-		}
-	}
-	return out
-}
 
 // htmlDecoder that creates an XML decoder that can handle typical HTML.
 // See http://golang.org/pkg/encoding/xml/#Decoder.
@@ -54,8 +39,6 @@ func (e errorsSlice) Error() string {
 
 // ExtractColleges grabs College structs from a string
 func ExtractColleges(content string) ([]College, error) {
-	content = filterUtf8(content, "?")
-	content = html.UnescapeString(content)
 	var colleges []College
 	var errs errorsSlice
 	// process hash links
@@ -112,8 +95,6 @@ func ExtractColleges(content string) ([]College, error) {
 // The abbreviation from the class listing by visiting the department page. Use
 // Dept.ScrapeAbbreviation with a class index page (Dept.Link).
 func ExtractDepts(content, collegeKey, url string, processed *map[string]int) ([]Dept, error) {
-	content = filterUtf8(content, "?")
-	content = html.UnescapeString(content)
 	var depts []Dept
 	var errs errorsSlice
 	for _, match := range anchorRe.FindAllString(content, -1) {
@@ -181,8 +162,6 @@ func validateDept(href, content string) bool {
 // ExtractClasses grabs Class structs from a string. All Class structs
 // in the returned slice will use deptKey as their DeptKey attribute.
 func ExtractClasses(content, deptKey string) []Class {
-	content = filterUtf8(content, "?")
-	content = html.UnescapeString(content)
 	var classes []Class
 	matchIndices := classChunkRe.FindAllStringIndex(content, -1)
 	for _, match := range classChunkRe.FindAllString(content, -1) {
@@ -209,7 +188,6 @@ func ExtractClasses(content, deptKey string) []Class {
 			break
 		}
 		classes[i].End = matchIndices[i+1][0]
-		// fmt.Printf("=== Class indices %3d : %3d ===\n", classes[i].Start, classes[i].End)
 	}
 	return classes
 }
@@ -217,8 +195,6 @@ func ExtractClasses(content, deptKey string) []Class {
 // ExtractSects grabs Sect structs from a string. All Sect structs
 // in the returned slice will use classKey as their ClassKey attribute.
 func ExtractSects(content, classKey string) ([]Sect, error) {
-	content = filterUtf8(content, "?")
-	content = html.UnescapeString(content)
 	var sects []Sect
 	var errs errorsSlice
 	for _, match := range sectChunkRe.FindAllString(content, -1) {

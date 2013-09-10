@@ -13,6 +13,7 @@
         - Causes error in db update: pq: S:"ERROR" C:"22021" M:"invalid byte sequence for encoding \"UTF8\": 0xe9 0x6d 0x69" F:"wchar.c" L:"2015" R:"report_invalid_encoding"
     - Weird department cases
         - Paper Science and Engineering (PSE): paper.html (redirect)
+    - EOF errors when fetching a page
 - Features
     - scrape summer too
     - add About section

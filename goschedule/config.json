@@ -1,5 +1,6 @@
 {
     "departmentDescriptionIndex" : "http://www.washington.edu/students/crscat/",
+    "scraperTimeout" : 2,
     "loopScraper" : false,
     "dbLogin" : {
         "user" : "gosh",
@@ -10,10 +11,6 @@
         { 
             "name" : "aut2013",
             "url" : "http://www.washington.edu/students/timeschd/AUT2013/"
-        },
-        {
-            "name" : "sum2013",
-            "url" : "http://www.washington.edu/students/timeschd/SUM2013/" 
         }
     ]
 }

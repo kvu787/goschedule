@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"time"
 
 	"github.com/kvu787/goschedule/goschedule/backend"
 	"github.com/kvu787/goschedule/lib"
@@ -142,21 +143,53 @@ func handleSetup(args []string) {
 
 func handleScrape(args []string) {
 	config := parseConfig(args)
-	for _, schedule := range config.Schedules {
-		// connect to db
-		db, err := sql.Open("postgres", fmt.Sprintf(
-			"user=%s dbname=%s password=%s sslmode=require",
-			config.DbLogin["user"],
-			fmt.Sprintf("goschedule_%s_app1", schedule["name"]),
-			config.DbLogin["password"],
-		))
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+	for {
+		// scrape for each schedule specified in config
+		for _, schedule := range config.Schedules {
+			// connect to switch db
+			switchDb, err := sql.Open("postgres", fmt.Sprintf(
+				"user=%s dbname=%s password=%s sslmode=require",
+				config.DbLogin["user"],
+				fmt.Sprintf("goschedule_%s_switch", schedule["name"]),
+				config.DbLogin["password"],
+			))
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
+			defer switchDb.Close()
+			appNum, err := getSwitch(switchDb)
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
+			// connect to app db
+			appDb, err := sql.Open("postgres", fmt.Sprintf(
+				"user=%s dbname=%s password=%s sslmode=require",
+				config.DbLogin["user"],
+				fmt.Sprintf("goschedule_%s_app%d", schedule["name"], appNum),
+				config.DbLogin["password"],
+			))
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
+			defer appDb.Close()
+			start := time.Now()
+			fmt.Printf("Scraping %q using application database %d\n", schedule["url"], appNum)
+			backend.Scrape(schedule["url"], appDb)
+			fmt.Println("Time taken:", time.Since(start))
+			// flip db switch
+			if err := flipSwitch(switchDb); err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
+			fmt.Printf("Scrape for %q done\n", schedule["url"])
 		}
-		fmt.Println("Scraping", schedule["url"])
-		backend.Scrape(schedule["url"], db)
-		break // use only the first schedule
+		if !config.LoopScraper {
+			break
+		}
+		time.Sleep(time.Duration(config.ScraperTimeout) * time.Minute)
 	}
 }
 
@@ -168,6 +201,7 @@ func handleWeb(flags []string) {
 
 type config struct {
 	DepartmentDescriptionIndex string
+	ScraperTimeout             int
 	LoopScraper                bool
 	DbLogin                    map[string]string
 	Schedules                  []map[string]string
@@ -197,4 +231,49 @@ func parseConfig(args []string) config {
 		os.Exit(1)
 	}
 	return parsedConfig
+}
+
+// xor implements the 'exclusive or' operator for booleans.
+// true, true -> false
+// true, false -> true
+// false, true -> true
+// false, false -> true
+func xor(b1, b2 bool) bool {
+	return (b1 || b2) && !(b1 && b2)
+}
+
+// getSwitch queries the 'switch db' returns either 1 or 2.
+// Used to determine which database should be used to store scrape results.
+func getSwitch(db *sql.DB) (int, error) {
+	var result int
+	query := fmt.Sprintf("SELECT switch_col FROM switch_table LIMIT 1")
+	if err := db.QueryRow(query).Scan(&result); err != nil {
+		return -1, err
+	}
+	return result, nil
+}
+
+// Flip switch changes the value stored in the 'switch db' from 1 to 2
+// or from 2 to 1.
+func flipSwitch(db *sql.DB) error {
+	currentSwitch, err := getSwitch(db)
+	if err != nil {
+		return err
+	}
+	var newSwitch int
+	if currentSwitch == 1 {
+		newSwitch = 2
+	} else {
+		newSwitch = 1
+	}
+	query := fmt.Sprintf(
+		"UPDATE switch_table SET switch_col = %d WHERE switch_col = %d",
+		newSwitch,
+		currentSwitch,
+	)
+	_, err = db.Exec(query)
+	if err != nil {
+		return err
+	}
+	return nil
 }
