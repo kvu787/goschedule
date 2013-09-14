@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/kvu787/goschedule/goschedule/backend"
+	"github.com/kvu787/goschedule/goschedule/frontend"
 	"github.com/kvu787/goschedule/lib"
 	_ "github.com/lib/pq"
 )
@@ -27,7 +28,34 @@ Commands:
     web      Start the web application to view Go Schedule.
     help     Use "goschedule help [command] for more information about a command.
 
-Built by Kevin Vu`
+Built by Kevin Vu, 2013.`
+
+var setupHelp string = `Usage:
+
+	goschedule setup <create|teardown> --config=<path to config>
+
+Examples:
+
+	'goschedule setup create --config=./config.json': Reads the config and creates several databases for each defined schedule.
+	'goschedule setup teardown --config=./config.json': Drops databases according to each defined schedule's name.
+
+Note that 'goschedule setup teardown' will not work properly if you change the schedules in the JSON config after running 'goschedule setup create'.`
+
+var scrapeHelp string = `Usage:
+
+	goschedule scrape --config=<path to config>
+
+Scrapes each schedule defined in the config and stores results in databases.
+Expects that 'goschedule setup create' has been run to setup the databases.`
+
+var webHelp string = `Usage:
+
+	goschedule web --config=<path to config> <--fcgi=<port number>|--local=<port number>>
+
+Examples:
+	
+	'goschedule web --config=./config.json --local=8080': Starts Go Schedule web app that can be viewed in a browser at localhost:8080.
+	'goschedule web --config=./config.json --fcgi=9000': Starts Go Schedule web app serving through fcgi on port 9000 (Used with an nginx server).`
 
 func main() {
 	if len(os.Args) < 2 {
@@ -41,7 +69,18 @@ func main() {
 	switch os.Args[1] {
 	case "help":
 		if len(os.Args) > 2 {
-			fmt.Println("command help not implemented")
+			switch os.Args[2] {
+			case "setup":
+				fmt.Println(setupHelp)
+				os.Exit(0)
+			case "scrape":
+				fmt.Println(scrapeHelp)
+				os.Exit(0)
+			case "web":
+				fmt.Println(webHelp)
+				os.Exit(0)
+			}
+			fmt.Println("ERRPR: command help not implemented")
 			os.Exit(1)
 		}
 		fmt.Println(usage)
@@ -53,15 +92,15 @@ func main() {
 	case "web":
 		handleWeb(flags)
 	default:
-		fmt.Println("unrecognized arguments")
+		fmt.Println("ERROR: unrecognized arguments")
 		fmt.Println(usage)
 		os.Exit(1)
 	}
 }
 
 func handleSetup(args []string) {
-	if len(args) < 2 {
-		fmt.Println("not enough arguments")
+	if len(args) < 1 {
+		fmt.Println("ERROR: not enough arguments")
 		os.Exit(1)
 	}
 	// create or drop databases
@@ -76,20 +115,23 @@ func handleSetup(args []string) {
 		os.Exit(1)
 	}
 	// load config
-	config := parseConfig(args[1:])
+	conf := parseConfig(args[1:])
+	user := conf.DbLogin["user"]
+	password := conf.DbLogin["user"]
+	dbname := conf.DbLogin["dbname"]
 	// connect to superuser db
 	db, err := sql.Open("postgres", fmt.Sprintf(
 		"user=%s dbname=%s password=%s sslmode=require",
-		config.DbLogin["user"],
-		config.DbLogin["dbname"],
-		config.DbLogin["password"],
+		user,
+		dbname,
+		password,
 	))
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
 	// setup databases for each schedule
-	for _, schedule := range config.Schedules {
+	for _, schedule := range conf.Schedules {
 		for _, statement := range []string{
 			fmt.Sprintf("%s DATABASE goschedule_%s_switch", command, schedule["name"]),
 			fmt.Sprintf("%s DATABASE goschedule_%s_app1", command, schedule["name"]),
@@ -97,61 +139,66 @@ func handleSetup(args []string) {
 		} {
 			if _, err := db.Exec(statement); err != nil {
 				fmt.Println(err)
+				os.Exit(1)
 			}
 		}
-		// load db schemas if in create mode
 		if command == "CREATE" {
 			// load switch schema
-			dbSwitch, err := sql.Open("postgres", fmt.Sprintf(
+			runSql("postgres", fmt.Sprintf(
 				"user=%s dbname=%s password=%s sslmode=require",
-				config.DbLogin["user"],
+				user,
 				fmt.Sprintf("goschedule_%s_switch", schedule["name"]),
-				config.DbLogin["password"],
-			))
-			if err != nil {
-				fmt.Println(err)
-			}
-			for _, statement := range []string{
-				"CREATE TABLE switch_table ( switch_col int)",
-				"INSERT INTO switch_table VALUES (1)",
-			} {
-				if _, err := dbSwitch.Exec(statement); err != nil {
-					fmt.Println(err)
-				}
-			}
+				password,
+			), "CREATE TABLE switch_table ( switch_col int)", "INSERT INTO switch_table VALUES (1)")
 			// load app db schemas
 			for i := 1; i < 3; i++ {
-				dbApp, err := sql.Open("postgres", fmt.Sprintf(
+				statements := make([]string, 4)
+				for i, object := range []interface{}{goschedule.College{}, goschedule.Dept{}, goschedule.Class{}, goschedule.Sect{}} {
+					statements[i] = goschedule.GenerateSchema(object)
+				}
+				runSql("postgres", fmt.Sprintf(
 					"user=%s dbname=%s password=%s sslmode=require",
-					config.DbLogin["user"],
+					user,
 					fmt.Sprintf("goschedule_%s_app%d", schedule["name"], i),
-					config.DbLogin["password"],
-				))
-				if err != nil {
-					fmt.Println(err)
-				}
-				objects := []interface{}{goschedule.College{}, goschedule.Dept{}, goschedule.Class{}, goschedule.Sect{}}
-				for _, object := range objects {
-					if _, err := dbApp.Exec(goschedule.GenerateSchema(object)); err != nil {
-						fmt.Println(err)
-					}
-				}
+					password,
+				), statements...)
 			}
 		}
 	}
 }
 
+// runSql connects to a database with the given driver and connection string and
+// executes SQL statements. If it encounters an error, it prints the error and
+// exits with status code 1.
+func runSql(driver, connection string, statements ...string) {
+	db, err := sql.Open(driver, connection)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	defer db.Close()
+	for _, statement := range statements {
+		if _, err := db.Exec(statement); err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+	}
+}
+
 func handleScrape(args []string) {
-	config := parseConfig(args)
+	conf := parseConfig(args)
+	user := conf.DbLogin["user"]
+	password := conf.DbLogin["password"]
+	dbname := conf.DbLogin["dbname"]
 	for {
 		// scrape for each schedule specified in config
-		for _, schedule := range config.Schedules {
+		for _, schedule := range conf.Schedules {
 			// connect to switch db
 			switchDb, err := sql.Open("postgres", fmt.Sprintf(
 				"user=%s dbname=%s password=%s sslmode=require",
-				config.DbLogin["user"],
+				user,
 				fmt.Sprintf("goschedule_%s_switch", schedule["name"]),
-				config.DbLogin["password"],
+				password,
 			))
 			if err != nil {
 				fmt.Println(err)
@@ -163,18 +210,35 @@ func handleScrape(args []string) {
 				fmt.Println(err)
 				os.Exit(1)
 			}
+			// reset app db
+			runSql("postgres", fmt.Sprintf(
+				"user=%s dbname=%s password=%s sslmode=require",
+				user,
+				dbname,
+				password),
+				fmt.Sprintf("DROP DATABASE goschedule_%s_app%d", schedule["name"], appNum),
+				fmt.Sprintf("CREATE DATABASE goschedule_%s_app%d", schedule["name"], appNum))
 			// connect to app db
 			appDb, err := sql.Open("postgres", fmt.Sprintf(
 				"user=%s dbname=%s password=%s sslmode=require",
-				config.DbLogin["user"],
+				conf.DbLogin["user"],
 				fmt.Sprintf("goschedule_%s_app%d", schedule["name"], appNum),
-				config.DbLogin["password"],
+				conf.DbLogin["password"],
 			))
 			if err != nil {
 				fmt.Println(err)
 				os.Exit(1)
 			}
 			defer appDb.Close()
+			// load app db with schemas
+			objects := []interface{}{goschedule.College{}, goschedule.Dept{}, goschedule.Class{}, goschedule.Sect{}}
+			for _, object := range objects {
+				if _, err := appDb.Exec(goschedule.GenerateSchema(object)); err != nil {
+					fmt.Println(err)
+					os.Exit(1)
+				}
+			}
+			// start scrape
 			start := time.Now()
 			fmt.Printf("Scraping %q using application database %d\n", schedule["url"], appNum)
 			backend.Scrape(schedule["url"], appDb)
@@ -186,20 +250,79 @@ func handleScrape(args []string) {
 			}
 			fmt.Printf("Scrape for %q done\n", schedule["url"])
 		}
-		if !config.LoopScraper {
+		if !conf.LoopScraper {
 			break
 		}
-		time.Sleep(time.Duration(config.ScraperTimeout) * time.Minute)
+		time.Sleep(time.Duration(conf.ScraperTimeout) * time.Minute)
 	}
 }
 
 func handleWeb(flags []string) {
-	// fcgi := flagSet.Bool("fcgi", false, "")
-	// flagSet.Parse(flags)
-	// fmt.Println(*fcgi)
+	conf := parseConfig(flags)
+	webFlags := flag.NewFlagSet("falgs", flag.PanicOnError)
+	var local int
+	var fcgi int
+	var schedule string
+	webFlags.IntVar(&local, "local", 0, "Local port number to serve and listen on.")
+	webFlags.IntVar(&fcgi, "fcgi", 0, "Fcgi port number to serve and listen on.")
+	webFlags.StringVar(&schedule, "schedule", "", "Name of the schedule (from config) to serve.")
+	webFlags.Parse(flags)
+	var scheduleName string
+	for _, s := range conf.Schedules {
+		if schedule == s["name"] {
+			scheduleName = schedule
+		}
+	}
+	if scheduleName == "" {
+		fmt.Printf("ERROR: cannot find schedule name %q in config\n", schedule)
+		os.Exit(1)
+	}
+	if fcgi != 0 && local != 0 {
+		fmt.Println("ERROR: cannot set both --fcgi and --local flags")
+		os.Exit(1)
+	}
+	user := conf.DbLogin["user"]
+	password := conf.DbLogin["password"]
+	dbSwitch, err := sql.Open("postgres", fmt.Sprintf(
+		"user=%s dbname=%s password=%s sslmode=require",
+		user,
+		fmt.Sprintf("goschedule_%s_switch", schedule),
+		password,
+	))
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	defer dbSwitch.Close()
+	appNum, err := getSwitch(dbSwitch)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	appDb, err := sql.Open("postgres", fmt.Sprintf(
+		"user=%s dbname=%s password=%s sslmode=require",
+		user,
+		fmt.Sprintf("goschedule_%s_app%d", schedule, appNum),
+		password,
+	))
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	defer appDb.Close()
+	if local != 0 {
+		frontend.Serve(appDb, true, conf.FrontendRoot, local)
+	}
+	if fcgi != 0 {
+		frontend.Serve(appDb, false, conf.FrontendRoot, fcgi)
+	}
+	fmt.Println("ERROR: must set either --fcgi or --local flag")
+	os.Exit(1)
 }
 
+// config represents a JSON config file marshalled into a struct.
 type config struct {
+	FrontendRoot               string
 	DepartmentDescriptionIndex string
 	ScraperTimeout             int
 	LoopScraper                bool
@@ -210,12 +333,12 @@ type config struct {
 // parseConfig will use the given args to try to load a file from the `--config` flag.
 // If the config flag is not set, or if it cannot read the file path, or it encounters
 // an error when unmarshalling the config from JSON, it will call os.Exit(1).
-// Else, it will return a jsonConfig struct.
+// Else, it will return a config struct.
 func parseConfig(args []string) config {
-	var flagSet = flag.NewFlagSet("flags", flag.ExitOnError)
-	flagSet.String("config", "", "Path to a JSON formatted config file.")
+	flagSet := flag.NewFlagSet("flags", flag.PanicOnError)
+	configPathPtr := flagSet.String("config", "", "Path to a JSON formatted config file.")
 	flagSet.Parse(args)
-	configPath := flagSet.Lookup("config").Value.String()
+	configPath := *configPathPtr
 	if configPath == "" {
 		fmt.Println("missing `--config` flag")
 		os.Exit(1)

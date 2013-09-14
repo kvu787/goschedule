@@ -58,7 +58,7 @@ func GenerateSchema(s interface{}) string {
 	)
 }
 
-func Select(db *sql.DB, conditions string, object interface{}) ([]interface{}, error) {
+func Select(db *sql.DB, object interface{}, conditions string) ([]interface{}, error) {
 	tableName := reflect.TypeOf(object).Name()
 	query := fmt.Sprintf("SELECT * FROM %s %s", tableName, conditions)
 	rows, err := db.Query(query)

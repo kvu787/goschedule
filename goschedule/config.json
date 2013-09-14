@@ -1,7 +1,7 @@
 {
     "departmentDescriptionIndex" : "http://www.washington.edu/students/crscat/",
     "scraperTimeout" : 2,
-    "loopScraper" : false,
+    "loopScraper" : true,
     "dbLogin" : {
         "user" : "gosh",
         "password" : "gosh",  
