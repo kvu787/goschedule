@@ -54,7 +54,7 @@ func ExtractColleges(content string) ([]College, error) {
 			errs = append(errs, fmt.Errorf("skipped a college: error unmarshalling xml (%s): %v", string(match), err))
 			continue
 		}
-		abbreviation := strings.TrimPrefix(strings.TrimSpace(tag.Href), "#")
+		abbreviation := strings.ToLower(strings.TrimPrefix(strings.TrimSpace(tag.Href), "#"))
 		// set attributes
 		college.Abbreviation = abbreviation
 		college.Name = tag.Content
@@ -266,6 +266,16 @@ func checkMeetingTime(line string) (MeetingTime, error) {
 		return mt, nil
 	}
 	return mt, fmt.Errorf("")
+}
+
+// ExtractClassDescriptionLinks grabs links from an index of links to class
+// description pages.
+func ExtractClassDescriptionLinks(content, root string) []string {
+	var links = []string{}
+	for _, match := range classDescriptionLinkRe.FindAllStringSubmatch(content, -1) {
+		links = append(links, root+match[1])
+	}
+	return links
 }
 
 // ExtractClassDescriptions extracts class descriptions from content. It returns a

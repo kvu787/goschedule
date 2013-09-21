@@ -1,10 +1,12 @@
 package frontend
 
 import (
+	"fmt"
 	"strings"
 )
 
 // route is a string that indicates a URL routing pattern.
+// Valid routes must start with `/`.
 type route string
 
 // match assumes that route r is well-formed.
@@ -50,4 +52,22 @@ func _match(routeSlice []string, pathSlice []string) bool {
 		return false
 	}
 	return true && _match(routeSlice[1:], pathSlice[1:])
+}
+
+func (ro route) parse(path string) map[string]string {
+	if path == "/" {
+		return nil
+	}
+	if !ro.match(path) {
+		panic(fmt.Sprintf("route.parse error: route %q does not match path %q", ro, path))
+	}
+	var params = make(map[string]string)
+	routeSlice := strings.Split(string(ro), "/")[1:]
+	pathSlice := strings.Split(path, "/")[1:]
+	for i, _ := range routeSlice {
+		if routeElem := routeSlice[i]; routeElem[0] == ':' {
+			params[string(routeElem[1:])] = pathSlice[i]
+		}
+	}
+	return params
 }

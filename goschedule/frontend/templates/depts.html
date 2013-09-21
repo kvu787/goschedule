@@ -6,10 +6,14 @@
         <li><a href="/schedule">Departments</a></li>
       </ul>
       <h1>Departments</h1>
-      {{range .}}
-        <h4>
-          <a href="/schedule/{{.Abbreviation}}">{{title .Title}} <small>({{upper .Abbreviation}})</small></a>
-        </h4>
+      {{$collegesMap := .collegesMap}}
+      {{$collegeAbbreviations := .collegeAbbreviations}}
+      {{range $collegeName := .collegeNames}}
+        <h3 name="{{index $collegeAbbreviations $collegeName}}">{{$collegeName}}</h3>
+        {{$depts :=  index $collegesMap .}}
+        {{range $dept := $depts}} 
+          <h4><a href="/schedule/{{.Abbreviation}}">{{$dept.Name}} <small>({{upper $dept.Abbreviation}})</small></a></h4>
+        {{end}}
       {{end}}
     </div>
   </div>

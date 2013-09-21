@@ -2,6 +2,18 @@
 (function () {
     "use strict";
 
+    $(document).on('click', '#test-ajax', function() {
+        $.ajax({
+            url: '/test_ajax',
+            type: 'GET',
+            dataType: 'script'
+        });
+    });
+}());
+
+(function () {
+    "use strict";
+    
     // toggle Bootstrap tooltips based on data-toggle="tooltip"
     $(function () {
         $("[data-toggle='tooltip']").tooltip();
@@ -10,6 +22,10 @@
     $(function () {
         $("[data-toggle='popover']").popover();
     });
+}());
+
+(function () {
+    "use strict";
 
     // show/hide class descriptions checkbox
     var hideDescriptionSwitch = false;
@@ -23,7 +39,7 @@
     });
 
     // filter sections with checkboxes 
-    // TODO (kvu787): Use metaprogramming to shorten the following
+    // TODO (kvu787): Use AngularJS to replace the following
     var hideClosedSwitch = false;
     var hideFreshmenSwitch = false;
     var hideWithdrawalSwitch = false;

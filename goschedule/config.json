@@ -1,4 +1,5 @@
 {
+    "frontendRoot" : "/home/kevinvu/projects/go/goschedule/goschedule/frontend",
     "departmentDescriptionIndex" : "http://www.washington.edu/students/crscat/",
     "scraperTimeout" : 2,
     "loopScraper" : true,

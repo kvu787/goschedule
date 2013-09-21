@@ -50,12 +50,16 @@ Expects that 'goschedule setup create' has been run to setup the databases.`
 
 var webHelp string = `Usage:
 
-	goschedule web --config=<path to config> <--fcgi=<port number>|--local=<port number>>
+	TEMP: goschedule web --config=<path to config> (will serve through local on port 8080 with schedule "aut2013" by default)
+
+	TODO: implement below: 
+
+	goschedule web --config=<path to config> --schedule=<schedule name> --fcgi=<port number>|--local=<port number>
 
 Examples:
 	
-	'goschedule web --config=./config.json --local=8080': Starts Go Schedule web app that can be viewed in a browser at localhost:8080.
-	'goschedule web --config=./config.json --fcgi=9000': Starts Go Schedule web app serving through fcgi on port 9000 (Used with an nginx server).`
+	'goschedule web --config=./config.json --schedule=aut2013 --local=8080': Starts Go Schedule web app that can be viewed in a browser at localhost:8080.
+	'goschedule web --config=./config.json --schedule=aut2014 --fcgi=9000': Starts Go Schedule web app serving through fcgi on port 9000 (Used with an nginx server).`
 
 func main() {
 	if len(os.Args) < 2 {
@@ -69,7 +73,7 @@ func main() {
 	switch os.Args[1] {
 	case "help":
 		if len(os.Args) > 2 {
-			switch os.Args[2] {
+			switch command := os.Args[2]; command {
 			case "setup":
 				fmt.Println(setupHelp)
 				os.Exit(0)
@@ -79,9 +83,10 @@ func main() {
 			case "web":
 				fmt.Println(webHelp)
 				os.Exit(0)
+			default:
+				fmt.Printf("ERROR: help not implemented for %q\n", command)
+				os.Exit(1)
 			}
-			fmt.Println("ERRPR: command help not implemented")
-			os.Exit(1)
 		}
 		fmt.Println(usage)
 		os.Exit(0)
@@ -167,24 +172,6 @@ func handleSetup(args []string) {
 	}
 }
 
-// runSql connects to a database with the given driver and connection string and
-// executes SQL statements. If it encounters an error, it prints the error and
-// exits with status code 1.
-func runSql(driver, connection string, statements ...string) {
-	db, err := sql.Open(driver, connection)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-	defer db.Close()
-	for _, statement := range statements {
-		if _, err := db.Exec(statement); err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-	}
-}
-
 func handleScrape(args []string) {
 	conf := parseConfig(args)
 	user := conf.DbLogin["user"]
@@ -204,7 +191,6 @@ func handleScrape(args []string) {
 				fmt.Println(err)
 				os.Exit(1)
 			}
-			defer switchDb.Close()
 			appNum, err := getSwitch(switchDb)
 			if err != nil {
 				fmt.Println(err)
@@ -229,7 +215,6 @@ func handleScrape(args []string) {
 				fmt.Println(err)
 				os.Exit(1)
 			}
-			defer appDb.Close()
 			// load app db with schemas
 			objects := []interface{}{goschedule.College{}, goschedule.Dept{}, goschedule.Class{}, goschedule.Sect{}}
 			for _, object := range objects {
@@ -241,14 +226,17 @@ func handleScrape(args []string) {
 			// start scrape
 			start := time.Now()
 			fmt.Printf("Scraping %q using application database %d\n", schedule["url"], appNum)
-			backend.Scrape(schedule["url"], appDb)
+			backend.Scrape(schedule["url"], conf.DepartmentDescriptionIndex, appDb)
 			fmt.Println("Time taken:", time.Since(start))
 			// flip db switch
 			if err := flipSwitch(switchDb); err != nil {
 				fmt.Println(err)
 				os.Exit(1)
 			}
+			switchDb.Close()
 			fmt.Printf("Scrape for %q done\n", schedule["url"])
+			// close connection to app db
+			appDb.Close()
 		}
 		if !conf.LoopScraper {
 			break
@@ -259,28 +247,29 @@ func handleScrape(args []string) {
 
 func handleWeb(flags []string) {
 	conf := parseConfig(flags)
-	webFlags := flag.NewFlagSet("falgs", flag.PanicOnError)
-	var local int
-	var fcgi int
-	var schedule string
-	webFlags.IntVar(&local, "local", 0, "Local port number to serve and listen on.")
-	webFlags.IntVar(&fcgi, "fcgi", 0, "Fcgi port number to serve and listen on.")
-	webFlags.StringVar(&schedule, "schedule", "", "Name of the schedule (from config) to serve.")
-	webFlags.Parse(flags)
-	var scheduleName string
-	for _, s := range conf.Schedules {
-		if schedule == s["name"] {
-			scheduleName = schedule
-		}
-	}
-	if scheduleName == "" {
-		fmt.Printf("ERROR: cannot find schedule name %q in config\n", schedule)
-		os.Exit(1)
-	}
-	if fcgi != 0 && local != 0 {
-		fmt.Println("ERROR: cannot set both --fcgi and --local flags")
-		os.Exit(1)
-	}
+	// webFlags := flag.NewFlagSet("flags", flag.ContinueOnError)
+	// var local int
+	// var fcgi int
+	// var schedule string
+	// webFlags.IntVar(&local, "local", 0, "Local port number to serve and listen on.")
+	// webFlags.IntVar(&fcgi, "fcgi", 0, "Fcgi port number to serve and listen on.")
+	// webFlags.StringVar(&schedule, "schedule", "", "Name of the schedule (from config) to serve.")
+	// webFlags.Parse(flags)
+	// var scheduleName string
+	// for _, s := range conf.Schedules {
+	// 	if schedule == s["name"] {
+	// 		scheduleName = schedule
+	// 	}
+	// }
+	// if scheduleName == "" {
+	// 	fmt.Printf("ERROR: cannot find schedule name %q in config\n", schedule)
+	// 	os.Exit(1)
+	// }
+	// if fcgi != 0 && local != 0 {
+	// 	fmt.Println("ERROR: cannot set both --fcgi and --local flags")
+	// 	os.Exit(1)
+	// }
+	schedule := "aut2013"
 	user := conf.DbLogin["user"]
 	password := conf.DbLogin["password"]
 	dbSwitch, err := sql.Open("postgres", fmt.Sprintf(
@@ -299,10 +288,18 @@ func handleWeb(flags []string) {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+	if appNum == 1 {
+		appNum = 2
+	} else if appNum == 2 {
+		appNum = 1
+	} else {
+		panic("getSwitch returned neither 1 nor 2")
+	}
+	database := fmt.Sprintf("goschedule_%s_app%d", schedule, appNum)
 	appDb, err := sql.Open("postgres", fmt.Sprintf(
 		"user=%s dbname=%s password=%s sslmode=require",
 		user,
-		fmt.Sprintf("goschedule_%s_app%d", schedule, appNum),
+		database,
 		password,
 	))
 	if err != nil {
@@ -310,14 +307,19 @@ func handleWeb(flags []string) {
 		os.Exit(1)
 	}
 	defer appDb.Close()
-	if local != 0 {
-		frontend.Serve(appDb, true, conf.FrontendRoot, local)
+	// if local != 0 {
+	// 	frontend.Serve(appDb, true, conf.FrontendRoot, local)
+	// }
+	// if fcgi != 0 {
+	// 	frontend.Serve(appDb, false, conf.FrontendRoot, fcgi)
+	// }
+	fmt.Printf("Go Schedule frontend started locally on port %d using db %q\n", 8080, database)
+	if err := frontend.Serve(appDb, true, conf.FrontendRoot, 8080); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
 	}
-	if fcgi != 0 {
-		frontend.Serve(appDb, false, conf.FrontendRoot, fcgi)
-	}
-	fmt.Println("ERROR: must set either --fcgi or --local flag")
-	os.Exit(1)
+	// fmt.Println("ERROR: must set either --fcgi or --local flag")
+	// os.Exit(1)
 }
 
 // config represents a JSON config file marshalled into a struct.
@@ -330,12 +332,21 @@ type config struct {
 	Schedules                  []map[string]string
 }
 
+func findScheduleInConfig(name string, schedules []map[string]string) bool {
+	for _, s := range schedules {
+		if name == s["name"] {
+			return true
+		}
+	}
+	return false
+}
+
 // parseConfig will use the given args to try to load a file from the `--config` flag.
 // If the config flag is not set, or if it cannot read the file path, or it encounters
 // an error when unmarshalling the config from JSON, it will call os.Exit(1).
 // Else, it will return a config struct.
 func parseConfig(args []string) config {
-	flagSet := flag.NewFlagSet("flags", flag.PanicOnError)
+	flagSet := flag.NewFlagSet("flags", flag.ContinueOnError)
 	configPathPtr := flagSet.String("config", "", "Path to a JSON formatted config file.")
 	flagSet.Parse(args)
 	configPath := *configPathPtr
@@ -356,13 +367,22 @@ func parseConfig(args []string) config {
 	return parsedConfig
 }
 
-// xor implements the 'exclusive or' operator for booleans.
-// true, true -> false
-// true, false -> true
-// false, true -> true
-// false, false -> true
-func xor(b1, b2 bool) bool {
-	return (b1 || b2) && !(b1 && b2)
+// runSql is a convenience method that  connects to a database with the given
+// driver and connection string and executes SQL statements. If it encounters
+// an error, it prints the error and exits with status code 1.
+func runSql(driver, connection string, statements ...string) {
+	db, err := sql.Open(driver, connection)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	defer db.Close()
+	for _, statement := range statements {
+		if _, err := db.Exec(statement); err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+	}
 }
 
 // getSwitch queries the 'switch db' returns either 1 or 2.
@@ -376,7 +396,7 @@ func getSwitch(db *sql.DB) (int, error) {
 	return result, nil
 }
 
-// Flip switch changes the value stored in the 'switch db' from 1 to 2
+// flipSwitch changes the value stored in the 'switch db' from 1 to 2
 // or from 2 to 1.
 func flipSwitch(db *sql.DB) error {
 	currentSwitch, err := getSwitch(db)

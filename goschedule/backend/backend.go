@@ -13,7 +13,7 @@ import (
 
 // Scrape will begin a full time schedule scrape and store results in a database.
 // Parameter link must be a the time schedule page listing departments and colleges.
-func Scrape(link string, db *sql.DB) {
+func Scrape(link, descriptionLink string, db *sql.DB) {
 	if err := db.Ping(); err != nil {
 		panic("Bad db connection")
 	}
@@ -77,10 +77,36 @@ func Scrape(link string, db *sql.DB) {
 			fmt.Print("\n")
 		}
 	}
+	fmt.Println("Scraping class descriptions...")
+	descriptionBody, err := get(descriptionLink)
+	if err != nil {
+		panic(fmt.Sprintf("ERROR fetching class description index link %q: %v", descriptionLink, err))
+	}
+	descriptionLinks := goschedule.ExtractClassDescriptionLinks(descriptionBody, descriptionLink)
+	for _, link := range descriptionLinks {
+		descriptionBody, err := get(link)
+		if err != nil {
+			fmt.Printf("ERROR fetching class description link %q\n", link)
+			continue
+		}
+		descriptionBody = goschedule.Filter(descriptionBody)
+		descriptions, err := goschedule.ExtractClassDescriptions(descriptionBody)
+		if err != nil {
+			fmt.Printf("ERROR extracting descriptions %q: %v\n", link, err)
+		}
+		for abbreviationCode, description := range descriptions {
+			_, err := db.Exec("UPDATE class SET description = $1 WHERE abbreviationcode = $2", description, abbreviationCode)
+			if err != nil {
+				fmt.Printf("ERROR updating db with description %q: %v\n", abbreviationCode, err)
+				continue
+			}
+		}
+		fmt.Printf("Scraped descriptions from %q\n", link)
+	}
 }
 
-// get requests a link with the given client and returns the bytes
-// of the response body if successful.
+// get requests a link with the given client and returns the string of the
+// response body if successful.
 // A response with a non-2XX/3XX status code is considered an error.
 func get(link string) (string, error) {
 	resp, err := http.Get(link)
