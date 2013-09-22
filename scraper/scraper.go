@@ -131,6 +131,7 @@ func scrapeClassDescription(link string, c *http.Client, db *sql.DB, fetchc chan
 	fetchc <- 1
 	classDescriptionIndex, err := fetch.Get(c, link)
 	if err != nil {
+		fmt.Printf("ERROR fetching class descriptions %q: %v\n", link, err)
 		<-fetchc
 		return // skip if dept link is bad
 	}
@@ -199,6 +200,7 @@ func scrapeDeptLoadBalance(dept database.Dept, c *http.Client, db *sql.DB, fetch
 	fetchc <- 1
 	classSectIndex, err := fetch.Get(c, dept.Link)
 	if err != nil {
+		fmt.Printf("ERROR fetching class index %q: %v\n", dept.Link, err)
 		<-fetchc
 		return // skip if dept link is bad
 	}
@@ -244,6 +246,7 @@ func scrapeDeptLoadBalance(dept database.Dept, c *http.Client, db *sql.DB, fetch
 func scrapeDept(dept database.Dept, c *http.Client, db *sql.DB) {
 	classSectIndex, err := fetch.Get(c, dept.Link)
 	if err != nil {
+		fmt.Printf("ERROR fetching class index %q: %v\n", dept.Link, err)
 		return // skip if dept link is bad
 	}
 	database.Insert(db, dept)
