@@ -11,6 +11,7 @@ import (
 
 	"github.com/kvu787/goschedule/goschedule/backend"
 	"github.com/kvu787/goschedule/goschedule/frontend"
+	"github.com/kvu787/goschedule/goschedule/shared"
 	"github.com/kvu787/goschedule/lib"
 	_ "github.com/lib/pq"
 )
@@ -189,7 +190,7 @@ func handleScrape(args []string) {
 				fmt.Println(err)
 				os.Exit(1)
 			}
-			appNum, err := getSwitch(switchDb)
+			appNum, err := shared.GetSwitch(switchDb)
 			if err != nil {
 				fmt.Println(err)
 				os.Exit(1)
@@ -284,40 +285,21 @@ func handleWeb(flags []string) {
 		os.Exit(1)
 	}
 	defer dbSwitch.Close()
-	appNum, err := getSwitch(dbSwitch)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-	if appNum == 1 {
-		appNum = 2
-	} else if appNum == 2 {
-		appNum = 1
-	} else {
-		panic("getSwitch returned neither 1 nor 2")
-	}
-	database := fmt.Sprintf("goschedule_%s_app%d", schedule, appNum)
-	appDb, err := sql.Open("postgres", fmt.Sprintf(
-		"user=%s dbname=%s password=%s sslmode=require",
+	appDbConnString := fmt.Sprintf("user=%s dbname=goschedule_%s_app%%d password=%s sslmode=require",
 		user,
-		database,
+		schedule,
 		password,
-	))
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-	defer appDb.Close()
+	)
 	if local != 0 {
-		fmt.Printf("Go Schedule frontend started locally on port %d using db %q\n", local, database)
-		if err := frontend.Serve(appDb, true, conf.FrontendRoot, local); err != nil {
+		fmt.Printf("Go Schedule frontend started locally on port %d\n", local)
+		if err := frontend.Serve(appDbConnString, dbSwitch, true, conf.FrontendRoot, local); err != nil {
 			fmt.Printf("ERROR in handleWeb: %v\n", err)
 			os.Exit(1)
 		}
 	}
 	if fcgi != 0 {
-		fmt.Printf("Go Schedule frontend serving through fcgi on port %d using db %q\n", fcgi, database)
-		if err := frontend.Serve(appDb, false, conf.FrontendRoot, fcgi); err != nil {
+		fmt.Printf("Go Schedule frontend serving through fcgi on port %d using db %q\n", fcgi)
+		if err := frontend.Serve(appDbConnString, dbSwitch, false, conf.FrontendRoot, fcgi); err != nil {
 			fmt.Printf("ERROR in handleWeb: %v\n", err)
 			os.Exit(1)
 		}
@@ -387,21 +369,10 @@ func runSql(driver, connection string, statements ...string) {
 	}
 }
 
-// getSwitch queries the 'switch db' returns either 1 or 2.
-// Used to determine which database should be used to store scrape results.
-func getSwitch(db *sql.DB) (int, error) {
-	var result int
-	query := fmt.Sprintf("SELECT switch_col FROM switch_table LIMIT 1")
-	if err := db.QueryRow(query).Scan(&result); err != nil {
-		return -1, err
-	}
-	return result, nil
-}
-
 // flipSwitch changes the value stored in the 'switch db' from 1 to 2
 // or from 2 to 1.
 func flipSwitch(db *sql.DB) error {
-	currentSwitch, err := getSwitch(db)
+	currentSwitch, err := shared.GetSwitch(db)
 	if err != nil {
 		return err
 	}

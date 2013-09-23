@@ -12,13 +12,17 @@ import (
 	"strings"
 	"time"
 
+	"github.com/kvu787/goschedule/goschedule/shared"
 	"github.com/kvu787/goschedule/lib"
 )
 
 var appDb *sql.DB
+var switchDatabase *sql.DB
+var conn string
 
-func Serve(db *sql.DB, local bool, frontendRoot string, port int) error {
-	appDb = db
+func Serve(connString string, switchDb *sql.DB, local bool, frontendRoot string, port int) error {
+	conn = connString
+	switchDatabase = switchDb
 	if err := os.Chdir(os.ExpandEnv(frontendRoot)); err != nil {
 		fmt.Println(err)
 		return err
@@ -54,6 +58,18 @@ var routing = [][]interface{}{
 type routeHandler func(http.ResponseWriter, *http.Request, map[string]string)
 
 func router(w http.ResponseWriter, r *http.Request) {
+	// determine application db
+	appNum, err := shared.GetSwitch(switchDatabase)
+	if err != nil {
+		panic(fmt.Sprintf("Failed to query switch database for app db number in frontend.router: %v", err))
+	}
+	appDb, err = sql.Open("postgres", fmt.Sprintf(conn, appNum))
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	defer appDb.Close()
+	// process request
 	path := r.URL.Path
 	var matched bool
 	for _, tuple := range routing {
