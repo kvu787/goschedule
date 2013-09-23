@@ -1,12 +1,12 @@
 {
-    "frontendRoot" : "/home/kevinvu/projects/go/goschedule/goschedule/frontend",
+    "frontendRoot" : "absolute path to goschedule/goschedule/frontend",
     "departmentDescriptionIndex" : "http://www.washington.edu/students/crscat/",
     "scraperTimeout" : 2,
     "loopScraper" : true,
     "dbLogin" : {
-        "user" : "gosh",
-        "password" : "gosh",  
-        "dbname" : "gosh"  
+        "user" : "fill in username",
+        "password" : "fill in password",  
+        "dbname" : "fill in dbname"  
     },
     "schedules" : [
         { 
