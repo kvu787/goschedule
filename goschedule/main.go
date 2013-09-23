@@ -298,7 +298,7 @@ func handleWeb(flags []string) {
 		}
 	}
 	if fcgi != 0 {
-		fmt.Printf("Go Schedule frontend serving through fcgi on port %d using db %q\n", fcgi)
+		fmt.Printf("Go Schedule frontend serving through fcgi on port %d\n", fcgi)
 		if err := frontend.Serve(appDbConnString, dbSwitch, false, conf.FrontendRoot, fcgi); err != nil {
 			fmt.Printf("ERROR in handleWeb: %v\n", err)
 			os.Exit(1)
