@@ -50,16 +50,14 @@ Expects that 'goschedule setup create' has been run to setup the databases.`
 
 var webHelp string = `Usage:
 
-	TEMP: goschedule web --config=<path to config> (will serve through local on port 8080 with schedule "aut2013" by default)
-
-	TODO: implement below: 
-
 	goschedule web --config=<path to config> --schedule=<schedule name> --fcgi=<port number>|--local=<port number>
 
 Examples:
 	
 	'goschedule web --config=./config.json --schedule=aut2013 --local=8080': Starts Go Schedule web app that can be viewed in a browser at localhost:8080.
-	'goschedule web --config=./config.json --schedule=aut2014 --fcgi=9000': Starts Go Schedule web app serving through fcgi on port 9000 (Used with an nginx server).`
+	'goschedule web --config=./config.json --schedule=aut2014 --fcgi=9000': Starts Go Schedule web app serving through fcgi on port 9000 (Used with an nginx server).
+
+Note that the flags need to be in the order shown in 'Usage'.`
 
 func main() {
 	if len(os.Args) < 2 {
@@ -246,30 +244,33 @@ func handleScrape(args []string) {
 }
 
 func handleWeb(flags []string) {
-	conf := parseConfig(flags)
-	// webFlags := flag.NewFlagSet("flags", flag.ContinueOnError)
-	// var local int
-	// var fcgi int
-	// var schedule string
-	// webFlags.IntVar(&local, "local", 0, "Local port number to serve and listen on.")
-	// webFlags.IntVar(&fcgi, "fcgi", 0, "Fcgi port number to serve and listen on.")
-	// webFlags.StringVar(&schedule, "schedule", "", "Name of the schedule (from config) to serve.")
-	// webFlags.Parse(flags)
-	// var scheduleName string
-	// for _, s := range conf.Schedules {
-	// 	if schedule == s["name"] {
-	// 		scheduleName = schedule
-	// 	}
-	// }
-	// if scheduleName == "" {
-	// 	fmt.Printf("ERROR: cannot find schedule name %q in config\n", schedule)
-	// 	os.Exit(1)
-	// }
-	// if fcgi != 0 && local != 0 {
-	// 	fmt.Println("ERROR: cannot set both --fcgi and --local flags")
-	// 	os.Exit(1)
-	// }
-	schedule := "aut2013"
+	if len(flags) < 3 {
+		fmt.Println("ERROR: not enough arguments")
+		os.Exit(1)
+	}
+	conf := parseConfig(flags[0:1])
+	webFlags := flag.NewFlagSet("flags", flag.ContinueOnError)
+	var local int
+	var fcgi int
+	var schedule string
+	webFlags.IntVar(&local, "local", 0, "Local port number to serve and listen on.")
+	webFlags.IntVar(&fcgi, "fcgi", 0, "Fcgi port number to serve and listen on.")
+	webFlags.StringVar(&schedule, "schedule", "", "Name of the schedule (from config) to serve.")
+	webFlags.Parse(flags[1:])
+	var scheduleName string
+	for _, s := range conf.Schedules {
+		if schedule == s["name"] {
+			scheduleName = schedule
+		}
+	}
+	if scheduleName == "" {
+		fmt.Printf("ERROR: cannot find schedule name %q in config\n", schedule)
+		os.Exit(1)
+	}
+	if fcgi != 0 && local != 0 {
+		fmt.Println("ERROR: cannot set both --fcgi and --local flags")
+		os.Exit(1)
+	}
 	user := conf.DbLogin["user"]
 	password := conf.DbLogin["password"]
 	dbSwitch, err := sql.Open("postgres", fmt.Sprintf(
@@ -307,19 +308,20 @@ func handleWeb(flags []string) {
 		os.Exit(1)
 	}
 	defer appDb.Close()
-	// if local != 0 {
-	// 	frontend.Serve(appDb, true, conf.FrontendRoot, local)
-	// }
-	// if fcgi != 0 {
-	// 	frontend.Serve(appDb, false, conf.FrontendRoot, fcgi)
-	// }
-	fmt.Printf("Go Schedule frontend started locally on port %d using db %q\n", 8080, database)
-	if err := frontend.Serve(appDb, true, conf.FrontendRoot, 8080); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+	if local != 0 {
+		fmt.Printf("Go Schedule frontend started locally on port %d using db %q\n", local, database)
+		if err := frontend.Serve(appDb, true, conf.FrontendRoot, local); err != nil {
+			fmt.Printf("ERROR in handleWeb: %v\n", err)
+			os.Exit(1)
+		}
 	}
-	// fmt.Println("ERROR: must set either --fcgi or --local flag")
-	// os.Exit(1)
+	if fcgi != 0 {
+		fmt.Printf("Go Schedule frontend serving through fcgi on port %d using db %q\n", fcgi, database)
+		if err := frontend.Serve(appDb, false, conf.FrontendRoot, fcgi); err != nil {
+			fmt.Printf("ERROR in handleWeb: %v\n", err)
+			os.Exit(1)
+		}
+	}
 }
 
 // config represents a JSON config file marshalled into a struct.
