@@ -1,0 +1,17 @@
+{
+    "frontendRoot" : "absolute path to goschedule/goschedule/frontend",
+    "departmentDescriptionIndex" : "http://www.washington.edu/students/crscat/",
+    "scraperTimeout" : 2,
+    "loopScraper" : true,
+    "dbLogin" : {
+        "user" : "fill in username",
+        "password" : "fill in password",  
+        "dbname" : "fill in dbname"  
+    },
+    "schedules" : [
+        { 
+            "name" : "aut2013",
+            "url" : "http://www.washington.edu/students/timeschd/AUT2013/"
+        }
+    ]
+}
