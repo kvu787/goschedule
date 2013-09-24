@@ -24,13 +24,11 @@ func Serve(connString string, switchDb *sql.DB, local bool, frontendRoot string,
 	conn = connString
 	switchDatabase = switchDb
 	if err := os.Chdir(os.ExpandEnv(frontendRoot)); err != nil {
-		fmt.Println(err)
 		return err
 	}
 	if local {
 		http.HandleFunc("/", router)
 		if err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil); err != nil {
-			fmt.Println(err)
 			return err
 		}
 	} else {
@@ -48,7 +46,7 @@ func Serve(connString string, switchDb *sql.DB, local bool, frontendRoot string,
 
 var routing = [][]interface{}{
 	{"/", indexHandler},
-	{"/test_ajax", ajaxHandler},
+	{"/search", searchHandler},
 	{"/schedule", deptsHandler},
 	{"/schedule/:dept", classesHandler},
 	{"/schedule/:dept/:class", sectsHandler},
@@ -63,10 +61,14 @@ func router(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(fmt.Sprintf("Failed to query switch database for app db number in frontend.router: %v", err))
 	}
+	if appNum == 1 {
+		appNum = 2
+	} else {
+		appNum = 1
+	}
 	appDb, err = sql.Open("postgres", fmt.Sprintf(conn, appNum))
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		panic(err)
 	}
 	defer appDb.Close()
 	// process request
@@ -84,7 +86,7 @@ func router(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func ajaxHandler(w http.ResponseWriter, r *http.Request, params map[string]string) {
+func searchHandler(w http.ResponseWriter, r *http.Request, params map[string]string) {
 	w.Header().Set("Content-Type", "text/javascript; charset=utf-8")
 	fmt.Fprintf(w, `alert('works!');`)
 }
