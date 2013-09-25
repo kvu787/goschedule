@@ -1,0 +1,9 @@
+<li role="presentation" class="dropdown-header"><strong>Departments</strong></li>
+{{range .depts}}
+  <li><a href="/schedule/{{.Abbreviation}}"><h5 class="thin-header">{{html .Name}} <small>({{html .Abbreviation | upper}})</small></h5></a></li>
+{{end}}
+<li role="presentation" class="divider"></li>
+<li role="presentation" class="dropdown-header"><strong>Classes</strong></li>
+{{range .classes}}
+  <li><a href="/schedule/{{.DeptKey}}/{{.AbbreviationCode}}"><h5 class="thin-header">{{html .Name | upper}} <small>({{html .AbbreviationCode | upper}})</small></h5></a></li>
+{{end}}

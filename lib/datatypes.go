@@ -52,7 +52,7 @@ type Class struct {
 	AbbreviationCode string `pk:"true"`
 	Abbreviation     string
 	Code             string
-	Title            string
+	Name             string
 	Description      string
 	position         `ignore:"true"`
 }

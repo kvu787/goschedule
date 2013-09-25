@@ -1,9 +1,11 @@
 package frontend
 
 import (
+	"bytes"
 	"database/sql"
 	"fmt"
 	"html/template"
+	"io/ioutil"
 	"net"
 	"net/http"
 	"net/http/fcgi"
@@ -88,7 +90,60 @@ func router(w http.ResponseWriter, r *http.Request) {
 
 func searchHandler(w http.ResponseWriter, r *http.Request, params map[string]string) {
 	w.Header().Set("Content-Type", "text/javascript; charset=utf-8")
-	fmt.Fprintf(w, `alert('works!');`)
+	search := r.FormValue("search")
+	depts, err := searchDepts(search)
+	if err != nil {
+		panic(err)
+	}
+	classes, err := searchClasses(search)
+	if err != nil {
+		panic(err)
+	}
+
+	var htmlBuffer = &bytes.Buffer{}
+	viewBag := map[string]interface{}{
+		"depts":   depts,
+		"classes": classes,
+	}
+	searchTemplate, err := ioutil.ReadFile("templates/search.html")
+	if err != nil {
+		panic(err)
+	}
+	if err := template.Must(template.New("").Funcs(template.FuncMap{"upper": strings.ToUpper}).Parse(string(searchTemplate))).Execute(htmlBuffer, viewBag); err != nil {
+		panic(err)
+	}
+	htmlStr := htmlBuffer.String()
+	htmlStr = strings.Replace(htmlStr, "\n", "", -1)
+	// htmlStr = html.EscapeString(htmlStr)
+
+	t := template.Must(template.ParseFiles("templates/search.js"))
+	// sort slice of college names
+	t.ExecuteTemplate(w, "searchjs", template.HTML(htmlStr))
+}
+
+func searchDepts(search string) ([]goschedule.Dept, error) {
+	records, err := goschedule.Select(appDb, goschedule.Dept{},
+		fmt.Sprintf("ORDER BY word_score('%s', name) + word_score('%s', abbreviation) DESC, letter_score('%s', name) + letter_score('%s', abbreviation) DESC LIMIT 5", search, search, search, search))
+	if err != nil {
+		return nil, err
+	}
+	var depts []goschedule.Dept
+	for _, record := range records {
+		depts = append(depts, record.(goschedule.Dept))
+	}
+	return depts, nil
+}
+
+func searchClasses(search string) ([]goschedule.Class, error) {
+	records, err := goschedule.Select(appDb, goschedule.Class{}, fmt.Sprintf("ORDER BY word_score('%s', abbreviationcode) + word_score('%s', name) DESC, letter_score('%s', abbreviationcode) + letter_score('%s', name) DESC LIMIT 5", search, search))
+	if err != nil {
+		return nil, err
+	}
+	var classes []goschedule.Class
+	for _, record := range records {
+		classes = append(classes, record.(goschedule.Class))
+	}
+	return classes, nil
 }
 
 // CREDIT: http://stackoverflow.com/questions/11467731/is-it-possible-to-have-nested-templates-in-go-using-the-standard-library-googl

@@ -60,6 +60,17 @@ Examples:
 
 Note that the flags need to be in the order shown in 'Usage'.`
 
+var dbSetupStatements = make([]string, 7)
+
+func init() {
+	for i, object := range []interface{}{goschedule.College{}, goschedule.Dept{}, goschedule.Class{}, goschedule.Sect{}} {
+		dbSetupStatements[i] = goschedule.GenerateSchema(object)
+	}
+	dbSetupStatements[4] = "CREATE EXTENSION plpythonu"
+	dbSetupStatements[5] = wordScoreSqlFunc
+	dbSetupStatements[6] = letterScoreSqlFunc
+}
+
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Println(usage)
@@ -154,18 +165,14 @@ func handleSetup(args []string) {
 				fmt.Sprintf("goschedule_%s_switch", schedule["name"]),
 				password,
 			), "CREATE TABLE switch_table ( switch_col int)", "INSERT INTO switch_table VALUES (1)")
-			// load app db schemas
+			// load app db schemas and python functions
 			for i := 1; i < 3; i++ {
-				statements := make([]string, 4)
-				for i, object := range []interface{}{goschedule.College{}, goschedule.Dept{}, goschedule.Class{}, goschedule.Sect{}} {
-					statements[i] = goschedule.GenerateSchema(object)
-				}
 				runSql("postgres", fmt.Sprintf(
 					"user=%s dbname=%s password=%s sslmode=require",
 					user,
 					fmt.Sprintf("goschedule_%s_app%d", schedule["name"], i),
 					password,
-				), statements...)
+				), dbSetupStatements...)
 			}
 		}
 	}
@@ -215,13 +222,12 @@ func handleScrape(args []string) {
 				os.Exit(1)
 			}
 			// load app db with schemas
-			objects := []interface{}{goschedule.College{}, goschedule.Dept{}, goschedule.Class{}, goschedule.Sect{}}
-			for _, object := range objects {
-				if _, err := appDb.Exec(goschedule.GenerateSchema(object)); err != nil {
-					fmt.Println(err)
-					os.Exit(1)
-				}
-			}
+			runSql("postgres", fmt.Sprintf(
+				"user=%s dbname=%s password=%s sslmode=require",
+				user,
+				fmt.Sprintf("goschedule_%s_app%d", schedule["name"], appNum),
+				password,
+			), dbSetupStatements...)
 			// start scrape
 			start := time.Now()
 			fmt.Printf("Scraping %q using application database %d\n", schedule["url"], appNum)
@@ -393,3 +399,50 @@ func flipSwitch(db *sql.DB) error {
 	}
 	return nil
 }
+
+var wordScoreSqlFunc string = `CREATE OR REPLACE FUNCTION word_score (search text, phrase text)
+  RETURNS integer
+AS $$
+    import string
+
+    def word_similarity(search_term, word):
+        search_term = string.lower(search_term)
+        word = string.lower(word)
+        if len(search_term) > len(word):
+            return 0
+        for i in range(len(search_term)):
+            if search_term[i] != word[i]:
+                return 0
+        return len(search_term)
+
+    search_terms = search.split(' ')
+    score = 0
+    for search_term in search_terms:
+        for word in phrase.split(' '):
+            if word_similarity(search_term, word) > 0:
+                score += 1
+    return score
+$$ LANGUAGE plpythonu;`
+
+var letterScoreSqlFunc string = `CREATE OR REPLACE FUNCTION letter_score (search text, phrase text)
+  RETURNS integer
+AS $$
+    import string
+
+    def word_similarity(search_term, word):
+        search_term = string.lower(search_term)
+        word = string.lower(word)
+        if len(search_term) > len(word):
+            return 0
+        for i in range(len(search_term)):
+            if search_term[i] != word[i]:
+                return 0
+        return len(search_term)
+
+    search_terms = search.split(' ')
+    score = 0
+    for search_term in search_terms:
+        for word in phrase.split(' '):
+            score += word_similarity(search_term, word)
+    return score
+$$ LANGUAGE plpythonu;`

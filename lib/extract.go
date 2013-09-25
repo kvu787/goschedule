@@ -174,7 +174,7 @@ func ExtractClasses(content, deptKey string) []Class {
 		// grab code
 		class.Code = strings.ToLower(classCodeRe.FindString(name))
 		// grab title
-		class.Title = strings.ToLower(tagRe.ReplaceAllString(classTitleRe.FindString(match), ""))
+		class.Name = strings.ToLower(tagRe.ReplaceAllString(classTitleRe.FindString(match), ""))
 		// set AbbreviationCode key
 		class.AbbreviationCode = class.Abbreviation + class.Code
 		// append to slice
