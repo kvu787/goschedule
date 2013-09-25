@@ -290,7 +290,6 @@ func handleWeb(flags []string) {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	defer dbSwitch.Close()
 	appDbConnString := fmt.Sprintf("user=%s dbname=goschedule_%s_app%%d password=%s sslmode=require",
 		user,
 		schedule,

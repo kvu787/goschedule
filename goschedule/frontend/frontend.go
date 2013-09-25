@@ -72,7 +72,6 @@ func router(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	defer appDb.Close()
 	// process request
 	path := r.URL.Path
 	var matched bool
