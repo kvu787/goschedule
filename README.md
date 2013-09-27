@@ -14,6 +14,8 @@ The library is in `lib/`. Install it with `go get github.com/kvu787/goschedule/l
 
 The web application is in `goschedule/`. Install it with `go get github.com/kvu787/goschedule/goschedule`.
 
+Run `goschedule help` for more details.
+
 Deployment: 
 
 - Edit the configuration file at `goschedule/config.json` as necessary.
