@@ -89,7 +89,7 @@ func router(w http.ResponseWriter, r *http.Request) {
 
 func searchHandler(w http.ResponseWriter, r *http.Request, params map[string]string) {
 	w.Header().Set("Content-Type", "text/javascript; charset=utf-8")
-	search := r.FormValue("search")
+	search := strings.TrimSpace(r.FormValue("search"))
 	depts, err := searchDepts(search)
 	if err != nil {
 		panic(err)
@@ -103,21 +103,57 @@ func searchHandler(w http.ResponseWriter, r *http.Request, params map[string]str
 	viewBag := map[string]interface{}{
 		"depts":   depts,
 		"classes": classes,
+		"query":   search,
 	}
 	searchTemplate, err := ioutil.ReadFile("templates/search.html")
 	if err != nil {
 		panic(err)
 	}
-	if err := template.Must(template.New("").Funcs(template.FuncMap{"upper": strings.ToUpper}).Parse(string(searchTemplate))).Execute(htmlBuffer, viewBag); err != nil {
+	if err := template.Must(template.New("").Funcs(template.FuncMap{
+		"upper":     strings.ToUpper,
+		"boldWords": boldWords,
+		"toHTML":    toHTML,
+	}).Parse(string(searchTemplate))).Execute(htmlBuffer, viewBag); err != nil {
 		panic(err)
 	}
 	htmlStr := htmlBuffer.String()
 	htmlStr = strings.Replace(htmlStr, "\n", "", -1)
-	// htmlStr = html.EscapeString(htmlStr)
 
 	t := template.Must(template.ParseFiles("templates/search.js"))
 	// sort slice of college names
 	t.ExecuteTemplate(w, "searchjs", template.HTML(htmlStr))
+}
+
+func toHTML(in string) template.HTML {
+	return template.HTML(in)
+}
+
+func boldWords(search, in string) string {
+	inSlice := strings.Split(strings.TrimSpace(in), " ")
+	searchSlice := strings.Split(strings.TrimSpace(search), " ")
+	for i := range inSlice {
+		var outWord string
+		var longestSearchTerm string
+		for _, searchTerm := range searchSlice {
+			if checkedWord := boldPrefix(inSlice[i], searchTerm); len(searchTerm) > len(longestSearchTerm) && len(checkedWord) > len(outWord) {
+				longestSearchTerm = searchTerm
+				outWord = checkedWord
+			}
+		}
+		if len(outWord) > 0 {
+			inSlice[i] = outWord
+		}
+	}
+	return strings.Join(inSlice, " ")
+}
+
+func boldPrefix(word, searchTerm string) string {
+	if strings.HasPrefix(strings.ToLower(word), strings.ToLower(searchTerm)) {
+		word = word[:len(searchTerm)] + "</strong>" + word[len(searchTerm):]
+		word = "<strong>" + word
+		return word
+	}
+	return ""
 }
 
 func searchDepts(search string) ([]goschedule.Dept, error) {
