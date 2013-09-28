@@ -25,18 +25,18 @@
         }, slideTime);
     });
 
-    // $(document).on('focusout', '#magic-search-box', function () {
-    //     $('#magic-search-box-div').removeClass('open');
-    // });
-
+    var timeoutYo = null;
     $(document).on('keyup', '#magic-search-box', function () {
+        window.clearTimeout(timeoutYo);
         var search = $(this).val();
-        $.ajax({
-            url: '/search',
-            type: 'POST',
-            dataType: 'script',
-            data : { search : search }
-        });
+        timeoutYo = window.setTimeout(function () {
+            $.ajax({
+                url: '/search',
+                type: 'POST',
+                dataType: 'script',
+                data : { search : search }
+            });
+        }, 100);
     });
 }());
 
