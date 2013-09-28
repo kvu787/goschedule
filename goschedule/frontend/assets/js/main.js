@@ -36,7 +36,7 @@
                 dataType: 'script',
                 data : { search : search }
             });
-        }, 100);
+        }, 350);
     });
 }());
 
