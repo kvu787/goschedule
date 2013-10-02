@@ -74,7 +74,7 @@ func router(w http.ResponseWriter, r *http.Request) {
 	}
 	defer appDb.Close()
 	// process request
-	path := r.URL.Path
+	path := strings.ToLower(r.URL.Path)
 	var matched bool
 	for _, tuple := range routing {
 		handler := tuple[1].(func(http.ResponseWriter, *http.Request, map[string]string))
