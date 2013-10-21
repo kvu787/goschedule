@@ -17,7 +17,7 @@
     margin-right: 15px;
   }
 </style>
-<div class="container" id="here">
+<div class="container">
   <div class="row">
     <div class="col-md-12">
       <ul class="breadcrumb">
@@ -25,6 +25,10 @@
         <li><a href="/schedule/{{.dept}}">{{upper .dept}}</a></li>
         <li><a href="/schedule/{{.dept}}/{{.class}}">{{lower .class}}</a></li>
       </ul>
+      {{with .classStruct}}
+      <h3>Description</h3>
+      <p>{{.DescriptionHTML}}</p>
+      {{end}}
       <h1>Sections</h1>
       <div class="panel panel-primary">
         <div class="panel-body">

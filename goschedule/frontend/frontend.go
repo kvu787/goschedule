@@ -280,6 +280,14 @@ func classesHandler(w http.ResponseWriter, r *http.Request, params map[string]st
 func sectsHandler(w http.ResponseWriter, r *http.Request, params map[string]string) {
 	dept := strings.Split(strings.ToLower(r.URL.Path), "/")[2]
 	class := strings.Split(strings.ToLower(r.URL.Path), "/")[3]
+	classRecords, err := goschedule.Select(appDb, goschedule.Class{}, fmt.Sprintf("WHERE abbreviationcode = '%s'", class))
+	if err != nil {
+		panic(err)
+	}
+	var classStruct goschedule.Class
+	if len(classRecords) > 0 {
+		classStruct = classRecords[0].(goschedule.Class)
+	}
 	sectRecords, err := goschedule.Select(appDb, goschedule.Sect{}, fmt.Sprintf("WHERE classkey = '%s' ORDER BY section", class))
 	if err != nil {
 		panic(err)
@@ -295,10 +303,12 @@ func sectsHandler(w http.ResponseWriter, r *http.Request, params map[string]stri
 		"templates/sects.html",
 		"templates/base.html",
 	))
-	viewBag := make(map[string]interface{})
-	viewBag["dept"] = dept
-	viewBag["class"] = class
-	viewBag["sects"] = sects
+	viewBag := map[string]interface{}{
+		"dept":        dept,
+		"class":       class,
+		"sects":       sects,
+		"classStruct": classStruct,
+	}
 	t.ExecuteTemplate(w, "base", viewBag)
 }
 
