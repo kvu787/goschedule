@@ -1,12 +1,15 @@
-<li role="presentation" class="dropdown-header"><strong>Departments</strong></li>
 {{$query  := .query}}
+<li role="presentation" class="dropdown-header"><strong>Classes</strong></li>
+{{range .classes}}
+  <li><a href="/schedule/{{.DeptKey}}/{{.AbbreviationCode}}"><h5 class="thin-header">{{.Name | html | boldWords $query | upper | toHTML}} <small>({{.Abbreviation | html | boldWords $query | upper | toHTML}} {{.Code | html | boldWords $query | upper | toHTML}})</small></h5></a></li>
+{{end}}
+<li role="presentation" class="divider"></li>
+<li role="presentation" class="dropdown-header"><strong>Departments</strong></li>
 {{range .depts}}
   <li><a href="/schedule/{{.Abbreviation}}"><h5 class="thin-header">{{.Name | html | boldWords $query | toHTML}} <small>({{.Abbreviation | html | boldWords $query | upper | toHTML}})</small></h5></a></li>
 {{end}}
 <li role="presentation" class="divider"></li>
-<li role="presentation" class="dropdown-header"><strong>Classes</strong></li>
-{{range .classes}}
-  <li><a href="/schedule/{{.DeptKey}}/{{.AbbreviationCode}}"><h5 class="thin-header">{{.Name | html | boldWords $query | upper | toHTML}} <small>({{.AbbreviationCode | html | boldWords $query | upper | toHTML}})</small></h5></a></li>
-{{end}}
-{{define "pagejs"}}
+<li role="presentation" class="dropdown-header"><strong>Colleges</strong></li>
+{{range .colleges}}
+  <li><a href="/schedule#{{lower .Abbreviation}}"><h5 class="thin-header">{{.Name | html | boldWords $query | toHTML}} <small>({{.Abbreviation | html | boldWords $query | upper | toHTML}})</small></h5></a></li>
 {{end}}

@@ -91,6 +91,10 @@ func router(w http.ResponseWriter, r *http.Request) {
 func searchHandler(w http.ResponseWriter, r *http.Request, params map[string]string) {
 	w.Header().Set("Content-Type", "text/javascript; charset=utf-8")
 	search := strings.TrimSpace(r.FormValue("search"))
+	colleges, err := searchColleges(search)
+	if err != nil {
+		panic(err)
+	}
 	depts, err := searchDepts(search)
 	if err != nil {
 		panic(err)
@@ -102,9 +106,10 @@ func searchHandler(w http.ResponseWriter, r *http.Request, params map[string]str
 
 	var htmlBuffer = &bytes.Buffer{}
 	viewBag := map[string]interface{}{
-		"depts":   depts,
-		"classes": classes,
-		"query":   search,
+		"colleges": colleges,
+		"depts":    depts,
+		"classes":  classes,
+		"query":    search,
 	}
 	searchTemplate, err := ioutil.ReadFile("templates/search.html")
 	if err != nil {
@@ -112,6 +117,7 @@ func searchHandler(w http.ResponseWriter, r *http.Request, params map[string]str
 	}
 	if err := template.Must(template.New("").Funcs(template.FuncMap{
 		"upper":     strings.ToUpper,
+		"lower":     strings.ToLower,
 		"boldWords": boldWords,
 		"toHTML":    toHTML,
 	}).Parse(string(searchTemplate))).Execute(htmlBuffer, viewBag); err != nil {
@@ -157,6 +163,19 @@ func boldPrefix(word, searchTerm string) string {
 	return ""
 }
 
+func searchColleges(search string) ([]goschedule.College, error) {
+	records, err := goschedule.Select(appDb, goschedule.College{},
+		fmt.Sprintf("ORDER BY word_score('%s', name) + word_score('%s', abbreviation) DESC, letter_score('%s', name) + letter_score('%s', abbreviation) DESC LIMIT 5", search, search, search, search))
+	if err != nil {
+		return nil, err
+	}
+	var colleges []goschedule.College
+	for _, record := range records {
+		colleges = append(colleges, record.(goschedule.College))
+	}
+	return colleges, nil
+}
+
 func searchDepts(search string) ([]goschedule.Dept, error) {
 	records, err := goschedule.Select(appDb, goschedule.Dept{},
 		fmt.Sprintf("ORDER BY word_score('%s', name) + word_score('%s', abbreviation) DESC, letter_score('%s', name) + letter_score('%s', abbreviation) DESC LIMIT 5", search, search, search, search))
@@ -171,7 +190,7 @@ func searchDepts(search string) ([]goschedule.Dept, error) {
 }
 
 func searchClasses(search string) ([]goschedule.Class, error) {
-	records, err := goschedule.Select(appDb, goschedule.Class{}, fmt.Sprintf("ORDER BY word_score('%s', abbreviationcode) + word_score('%s', name) DESC, letter_score('%s', abbreviationcode) + letter_score('%s', name) DESC LIMIT 5", search, search))
+	records, err := goschedule.Select(appDb, goschedule.Class{}, fmt.Sprintf("ORDER BY word_score('%s', abbreviation || ' ' || code || ' ' || name) DESC, letter_score('%s', abbreviation) + letter_score('%s', code) + letter_score('%s', name) DESC LIMIT 5", search, search, search, search))
 	if err != nil {
 		return nil, err
 	}

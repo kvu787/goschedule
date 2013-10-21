@@ -420,6 +420,7 @@ AS $$
         for word in phrase.split(' '):
             if word_similarity(search_term, word) > 0:
                 score += 1
+                break
     return score
 $$ LANGUAGE plpythonu;`
 
