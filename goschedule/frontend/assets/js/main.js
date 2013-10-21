@@ -1,5 +1,17 @@
 // main.js contains all application javascript other than bootstrap, jquery, etc.
 
+// Handle department page quick links. 
+(function () {
+    "use strict";
+    var offset = 65;
+
+    $('.department-quick-link').click(function(event) {
+        event.preventDefault();
+        $($(this).attr('href'))[0].scrollIntoView();
+        scrollBy(0, -offset);
+    });
+}());
+
 // Handle navbar search box.
 (function () {
     "use strict";
@@ -83,7 +95,7 @@
                 element.style.display = 'block';
             }
         }
-    }
+    };
 
     // Returns a copy of the input array with all instances of
     // element removed.
@@ -91,7 +103,7 @@
         return array === jQuery.grep(array, function(n, i) {
             return n !== element;
         });
-    }
+    };
 
     // Returns true if the element has any class in classList. Else, 
     // returns false.
@@ -105,7 +117,7 @@
             }
         }
         return false;
-    }
+    };
 
 
     // filter sections with checkboxes 

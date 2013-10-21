@@ -8,3 +8,5 @@
 {{range .classes}}
   <li><a href="/schedule/{{.DeptKey}}/{{.AbbreviationCode}}"><h5 class="thin-header">{{.Name | html | boldWords $query | upper | toHTML}} <small>({{.AbbreviationCode | html | boldWords $query | upper | toHTML}})</small></h5></a></li>
 {{end}}
+{{define "pagejs"}}
+{{end}}
