@@ -10,7 +10,7 @@ var (
 	parenthesesRe          *regexp.Regexp = regexp.MustCompile(`(?is)\(.*?\)`)
 	collegeLinkRe          *regexp.Regexp = regexp.MustCompile(`<a href="#.+?\|`)
 	collegeChunkRe         *regexp.Regexp = regexp.MustCompile(`(?i)<a name.+?</a>\n<h2>.+?</h2>`)
-	classChunkRe           *regexp.Regexp = regexp.MustCompile(`(?is)<table bgcolor="#ffcccc".*?</table>`)
+	classChunkRe           *regexp.Regexp = regexp.MustCompile(`(?is)<table bgcolor="#99ccff".*?</table>`)
 	classNameRe            *regexp.Regexp = regexp.MustCompile(`(?i)name=.*?>`)
 	classAbbreviationRe    *regexp.Regexp = regexp.MustCompile(`[a-z]+`)
 	classCodeRe            *regexp.Regexp = regexp.MustCompile(`\d+`)
