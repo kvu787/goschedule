@@ -18,7 +18,7 @@ Run `goschedule help` for more details.
 
 Deployment: 
 
-- Edit the configuration file at `goschedule/config.json` as necessary.
+- Copy the configuration file at `goschedule/config.sample.json` to `config.json` and edit as necessary.
 - Setup the databases with  `goschedule setup create --config=<path to config>`.
 - Scrape the UW time schedule with `goschedule scrape --config=<path to config>`.
 - Run the web application locally with `goschedule web --config=<path to config> --schedule=<name of schedule in config> --local=8080`. 

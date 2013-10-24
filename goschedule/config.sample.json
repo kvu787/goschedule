@@ -10,8 +10,8 @@
     },
     "schedules" : [
         { 
-            "name" : "aut2013",
-            "url" : "http://www.washington.edu/students/timeschd/AUT2013/"
+            "name" : "win2014",
+            "url" : "http://www.washington.edu/students/timeschd/WIN2014/"
         }
     ]
 }
