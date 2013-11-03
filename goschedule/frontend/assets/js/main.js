@@ -6,7 +6,7 @@
 
     var changeTopMargin = function () {
         if ($(window).width() < 768) {
-            $('body').css('padding-top', '150px');
+            $('body').css('padding-top', '180px');
         } else {
             $('body').css('padding-top', '70px');
         }
@@ -15,6 +15,18 @@
     changeTopMargin();
     $(window).resize(function () {
         changeTopMargin();
+    });
+}());
+
+// Handle selector button for search box.
+(function () {
+    "use strict";
+
+    var categories = ['All', 'Classes', 'Departments', 'Colleges']
+    $('#category-selector').click(function () {
+        categories.unshift(categories.pop());
+        $('#category-selector').text(categories[0]);
+        $('#category-input').val(categories[0]);
     });
 }());
 
@@ -38,33 +50,20 @@
         $('#magic-search-box-div').addClass('open');
     });
 
-    var slideTime = 250;
-
-    $(document).on('focusin', '#magic-search-box', function () {
-        $('#magic-search-box-div').addClass('open');
-        if ($(window).width() >= 768) {
-            $('#magic-search-box').animate({
-                width : '150%'
-            }, slideTime);
-        }
-    });
-
-    $(document).on('focusout', '#magic-search-box', function () {
-        $('#magic-search-box').animate({
-            width : '100%'
-        }, slideTime);
-    });
-
     var timeoutYo = null;
     $(document).on('keyup', '#magic-search-box', function () {
         window.clearTimeout(timeoutYo);
         var search = $(this).val();
+        var category = $('#category-input').val();
         timeoutYo = window.setTimeout(function () {
             $.ajax({
                 url: '/search',
                 type: 'POST',
                 dataType: 'script',
-                data : { search : search }
+                data : { 
+                    search : search,
+                    category : category
+                }
             });
         }, 150);
     });

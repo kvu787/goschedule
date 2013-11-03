@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"html/template"
 	"io/ioutil"
+	"log"
 	"net"
 	"net/http"
 	"net/http/fcgi"
@@ -91,44 +92,74 @@ func router(w http.ResponseWriter, r *http.Request) {
 func searchHandler(w http.ResponseWriter, r *http.Request, params map[string]string) {
 	w.Header().Set("Content-Type", "text/javascript; charset=utf-8")
 	search := strings.TrimSpace(r.FormValue("search"))
-	colleges, err := searchColleges(search)
-	if err != nil {
-		panic(err)
+	if len(strings.TrimSpace(search)) == 0 {
+		t := template.Must(template.ParseFiles("assets/js/search.js"))
+		t.ExecuteTemplate(w, "searchjs", template.HTML(`<li class="disabled"><a href="#">Start typing a query like &#39archi&#39 or &#39cse1&#39...</a></li><li class="disabled"><a href="#">Click the button to the right/bottom to filter</a></li>`))
+	} else {
+		category := strings.TrimSpace(r.FormValue("category"))
+		var templatePath string
+		var colleges []goschedule.College
+		var depts []goschedule.Dept
+		var classes []goschedule.Class
+		var err error
+		switch category {
+		case "All":
+			templatePath = "templates/search_box/all.html"
+			colleges, err = searchColleges(search, 5)
+			if err != nil {
+				log.Println(err)
+			}
+			depts, err = searchDepts(search, 5)
+			if err != nil {
+				log.Println(err)
+			}
+			classes, err = searchClasses(search, 5)
+			if err != nil {
+				log.Println(err)
+			}
+		case "Colleges":
+			templatePath = "templates/search_box/colleges.html"
+			colleges, err = searchColleges(search, 10)
+			if err != nil {
+				log.Println(err)
+			}
+		case "Departments":
+			templatePath = "templates/search_box/depts.html"
+			depts, err = searchDepts(search, 10)
+			if err != nil {
+				log.Println(err)
+			}
+		case "Classes":
+			templatePath = "templates/search_box/classes.html"
+			classes, err = searchClasses(search, 10)
+			if err != nil {
+				log.Println(err)
+			}
+		}
+		viewBag := map[string]interface{}{
+			"colleges": colleges,
+			"depts":    depts,
+			"classes":  classes,
+			"query":    search,
+		}
+		searchTemplate, err := ioutil.ReadFile(templatePath)
+		if err != nil {
+			log.Printf("%v: file path is %q\n", err, templatePath)
+		}
+		var htmlBuffer = &bytes.Buffer{}
+		if err := template.Must(template.New("").Funcs(template.FuncMap{
+			"upper":     strings.ToUpper,
+			"lower":     strings.ToLower,
+			"boldWords": boldWords,
+			"toHTML":    toHTML,
+		}).Parse(string(searchTemplate))).Execute(htmlBuffer, viewBag); err != nil {
+			log.Println(err)
+		}
+		htmlStr := htmlBuffer.String()
+		htmlStr = strings.Replace(htmlStr, "\n", "", -1)
+		t := template.Must(template.ParseFiles("assets/js/search.js"))
+		t.ExecuteTemplate(w, "searchjs", template.HTML(htmlStr))
 	}
-	depts, err := searchDepts(search)
-	if err != nil {
-		panic(err)
-	}
-	classes, err := searchClasses(search)
-	if err != nil {
-		panic(err)
-	}
-
-	var htmlBuffer = &bytes.Buffer{}
-	viewBag := map[string]interface{}{
-		"colleges": colleges,
-		"depts":    depts,
-		"classes":  classes,
-		"query":    search,
-	}
-	searchTemplate, err := ioutil.ReadFile("templates/search.html")
-	if err != nil {
-		panic(err)
-	}
-	if err := template.Must(template.New("").Funcs(template.FuncMap{
-		"upper":     strings.ToUpper,
-		"lower":     strings.ToLower,
-		"boldWords": boldWords,
-		"toHTML":    toHTML,
-	}).Parse(string(searchTemplate))).Execute(htmlBuffer, viewBag); err != nil {
-		panic(err)
-	}
-	htmlStr := htmlBuffer.String()
-	htmlStr = strings.Replace(htmlStr, "\n", "", -1)
-
-	t := template.Must(template.ParseFiles("templates/search.js"))
-	// sort slice of college names
-	t.ExecuteTemplate(w, "searchjs", template.HTML(htmlStr))
 }
 
 func toHTML(in string) template.HTML {
@@ -163,9 +194,9 @@ func boldPrefix(word, searchTerm string) string {
 	return ""
 }
 
-func searchColleges(search string) ([]goschedule.College, error) {
+func searchColleges(search string, limit int) ([]goschedule.College, error) {
 	records, err := goschedule.Select(appDb, goschedule.College{},
-		fmt.Sprintf("ORDER BY word_score('%s', name) + word_score('%s', abbreviation) DESC, letter_score('%s', name) + letter_score('%s', abbreviation) DESC LIMIT 5", search, search, search, search))
+		fmt.Sprintf("ORDER BY word_score('%s', name) + word_score('%s', abbreviation) DESC, letter_score('%s', name) + letter_score('%s', abbreviation) DESC LIMIT %d", search, search, search, search, limit))
 	if err != nil {
 		return nil, err
 	}
@@ -176,9 +207,9 @@ func searchColleges(search string) ([]goschedule.College, error) {
 	return colleges, nil
 }
 
-func searchDepts(search string) ([]goschedule.Dept, error) {
+func searchDepts(search string, limit int) ([]goschedule.Dept, error) {
 	records, err := goschedule.Select(appDb, goschedule.Dept{},
-		fmt.Sprintf("ORDER BY word_score('%s', name) + word_score('%s', abbreviation) DESC, letter_score('%s', name) + letter_score('%s', abbreviation) DESC LIMIT 5", search, search, search, search))
+		fmt.Sprintf("ORDER BY word_score('%s', name) + word_score('%s', abbreviation) DESC, letter_score('%s', name) + letter_score('%s', abbreviation) DESC LIMIT %d", search, search, search, search, limit))
 	if err != nil {
 		return nil, err
 	}
@@ -189,8 +220,8 @@ func searchDepts(search string) ([]goschedule.Dept, error) {
 	return depts, nil
 }
 
-func searchClasses(search string) ([]goschedule.Class, error) {
-	records, err := goschedule.Select(appDb, goschedule.Class{}, fmt.Sprintf("ORDER BY word_score('%s', abbreviation || ' ' || code || ' ' || name) DESC, letter_score('%s', abbreviation) + letter_score('%s', code) + letter_score('%s', name) DESC LIMIT 5", search, search, search, search))
+func searchClasses(search string, limit int) ([]goschedule.Class, error) {
+	records, err := goschedule.Select(appDb, goschedule.Class{}, fmt.Sprintf("ORDER BY word_score('%s', abbreviation || ' ' || code || ' ' || name) DESC, letter_score('%s', abbreviation) + letter_score('%s', code) + letter_score('%s', name) DESC LIMIT %d", search, search, search, search, limit))
 	if err != nil {
 		return nil, err
 	}

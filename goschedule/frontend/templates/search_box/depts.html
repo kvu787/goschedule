@@ -1,0 +1,5 @@
+{{$query  := .query}}
+<li role="presentation" class="dropdown-header"><strong>Departments</strong></li>
+{{range .depts}}
+  <li><a href="/schedule/{{.Abbreviation}}"><h5 class="thin-header">{{.Name | html | boldWords $query | toHTML}} <small>({{.Abbreviation | html | boldWords $query | upper | toHTML}})</small></h5></a></li>
+{{end}}
