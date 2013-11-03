@@ -1,5 +1,23 @@
 // main.js contains all application javascript other than bootstrap, jquery, etc.
 
+// Handle changing the <body> padding-top when resized.
+(function () {
+    "use strict";
+
+    var changeTopMargin = function () {
+        if ($(window).width() < 768) {
+            $('body').css('padding-top', '150px');
+        } else {
+            $('body').css('padding-top', '70px');
+        }
+    };
+
+    changeTopMargin();
+    $(window).resize(function () {
+        changeTopMargin();
+    });
+}());
+
 // Handle department page quick links. 
 (function () {
     "use strict";
