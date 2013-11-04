@@ -48,6 +48,17 @@
 
     $(document).on('click', '#magic-search-box', function () {
         $('#magic-search-box-div').addClass('open');
+            var search = $(this).val();
+            var category = $('#category-input').val();
+            $.ajax({
+                url: '/search',
+                type: 'POST',
+                dataType: 'script',
+                data : { 
+                    search : search,
+                    category : category
+                }
+            });
     });
 
     var timeoutYo = null;
