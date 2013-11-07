@@ -94,7 +94,7 @@ func searchHandler(w http.ResponseWriter, r *http.Request, params map[string]str
 	search := strings.TrimSpace(r.FormValue("search"))
 	if len(strings.TrimSpace(search)) == 0 {
 		t := template.Must(template.ParseFiles("assets/js/search.js"))
-		t.ExecuteTemplate(w, "searchjs", template.HTML(`<li class="disabled"><a href="#">Start typing a query like &#39archi&#39 or &#39cse1&#39...</a></li><li class="disabled"><a href="#">Click the button to the right/bottom to filter</a></li>`))
+		t.ExecuteTemplate(w, "searchjs", template.HTML(`<li role="presentation" class="dropdown-header"><strong>Help</strong></li><li class="disabled"><a href="#">Start typing a query like &#39archi&#39 or &#39cse1&#39...</a></li><li role="presentation" class="divider"></li><li role="presentation" class="dropdown-header"><strong>Filtering</strong></li><li class="disabled"><a href="#">Click the green button to change the filter</a></li><li class="disabled"><a href="#">Or type &#39.a&#39 (All), &#39.g&#39 (Colleges),</a></li><li class="disabled"><a href="#">&#39.d&#39 (Departments), or &#39.c&#39 (Classes)</a></li>`))
 	} else {
 		category := strings.TrimSpace(r.FormValue("category"))
 		var templatePath string

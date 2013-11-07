@@ -1,5 +1,13 @@
 // main.js contains all application javascript other than bootstrap, jquery, etc.
 
+// Implement a string.startsWith function.
+// CREDIT: http://stackoverflow.com/questions/646628/javascript-startswith
+if (typeof String.prototype.startsWith != 'function') {
+  String.prototype.startsWith = function (str){
+    return this.slice(0, str.length) == str;
+  };
+}
+
 // Handle changing the <body> padding-top when resized.
 (function () {
     "use strict";
@@ -22,7 +30,7 @@
 (function () {
     "use strict";
 
-    var categories = ['All', 'Classes', 'Departments', 'Colleges']
+    var categories = ['All', 'Classes', 'Departments', 'Colleges'];
     $('#category-selector').click(function () {
         categories.unshift(categories.pop());
         $('#category-selector').text(categories[0]);
@@ -46,6 +54,26 @@
 (function () {
     "use strict";
 
+    var processCategory = function(searchSelector, categorySelectorText, categorySelectorInput) {
+        var search = $(searchSelector).val();
+        search = $.trim(search);
+        var mapping = [
+            ['.a', 'All'],
+            ['.g', 'Colleges'],
+            ['.d', 'Departments'],
+            ['.c', 'Classes']
+        ];
+        console.log(search);
+        $.each(mapping, function(index, value) {
+            if (search.startsWith(value[0])) {
+                var category = value[1];
+                $(searchSelector).val(search.substr(2));
+                $(categorySelectorText).text(category);
+                $(categorySelectorInput).val(category);
+            } 
+        });
+    };
+
     $(document).on('click', '#magic-search-box', function () {
         $('#magic-search-box-div').addClass('open');
             var search = $(this).val();
@@ -64,6 +92,7 @@
     var timeoutYo = null;
     $(document).on('keyup', '#magic-search-box', function () {
         window.clearTimeout(timeoutYo);
+        processCategory(this, '#category-selector', '#category-input');
         var search = $(this).val();
         var category = $('#category-input').val();
         timeoutYo = window.setTimeout(function () {
