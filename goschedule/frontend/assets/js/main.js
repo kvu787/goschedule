@@ -8,17 +8,46 @@ if (typeof String.prototype.startsWith != 'function') {
   };
 }
 
-// Handle changing the <body> padding-top when resized.
+// Handle changing the <body> padding-top and showing 'hide search' when resized.
 (function () {
     "use strict";
 
+    var searchBoxHidden = true;
+    $('#search-box-form').hide();
+    $('#show-search-div').show();
+    $('body').css('padding-top', '130px');
+
     var changeTopMargin = function () {
         if ($(window).width() < 768) {
-            $('body').css('padding-top', '180px');
+            if (searchBoxHidden) {
+                $('body').css('padding-top', '130px');
+            } else {
+                $('body').css('padding-top', '180px');
+            }
+            $('#search-box-form').hide();
+            $('#show-search-div').show();
+            $('body').css('padding-top', '130px');
         } else {
+            searchBoxHidden = false;
             $('body').css('padding-top', '70px');
+            $('#search-box-form').show();
+            $('#hide-search-div').hide();
+            $('#show-search-div').hide();
         }
     };
+
+    $('#hide-search-link').click(function() {
+        searchBoxHidden = true;
+        $('#search-box-form').hide();
+        $('#show-search-div').show();
+        $('body').css('padding-top', '130px');
+    });
+    $('#show-search-link').click(function() {
+        searchBoxHidden = false;
+        $('#show-search-div').hide();
+        $('#search-box-form').show();
+        $('body').css('padding-top', '180px');
+    });
 
     changeTopMargin();
     $(window).resize(function () {

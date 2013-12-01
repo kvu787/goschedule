@@ -29,18 +29,26 @@
         </button>
         <a class="navbar-brand" href="/">Go Schedule</a>
       </div>
-        <form class="navbar-form navbar-left" role="search" action="/" method="get">
-          <div class="form-group">
-            <div id="magic-search-box-div" class="dropdown">
-                <input autocomplete="off" id="magic-search-box" type="text" class="form-control" data-toggle="dropdown" placeholder="search">
-              <ul class="dropdown-menu dropdown-menu-content" role="menu" aria-labelledby="dLabel">
-                <li role="presentation" class="dropdown-header"><strong>Help</strong></li><li class="disabled"><a href="#">Start typing a query like &#39archi&#39 or &#39cse1&#39...</a></li><li role="presentation" class="divider"></li><li role="presentation" class="dropdown-header"><strong>Filtering</strong></li><li class="disabled"><a href="#">Click the green button to change the filter</a></li><li class="disabled"><a href="#">Or type &#39.a&#39 (All), &#39.g&#39 (Colleges),</a></li><li class="disabled"><a href="#">&#39.d&#39 (Departments), or &#39.c&#39 (Classes)</a></li>
-              </ul>
-            </div>
+      <form id="show-search-div" class="navbar-form navbar-left" style="display:none">
+        <div class="form-group">
+          <a href="#" id="show-search-link">Show search box</a>
+        </div>
+      </form>
+      <form id="search-box-form" class="navbar-form navbar-left" role="search" action="/" method="get">
+        <div class="form-group">
+          <div id="magic-search-box-div" class="dropdown">
+              <input autocomplete="off" id="magic-search-box" type="text" class="form-control" data-toggle="dropdown" placeholder="search">
+            <ul class="dropdown-menu dropdown-menu-content" role="menu" aria-labelledby="dLabel">
+              <li role="presentation" class="dropdown-header"><strong>Help</strong></li><li class="disabled"><a href="#">Start typing a query like &#39archi&#39 or &#39cse1&#39...</a></li><li role="presentation" class="divider"></li><li role="presentation" class="dropdown-header"><strong>Filtering</strong></li><li class="disabled"><a href="#">Click the green button to change the filter</a></li><li class="disabled"><a href="#">Or type &#39.a&#39 (All), &#39.g&#39 (Colleges),</a></li><li class="disabled"><a href="#">&#39.d&#39 (Departments), or &#39.c&#39 (Classes)</a></li>
+            </ul>
           </div>
-          <input id="category-input" type="hidden" name="category" value="All">
-          <a id="category-selector" class="btn btn-success" style="width: 120px;">All</a>
-        </form>
+        </div>
+        <input id="category-input" type="hidden" name="category" value="All">
+        <a id="category-selector" class="btn btn-success" style="width: 120px;">All</a>
+        <div id="hide-search-div" style="margin-left:20px; display:inline;">
+          <a href="#" id='hide-search-link'>Hide search box</a>
+        </div>
+      </form>
       <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav navbar-right">
           <li><a href="https://github.com/kvu787/goschedule">GitHub</a></li>
