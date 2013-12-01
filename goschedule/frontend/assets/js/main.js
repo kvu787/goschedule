@@ -46,6 +46,7 @@ if (typeof String.prototype.startsWith != 'function') {
         searchBoxHidden = false;
         $('#show-search-div').hide();
         $('#search-box-form').show();
+        $('#hide-search-div').show();
         $('body').css('padding-top', '180px');
     });
 
