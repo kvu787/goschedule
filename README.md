@@ -4,6 +4,8 @@ Go Schedule is
 - a library that provides functions for extracting data from UW time schedule pages
 - and a web application that uses the library to serve a better time schedule. 
 
+![Screen shot of Go Schedule](https://raw.githubusercontent.com/kvu787/goschedule/master/goschedule.png)
+
 # Usage
 
 ## Library
